@@ -1,0 +1,180 @@
+/*
+
+ * Code written by mo.ahmed@hmi-tech.net
+ * 
+ * Version 2.0.0 Dated 23-Dec-2012
+ * HMI Technologies Mumbai (2012-13)
+ *
+ * CSS Document for ezSite login section ** 
+*/
+@charset "utf-8";
+html,body {height: 100%;}
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover,
+a,button { outline:none; }
+.btn, .btn-group { 	margin-right:10px; }
+.btn-inverted{
+	background: #fff;
+	color: #333;
+	border: thin solid #006dcc;
+	-webkit-transition: all .6s ease-in-out;
+	transition: all .6s ease-in-out;
+}
+.btn-inverted.btn-info    { border-color:#2f96b4; }
+.btn-inverted.btn-warning { border-color:#f89406; }
+.btn-inverted.btn-danger  { border-color:#bd362f; }
+.btn-inverted.btn-success { border-color:#51a351; }
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -30px;
+}
+textarea {
+	height: 300px; 
+	width: 100%;
+    box-sizing: border-box;
+}
+#txtDesc, #txtKeywords {
+	height:auto;
+}
+#wrap .container {
+	padding-top:60px;
+	margin: 0 auto; 
+	width:98%;
+}
+.countDisplay {float: right;}
+.checkRight { float: right; }
+.row {
+    width: 100%;
+    margin: 0;
+}
+.slRootMsg {
+	margin: 0 0 3px;
+	padding: 5px 10px;
+	font-weight:bold;
+}
+a.label.label-info {
+    font-size: 1em;
+    border-radius: 0;
+    padding: 3px 6px;
+}
+#left-tree > li > a, 
+#left-tree > li > ul > li > a {
+    font-weight: bold;
+}
+#shrFrm {
+	width:100%;
+	min-height:500px;
+}
+#revBlock, #pagesBlock {display:none;}
+#revBlock,
+#pagesBlock,
+#difBlockHeader,
+#difBlockContent,
+#difBlockSide1,
+#difBlockSide2,
+#difBlockFooter {
+	position: relative;
+	margin: 15px 0;
+	padding: 39px 19px 14px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+#revBlock:after,
+#pagesBlock:after,
+#difBlockHeader:after,
+#difBlockContent:after,
+#difBlockSide1:after,
+#difBlockSide2:after,
+#difBlockFooter:after {
+	position: absolute;
+	top: -1px;
+	left: -1px;
+	padding: 3px 7px;
+	font-weight: bold;
+	background-color: #f5f5f5;
+	border: 1px solid #ddd;
+	color: #9da0a4;
+	-webkit-border-radius: 4px 0 4px 0;
+	-moz-border-radius: 4px 0 4px 0;
+	border-radius: 4px 0 4px 0;
+}
+#revBlock, #pagesBlock {
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+#revBlock .nomargin { margin-bottom:0; }
+#revBlock:after        {content: "Revision Log" ;}
+#pagesBlock:after      {content: "Pages using this layout" ;}
+#difBlockHeader:after  {content: "Header Block" ;}
+#difBlockContent:after {content: "Content Block";}
+#difBlockSide1:after   {content: "Aside 1 Block";}
+#difBlockSide2:after   {content: "Aside 2 Block";}
+#difBlockFooter:after  {content: "Footer Block" ;}
+
+#push,#footer {height: 30px;}
+#footer { 
+	height: 30px; 
+	background: rgba(245, 245, 245, 0.8);
+	text-align:center; 
+}
+.tooltip-inner {font-size:18px;}
+.label, .badge {white-space:normal;}
+.CodeMirror {height:500px; }
+div.white-boxed {
+	background: rgba(255, 255, 255, 0.95);
+	border: 1px solid #000;
+	padding: 10px;
+	margin-bottom:10px;
+	box-shadow: 0 7px 4px -4px #333;
+}
+/* Diff Styles*/
+#diffBlock { display:none; min-height: 480px;}
+#diffviewerControld td {text-align:center;width:50%}
+#diffviewerControld td:first-child {display:none;}
+#diffviewerControld select {min-width:260px;}
+#txtTemps  {display:none;}
+
+/* Login Page Styles*/
+.form-signin {
+	max-width: 300px;
+	padding: 19px 29px 29px;
+	margin: 60px auto 10px;
+	background-color: rgba(255, 255, 255, 0.85);
+	border: 1px solid #000;
+	box-shadow: 0 1px 2px rgba(0,0,0,.05);}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {margin-bottom: 10px;}
+.form-signin input[type="text"],
+.form-signin input[type="password"],
+.form-signin select {
+	font-size: 16px;
+	margin-bottom: 15px;
+	padding: 7px 9px;}
+
+@media (max-width: 980px) {
+	#wrap .container {
+		padding-top:0;
+		margin-bottom:50px;
+	}
+}
+
+@media (max-width: 767px) {
+	#footer {
+		margin-left: -20px;
+		margin-right: -20px;
+		padding-left: 20px;
+		padding-right: 20px;
+		height: auto;}
+	.navbar-text.pull-right {
+		float: none;
+		padding-left: 5px;
+		padding-right: 5px;}   
+	.form-signin {
+		padding: 10px 20px 20px;
+		margin: 10px auto 10px;}      
+}
