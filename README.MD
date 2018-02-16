@@ -1,16 +1,30 @@
+# ezCMS UPDATE REPO README #
 
-eSite Readme File.
+This repo is used to update ezCMS. It has copy of the login or admin folder which is only needed for the update.
 
-RELEASE NOTES:
+### What is this repository for? ###
 
-PREP for PDO
+* Quick summary
+* ezCMS Version 5.0 UPDATE 
+* Clone and pull this repo to update ezCM.
 
+### How do I get set up? ###
 
-UPDATE NOTES:
+#### Using the CLI ####
 
-1. Check /index.php and remove all ref to /traffic folder.
+* CLone this repo inside the root of your ezCMS.
+* Execute git pull to get the latest code.
+* Refer to the release notes for any changes to the database.
 
-2. Remove all the tables related to php traffic from the database
+### Contributors ###
 
-3. Hash all the passwd in the database using 
+* Mohd Ahmed
+* Mosh Ahmed
+* Avinash Jagwani
+* Kavya NM
+* Firdaus Nagree
 
+### Who do I talk to? ###
+
+* Repo owner or send email to support @ hmi-tech.net
+* Other community or team contact
