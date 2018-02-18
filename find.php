@@ -224,8 +224,8 @@ $('#frmfind form').submit(function (e) {
 				}
 
 				if ($('#resultsTable tbody').html() == '')
-					$('#resultsTable tbody').html('<tr><td colspan="4">Nothing found for `'+
-						$('#txtfind').val()+'`</td></tr>');
+					$('#resultsTable tbody')
+						.html('<tr><td colspan="4">Nothing found</td></tr>');
 				applyFilters();
 				
 			} else alert('Error: '+ data,msg);
