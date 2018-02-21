@@ -27,7 +27,7 @@ $stats = $cms->query('SELECT COUNT(DISTINCT `url`) as `ispublished` from `pages`
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.treeview/jquery.treeview.js"></script>
 <script src="js/pass-strength.js"></script>
-<script type="text/javascript">(function($) {
+<script>(function($) {
 
 "use strict";
 

@@ -104,7 +104,7 @@ $cms = new ezSettings();
 	<br><br>
 </div><!-- /wrap  -->
 <?php include('include/footer.php'); ?>
-<script type="text/javascript">
+<script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar li:eq(0)").addClass('active');
 	$("#top-bar li:eq(0) ul li:eq(0)").addClass('active');
@@ -117,7 +117,7 @@ $cms = new ezSettings();
 <?php if ($_SESSION['EDITORTYPE'] == 0) { ?>
 
 	<script type="text/javascript" src="ckeditor/ckeditor.js"></script>
-	<script type="text/javascript">
+	<script>
 	  CKEDITOR.replace( 'txtHeader', { uiColor : '#59ACFF' });
 	  CKEDITOR.replace( 'txtrSide' , { uiColor : '#FFD5AA' });
 	  CKEDITOR.replace( 'txtSide'  , { uiColor : '#FFAAAA' });
@@ -127,7 +127,7 @@ $cms = new ezSettings();
 <?php } else if ($_SESSION['EDITORTYPE'] == 1) { ?>
 
 	<script language="javascript" type="text/javascript" src="js/edit_area/edit_area_full.js"></script>
-	<script language="javascript" type="text/javascript">
+	<script>
 	var txtHeader_loaded = false;
 	var txtFooter_loaded = false;
 	var txtSide_loaded = false;
@@ -177,7 +177,7 @@ $cms = new ezSettings();
 	<script src="codemirror/addon/merge/merge.js"></script>
 	<script src="codemirror/mode/css/css.js"></script>
 	<script src="codemirror/mode/clike/clike.js"></script>
-	<script language="javascript" type="text/javascript">
+	<script>
 
 	var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
 
@@ -443,7 +443,7 @@ $cms = new ezSettings();
 	</script>
 
 <?php } ?>
-<script language="javascript" type="text/javascript">
+<script>
 	if(window.location.hash) $('a[href="'+window.location.hash.replace('#','#d-')+'"]').click();
 </script>
 </body></html>

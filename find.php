@@ -228,7 +228,7 @@ $('#frmfind form').submit(function (e) {
 						.html('<tr><td colspan="4">Nothing found</td></tr>');
 				applyFilters();
 				
-			} else alert('Error: '+ data,msg);
+			} else alert('Error: '+ data.msg);
 	}, 'json').fail( function() { 
 		alert('Failed: The request failed.'); 
 	});

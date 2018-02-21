@@ -28,7 +28,7 @@ $cms = new ezCMS(); // create new instance of CMS Class with loginRequired = tru
 </div><!-- /wrap  -->
 
 <?php include('include/footer.php'); ?>
-<script type="text/javascript">
+<script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar li:eq(0)").addClass('active');
 	$("#top-bar li:eq(0) ul li:eq(7)").addClass('active');

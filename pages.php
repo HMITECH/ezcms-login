@@ -291,7 +291,7 @@ $cms = new ezPages();
 	<br><br>
 </div><!-- /wrap  -->
 
-<script type="text/javascript">(function($) {
+<script>(function($) {
 
 "use strict";
 
@@ -368,7 +368,7 @@ $cms = new ezPages();
 
 <?php include('include/footer.php'); ?>
 
-<script type="text/javascript">
+<script>
 
 	$('#left-tree.treeview li a').click( function() {
 		$(this).attr('href', $(this).attr('href')+window.location.hash);
@@ -440,7 +440,7 @@ $cms = new ezPages();
 
 <?php if ($_SESSION['EDITORTYPE'] == 0) { ?>
 	<script type="text/javascript" src="ckeditor/ckeditor.js"></script>
-	<script type="text/javascript">
+	<script>
 	CKEDITOR.replace( 'txtMain'  , { uiColor : '#AAAAFF' });
 	CKEDITOR.replace( 'txtHeader', { uiColor : '#59ACFF' });
 	CKEDITOR.replace( 'txtrSide' , { uiColor : '#FFD5AA' });
@@ -449,7 +449,7 @@ $cms = new ezPages();
 	</script>
 <?php } else if ($_SESSION['EDITORTYPE'] == 1) { ?>
 	<script language="javascript" type="text/javascript" src="js/edit_area/edit_area_full.js"></script>
-	<script language="javascript" type="text/javascript">
+	<script>
 	var txtMain_loaded = false;
 	var txtHeader_loaded = false;
 	var txtFooter_loaded = false;
@@ -511,7 +511,7 @@ $cms = new ezPages();
 	<script src="codemirror/addon/merge/merge.js"></script>
 	<script src="codemirror/mode/css/css.js"></script>
 	<script src="codemirror/mode/clike/clike.js"></script>
-	<script language="javascript" type="text/javascript">
+	<script>
 
 	var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
 
@@ -786,7 +786,7 @@ $cms = new ezPages();
 
 </script>
 <?php } ?>
-<script language="javascript" type="text/javascript">
+<script>
 	if(window.location.hash) $('a[href="'+window.location.hash.replace('#','#d-')+'"]').click();
 </script>
 </body></html>

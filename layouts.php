@@ -116,7 +116,7 @@ $cms = new ezLayouts();
 </div><!-- /wrap  -->
 
 <?php include('include/footer.php'); ?>
-<script type="text/javascript">
+<script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar li:eq(0)").addClass('active');
 	$("#top-bar li:eq(0) ul li:eq(3)").addClass('active');
@@ -160,7 +160,7 @@ $cms = new ezLayouts();
 	<script src="codemirror/mode/css/css.js"></script>
 	<script src="codemirror/mode/clike/clike.js"></script>
 	<script src="codemirror/mode/php/php.js"></script>
-	<script language="javascript" type="text/javascript">
+	<script>
 		var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
 		var	cmTheme = '<?php echo $_SESSION["CMTHEME"]; ?>',
 			cmMode = 'application/x-httpd-php';
@@ -170,7 +170,7 @@ $cms = new ezLayouts();
 <?php } else { ?>
 
 	<script language="javascript" type="text/javascript" src="js/edit_area/edit_area_full.js"></script>
-	<script type="text/javascript">
+	<script>
 		editAreaLoader.init({
 			id:"txtContents",
 			syntax: "html",

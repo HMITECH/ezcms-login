@@ -68,7 +68,7 @@ $cms = new ezProfile();
 </div><!-- /wrap  -->
 
 <?php include('include/footer.php'); ?>
-<script type="text/javascript">
+<script>
 	$("#top-bar li").removeClass('active');
 </script>
 </body></html>

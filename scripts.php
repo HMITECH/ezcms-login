@@ -152,7 +152,7 @@ $cms = new ezScripts();
 	<script src="codemirror/addon/merge/merge.js"></script>
 	<script src="codemirror/mode/css/css.js"></script>
 	<script src="codemirror/mode/clike/clike.js"></script>
-	<script language="javascript" type="text/javascript">
+	<script>
 		var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
 		var	cmTheme = '<?php echo $_SESSION["CMTHEME"]; ?>',
 			cmMode = 'javascript';
@@ -162,7 +162,7 @@ $cms = new ezScripts();
 <?php } else { ?>
 
 	<script language="javascript" type="text/javascript" src="js/edit_area/edit_area_full.js"></script>
-	<script type="text/javascript">
+	<script>
 		editAreaLoader.init({
 			id:"txtContents",
 			syntax: "js",
