@@ -110,6 +110,8 @@
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-share"></i>
 					Welcome <?php echo $cms->usr['username']; ?> <b class="caret"></b></a>
 				<ul class="dropdown-menu">
+					<li><a href="update.php"><i class="icon-download"></i> Update ezCMS</a></li>
+					<li class="divider"></li>
 					<li><a href="profile.php"><i class="icon-comment"></i> Change Password</a></li>
 					<li class="divider"></li>
 					<li class="nav-header">Select Editor</li>
