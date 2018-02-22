@@ -19,7 +19,7 @@ $stats = $cms->query('SELECT COUNT(DISTINCT `url`) as `ispublished` from `pages`
       <div class="span6"> 
   	    <a href="../sitemap.xml" target="_blank"><strong><?php echo $stats['ispublished']; ?></strong> published page(s)</a>		  
 	  </div>
-      <div class="span3"> ezCMS Version:<strong>5.0</strong> </div>
+      <div class="span3"> ezCMS Version:<strong>5.1</strong> </div>
     </div>
   </div>
 </div>
