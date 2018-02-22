@@ -125,7 +125,7 @@ $cms = new ezScripts();
 			$('#txtSaveAs').focus();
 			return false;
 		}
-		if (!saveasfile.match(/^[a-z0-9]+$/ig)) {
+		if (!saveasfile.match(/^[a-z0-9_\-\.]+$/ig)) {
 			alert('Enter a valid filename with lower case alphabets and numbers only.');
 			$('#txtSaveAs').focus();
 			return false;
