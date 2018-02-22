@@ -40,7 +40,7 @@ $cms = new ezStyles();
 		  <form id="frm" action="styles.php" method="post" enctype="multipart/form-data">
 			<div class="navbar">
 				<div class="navbar-inner">
-					<input type="submit" name="Submit" id="Submit" value="Save Changes" class="btn btn-primary" style="padding:5px 12px;">
+					<input type="submit" name="Submit" id="Submit" value="Save Changes" class="btn btn-primary">
 					<div class="btn-group">
 					  <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
 						Save As <span class="caret"></span></a>
@@ -79,14 +79,13 @@ $cms = new ezStyles();
 					<input type="text" id="txtGitMsg" name="revmsg"
 						placeholder="Enter a description for this revision"
 						title="Enter a message to describe this revision."
-						data-toggle="tooltip"
-						value=""
+						data-toggle="tooltip" value=""
 						data-placement="top" minlength="2"
 						class="input-block-level tooltipme2">
 				</div>
 			</div>
-			<input border="0" class="input-block-level" name="txtlnk" onFocus="this.select();"
-				style="cursor: pointer;" onClick="this.select();"  type="text" title="include this link in layouts or page head"
+			<input border="0" class="input-block-level tooltipme2" name="txtlnk" onFocus="this.select();"
+				style="cursor: pointer;" onClick="this.select();"  type="text" title="Include this link in layouts or page head"
 				value="&lt;link href=&quot;<?php echo $cms->siteFolder.substr($cms->filename, 2); ?>&quot; rel=&quot;stylesheet&quot;&gt;" readonly/>
 			<input type="hidden" name="txtName" id="txtName" value="<?php echo $cms->filename; ?>">
 			<textarea name="txtContents" id="txtContents" class="input-block-level"
