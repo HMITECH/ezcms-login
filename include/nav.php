@@ -26,6 +26,8 @@
 				<li><a href="controllers.php"><i class="icon-play"></i> URL Router</a></li>
 				<li class="divider"></li>
 				<li><a href="layouts.php"><i class="icon-list-alt"></i> PHP Layouts</a></li>
+				<li><a href="includes.php"><i class="icon-share-alt"></i> PHP Includes</a></li>
+				<li class="divider"></li>
 				<li><a href="styles.php"><i class="icon-pencil"></i> CSS Stylesheets</a></li>
 				<li><a href="scripts.php"><i class="icon-align-left"></i> JS Javascripts</a></li>
 				<li class="divider"></li>
@@ -33,12 +35,26 @@
 			  </ul>
 		  </li>	
 		  
-		  <li><a href="pages.php"><i class="icon-file"></i> Pages</a></li>
+		  <li><a href="pages.php"><i class="icon-file"></i> Pages</a></li>		  
+		  
+<!-- 		  <li class="dropdown">
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th-large"></i> Shop <b class="caret"></b></a>
+			  <ul class="dropdown-menu">
+				<li><a href="setting.php"><i class="icon-th-list"></i> Defaults Settings</a></li>
+				<li><a href="controllers.php"><i class="icon-play"></i> URL Router</a></li>
+				<li class="divider"></li>
+				<li><a href="layouts.php"><i class="icon-list-alt"></i> PHP Layouts</a></li>
+			  </ul>
+		  </li>	 -->
+		  
 		  <li><a href="find.php"><i class="icon-search"></i> Find</a></li>
 		  <li><a href="users.php"><i class="icon-user"></i> Users</a></li>
 		  <li class="dropdown">
-			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> CMS Style <b class="caret"></b></a>
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> CMS <b class="caret"></b></a>
 			  <div id="divbgcolor" class="dropdown-menu" style="padding:10px;">
+<!-- 			  	<p><a href=""><i class="icon-share-alt"></i> Upgrade</a></p>
+			  	<p><a href=""><i class="icon-share-alt"></i> Users</a></p>
+			  	<p><a href=""><i class="icon-share-alt"></i> Search</a></p>			 -->  
 				<blockquote>
 				  <p><i class="icon-tint"></i> Background Color</p>
 				  <small>Change background color</small>

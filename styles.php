@@ -1,10 +1,11 @@
 <?php
 /*
- * Code written by mo.ahmed@hmi-tech.net
- * Version 2.010413 Dated 20/March/2013
- * Rev: 04-Octr-2016 (4.161005) * HMI Technologies Mumbai (2016-17)
- * $Header: /cygdrive/c/cvs/repo/xampp/htdocs/hmi/ezsite/login/styles.php,v 1.2 2017-12-02 09:33:28 a Exp $
+ * ezCMS Code written by mo.ahmed@hmi-tech.net & mosh.ahmed@gmail.com
+ *
+ * HMI Technologies Mumbai
+ *
  * View: Displays the css style sheets in the site
+ * 
  */
 
 // **************** ezCMS STYLES CLASS ****************
@@ -115,10 +116,10 @@ $cms = new ezStyles();
 </div><!-- /wrap  -->
 
 <?php include('include/footer.php'); ?>
-<script type="text/javascript">
+<script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar li:eq(0)").addClass('active');
-	$("#top-bar li:eq(0) ul li:eq(4)").addClass('active');
+	$("#top-bar li:eq(0) ul li:eq(6)").addClass('active');
 	$('#btnsaveas').click( function () {
 		var saveasfile = $('#txtSaveAs').val().trim();
 		if (saveasfile.length < 1) {
@@ -153,7 +154,7 @@ $cms = new ezStyles();
 	<script src="codemirror/addon/merge/merge.js"></script>
 	<script src="codemirror/mode/css/css.js"></script>
 	<script src="codemirror/mode/clike/clike.js"></script>
-	<script language="javascript" type="text/javascript">
+	<script>
 		var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
 		var	cmTheme = '<?php echo $_SESSION["CMTHEME"]; ?>',
 			cmMode = 'css';
@@ -163,7 +164,7 @@ $cms = new ezStyles();
 <?php } else { ?>
 
 	<script language="javascript" type="text/javascript" src="js/edit_area/edit_area_full.js"></script>
-	<script type="text/javascript">
+	<script>
 		editAreaLoader.init({
 			id:"txtContents",
 			syntax: "css",

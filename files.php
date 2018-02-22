@@ -1,12 +1,13 @@
 <?php
 /*
- * Code written by mo.ahmed@hmi-tech.net
- * Version 2.010413 Dated 20/March/2013
- * Rev: 04-Octr-2016 (4.161005) * HMI Technologies Mumbai (2016-17)
- * $Header: /cygdrive/c/cvs/repo/xampp/htdocs/hmi/ezsite/login/files.php,v 1.2 2017-12-02 09:33:28 a Exp $
- * View: Displays the files on the server in the site
+ * ezCMS Code written by mo.ahmed@hmi-tech.net & mosh.ahmed@gmail.com
  *
+ * HMI Technologies Mumbai
+ *
+ * View: Displays the files on the server in the site-assets folder
+ * 
  */
+
 // **************** ezCMS CLASS ****************
 require_once ("class/ezcms.class.php"); // CMS Class for database access
 $cms = new ezCMS(); // create new instance of CMS Class with loginRequired = true
@@ -31,7 +32,7 @@ $cms = new ezCMS(); // create new instance of CMS Class with loginRequired = tru
 <script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar li:eq(0)").addClass('active');
-	$("#top-bar li:eq(0) ul li:eq(7)").addClass('active');
+	$("#top-bar li:eq(0) ul li:eq(9)").addClass('active');
 </script>
 
 </body></html>

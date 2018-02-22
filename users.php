@@ -1,10 +1,11 @@
 <?php
 /*
- * Code written by mo.ahmed@hmi-tech.net
- * Version 2.010413 Dated 20/March/2013
- * Rev: 04-Oct-2016 (4.161005) * HMI Technologies Mumbai (2016-17)
- * $Header: /cygdrive/c/cvs/repo/xampp/htdocs/hmi/ezsite/login/users.php,v 1.2 2017-12-02 09:33:28 a Exp $
+ * ezCMS Code written by mo.ahmed@hmi-tech.net & mosh.ahmed@gmail.com
+ *
+ * HMI Technologies Mumbai
+ *
  * View: Displays the users in the site
+ * 
  */
 
 // **************** ezCMS USERS CLASS ****************
@@ -128,7 +129,7 @@ $cms = new ezUsers();
 <?php include('include/footer.php'); ?>
 <script>
 	$("#top-bar li").removeClass('active');
-	$("#top-bar li:eq(11)").addClass('active');
+	$("#top-bar li:eq(13)").addClass('active');
 </script>
 </body>
 </html>
