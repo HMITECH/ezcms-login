@@ -49,6 +49,9 @@ class ezUsers extends ezCMS {
 				
 			if ($this->id <> 1) $this->barBtns .=  
 				' <a href="?delid=' . $this->id .'" class="btn btn-danger conf-del">Delete</a>';
+
+			$this->barBtns .= '<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup>'.
+				$this->revs['cnt'].'</sup></a>';			
 				
 			// Get Created on String
 			$this->createdText = '<div class="clearfix"></div><p><em>Created on '.
