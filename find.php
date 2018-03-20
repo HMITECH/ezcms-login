@@ -20,10 +20,11 @@ $cms = new ezFind();
 	<?php include('include/head.php'); ?>
 	<style>
 	textarea { height: auto; }
-	#frmreplace { display:none; }
+	#frmreplace { display:none }
 	.row-fluid > .span9 {min-height: 240px;}
 	.icon-ok { background-color: green; }
 	.icon-remove { background-color: red; }
+	.replaceOnelnk { color: red; }
 	td.title, td.keywords, td.description { text-transform: capitalize;	}
 	</style>
 
@@ -35,15 +36,15 @@ $cms = new ezFind();
 	  <div class="row-fluid">
 		<div class="span3">
 		
-		  <div id="frmfind" class="white-boxed"><form method="post" action="#">
+		  <div class="white-boxed"><form id="frmfind"  method="post" action="#">
 			<div class="navbar"><div class="navbar-inner">
-				<input type="submit" name="find" class="btn btn-primary pull-left" value="FIND">
+				<input type="submit" name="find" class="btn btn-primary pull-left" value="Find All">
 				<ul class="nav pull-right">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-flag"></i>
 							WHERE <b class="caret"></b></a>
 						<ul id="findinDD" class="dropdown-menu">
-							<li><a data-loc="page" href="#"><i class="icon-file"></i> Pages</a></li>
+							<li class="active"><a data-loc="page" href="#"><i class="icon-file"></i> Pages</a></li>
 							<li class="divider"></li>
 							<li><a data-loc="php" href="#"><i class="icon-list-alt"></i> PHP Layouts</a></li>
 							<li><a data-loc="css" href="#"><i class="icon-pencil"></i> CSS Stylesheets</a></li>
@@ -58,29 +59,22 @@ $cms = new ezFind();
 				<div class="controls">
 					<textarea name="find" id="txtfind" rows="5"
 						placeholder="Enter the text or code to find"
-						class="input-block-level" required minlength="3"></textarea>
+						class="input-block-level" required minlength="3"></textarea></div>
+				<div class="control-group">
+					<label class="control-label">REPLACE WITH</label>
+					<div class="controls">
+						<textarea name="replace" id="txtreplace" rows="5"
+							placeholder="Enter the text or code to replace"
+							class="input-block-level"></textarea></div>
 				</div>
 			</div>
 			<input type="hidden" name="findinTxt" id="findinTxt" />
 		  </form></div><br>
-
-		  <!--<div id="frmreplace" class="white-boxed"><form method="post" action="#">
-			<div class="navbar"><div class="navbar-inner">
-				<a id="repall" href="#" class="btn btn-danger">Replace</a>
-			</div></div>
-			<div class="control-group">
-				<label class="control-label">REPLACE WITH</label>
-				<div class="controls">
-					<textarea name="replace" id="txtreplace" rows="5"
-						placeholder="Enter the text or code to replace"
-						class="input-block-level"></textarea>
-				</div>
-			</div>			
-		  </form></div>-->
 			
 		</div>
 		<div class="span9 white-boxed">
 			<div class="navbar"><div class="navbar-inner">
+				<a href="#" id="repall" class="btn btn-danger pull-left hide">Replace All</a>
 				<a class="brand" onclick="return false" href=""><small id="findinlbl"></small></a>
 				<ul class="nav pull-right">
 					<li class="dropdown">
@@ -137,17 +131,52 @@ var applyFilters = function () {
 }
 
 $('#resultsTable').on("click", ".replaceOnelnk", function() {
-	alert('Replace not implemented!');
+
+	// ajax to the server
+	var param, that = this;
+	
+	if ($('#findinTxt').val() == 'page') 
+		params =  '&id='+$(this).data('id')+'&block='+$(this).data('block');
+	else params =  '&file='+$(this).data('lnk');
+	
+	$.post( 'find.php?replaceone'+params, $('#frmfind').serialize(), 
+		function(data) {
+			if (data.success) {
+				$(that).after('<label class="label label-success">REPLACED</label>');
+				$(that).closest('tr').css('text-decoration','line-through');
+				$(that).remove();
+			} else alert('Error: '+ data.msg);
+	}, 'json').fail( function() { 
+		alert('Failed: The request failed.'); 
+	});	
+	
+	return false;
+});
+$('#repall').click(function (e) {
+	e.preventDefaults;
+	
+	$.post( 'find.php?replaceall', $('#frmfind').serialize(), 
+		function(data) {
+			if (data.success) {
+				
+			} else alert('Error: '+ data.msg);
+	}, 'json').fail( function() { 
+		alert('Failed: The request failed.'); 
+	});	
+	
 	return false;
 });
 $('#findinDD a').click(function (e) {
 	e.preventDefaults;
 	$('#findinlbl').html('WHERE : ' + $(this).html());
 	$('#findinTxt').val($(this).data('loc'));
+	$('#findinDD li').removeClass('active');
+	$(this).parent().addClass('active');
 	if ($(this).data('loc') == 'page')
 		$('#filterDD').parent().parent().show();
 	else
 		$('#filterDD').parent().parent().hide();
+	//return false;
 }).eq(0).click();
 $('#filterDD a').click(function (e) {
 	e.preventDefaults;
@@ -160,12 +189,12 @@ $('#filterDD a').click(function (e) {
 	return false;
 });
 
-$('#frmfind form').submit(function (e) {
+$('#frmfind').submit(function (e) {
 	
 	e.preventDefaults;
 	
 	// ajax to the server
-	$.post( 'find.php?action=fetch', $( this ).serialize(), 
+	$.post( 'find.php?fetchall', $( this ).serialize(), 
 		function(data) {
 			if (data.success) {
 				var row, lnk, blockCap, pagehash, findinTxt = $('#findinTxt').val();
@@ -183,13 +212,13 @@ $('#frmfind form').submit(function (e) {
 							if (data.results[k].name == 'layout.php' ) lnk = 'layouts.php';
 						} else if ($('#findinTxt').val()=='css') {
 							lnk = 'styles.php?show='+data.results[k].name;
-							if (data.results[k].name == 'style.css' ) lnk = 'styles.php';
+							if (data.results[k].inroot == 1 ) lnk = 'styles.php';
 						} else if ($('#findinTxt').val()=='js') {					
 							lnk = 'scripts.php?show='+data.results[k].name;
-							if (data.results[k].name == 'main.js' ) lnk = 'scripts.php';
+							if (data.results[k].inroot == 1 ) lnk = 'scripts.php';
 						}
 						row += '<td><a target="_blank" href="'+lnk+'">EDIT</a> '+
-								'<a href="#" class="replaceOnelnk hide">| Replace</a></td>';		
+								'<a href="#" class="replaceOnelnk" data-lnk="'+data.results[k].name+'">| REPLACE</a></td>';		
 					} else {
 						if (data.results[k].published == '1') 
 							row += '<td><i class="icon-ok icon-white"></i></td>';
@@ -219,14 +248,14 @@ $('#frmfind form').submit(function (e) {
 						row += '<td class="'+data.results[k].block+'">'+blockCap+'</td>';
 						row += '<td><a target="_blank" href="'+data.results[k].url+'">VIEW</a> | '+
 								'<a target="_blank" href="pages.php?id='+data.results[k].id+pagehash+'">EDIT</a>' +
-								'<a href="#" class="replaceOnelnk hide">| Replace</a></td>';
+								' | <a href="#" data-id="'+data.results[k].id+'" data-block="'+data.results[k].block+
+								'" class="replaceOnelnk">REPLACE</a></td>';
 					}
 					$('<tr></tr>').html(row).appendTo('#resultsTable tbody');
 				}
 
-				if ($('#resultsTable tbody').html() == '')
-					$('#resultsTable tbody')
-						.html('<tr><td colspan="4">Nothing found</td></tr>');
+				if ($('#resultsTable tbody').html() == '') 
+					$('#resultsTable tbody').html('<tr><td colspan="4">Nothing found</td></tr>');
 				applyFilters();
 				
 			} else alert('Error: '+ data.msg);
@@ -240,7 +269,7 @@ $('#frmfind form').submit(function (e) {
 </script>
 <script>
 	$("#top-bar li").removeClass('active');
-	$("#top-bar li:eq(12)").addClass('active');
+	$("#top-bar > li:eq(3)").addClass('active');
 </script>
 </body>
 </html>
