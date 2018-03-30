@@ -30,7 +30,6 @@ $cms = new ezPages();
 		}
 	</style>
 
-
 </head><body>
 
 <div id="wrap">

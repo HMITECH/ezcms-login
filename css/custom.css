@@ -58,6 +58,7 @@ a.label.label-info {
     border-radius: 0;
     padding: 3px 6px;
 }
+#divbgcolor { padding:10px; }
 #left-tree > li > a, 
 #left-tree > li > ul > li > a {
     font-weight: bold;

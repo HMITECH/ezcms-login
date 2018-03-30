@@ -1,10 +1,10 @@
 <?php
 /*
- * Code written by mo.ahmed@hmi-tech.net
- * * Version 2.010413 Dated 20/March/2013 
- * Rev: 04-Octr-2016 (4.161005) * HMI Technologies Mumbai (2016-17)
+ * ezCMS Code written by mo.ahmed@hmi-tech.net & mosh.ahmed@gmail.com
  *
- *Include: Displays the common head
+ * HMI Technologies Mumbai
+ *
+ * Include: Displays the header
  * 
  */
 ?>
