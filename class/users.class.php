@@ -44,6 +44,9 @@ class ezUsers extends ezCMS {
 				exit;
 			}
 			
+			// Get the Revisions
+			$this->getRevisions();			
+			
 			$this->barBtns = '<input type="submit" name="Submit" class="btn btn-primary" value="Save Changes">
 				 <a href="?id=new" class="btn btn-info">New User</a>';
 				
@@ -56,9 +59,6 @@ class ezUsers extends ezCMS {
 			// Get Created on String
 			$this->createdText = '<div class="clearfix"></div><p><em>Created on '.
 				$this->thisUser['createdon'].'</em></p>';
-				
-			// Get the Revisions
-			$this->getRevisions();			
 
 		} else {
 			// Set empty default values for new user
