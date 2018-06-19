@@ -1,0 +1,24 @@
+# ------------------------------------------------------------------- 
+#
+#* Code written by mo.ahmed@hmi-tech.net
+#
+#* HMI Technologies 
+#
+#* Module: Apache rewrites (.htacess) ezCMS
+#
+# -------------------------------------------------------------------
+
+# ------------------------------------------------------------------- 
+#* Rewrite URLs to Controller (index.php)
+#* Notes: If target is not a file or folder rewrite it to index
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^index\.php$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . index.php [L]
+</IfModule>
+
+#* END: Rewrite URLs to Controller
+# ------------------------------------------------------------------- 

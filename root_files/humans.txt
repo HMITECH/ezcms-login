@@ -1,0 +1,17 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Mohd Ahmed -- Director -- HMI Technologies (www.hmi-tech.net)
+    mo.ahmed@hmi-tech.net
+
+# THANKS
+
+    HMI Technologies (Mumbai)
+    Support@hmi-tech.net
+
+# TECHNOLOGY COLOPHON
+
+    HMI TECH ezCMS (Site Builder)
+	HTML5, CSS3, jQuery, php, MySQL
