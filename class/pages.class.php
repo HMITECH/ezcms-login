@@ -346,14 +346,16 @@ class ezPages extends ezCMS {
 	// Function to rebuild the sitemap
 	private function rebuildSitemap() {	
 	
+		$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? "https://" : "http://";
+
 		$sitemapXML  = '<?xml version="1.0" encoding="UTF-8"?>
 			<?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
 			<!-- generator="ezCMS" -->
-			<!-- sitemap-generator-url="http://www.hmi-tech.net" sitemap-generator-version="2.0" -->
-			<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-			<url><loc>http://' . $_SERVER['SERVER_NAME'] .  '/</loc></url>';
+			<!-- sitemap-generator-url="https://www.hmi-tech.net" sitemap-generator-version="2.0" -->
+			<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9/">
+			<url><loc>'.$protocol. $_SERVER['SERVER_NAME'] .  '/</loc></url>';
 		foreach ($this->query("SELECT `url` FROM `pages` WHERE `id`>2 AND `published`=1 AND `nositemap`=0") as $entry)
-				$sitemapXML  .= '<url><loc>http://'.$_SERVER['SERVER_NAME'].$entry['url'].'</loc></url>';
+				$sitemapXML  .= '<url><loc>'.$protocol.$_SERVER['SERVER_NAME'].$entry['url'].'</loc></url>';
 		$sitemapXML  .= '</urlset>';
 		// save XML Site Map
 		file_put_contents('../sitemap.xml', $sitemapXML);
