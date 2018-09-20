@@ -42,7 +42,7 @@ class db extends PDO {
 		if ($this->useRedis) {
 			$redKey = $this->useRedis."-site";
 			if (!$this->redis->exists($redKey))
-				$this->redis->set($redKey, json_encode($this->query('SELECT * FROM `site` ORDER BY `id` DESC LIMIT 1')->fetch(PDO::FETCH_ASSOC)));
+				$this->redis->setex($redKey, (int) 3600*12*30, json_encode($this->query('SELECT * FROM `site` ORDER BY `id` DESC LIMIT 1')->fetch(PDO::FETCH_ASSOC)));
 			return json_decode($this->redis->get($redKey), true);
 		} else return $this->query('SELECT * FROM `site` ORDER BY `id` DESC LIMIT 1')->fetch(PDO::FETCH_ASSOC);
 	}
@@ -54,7 +54,7 @@ class db extends PDO {
 			if (!$this->redis->exists($redKey)) {
 				$page = $this->getPageDatabase($uri);
 				if ($page['id'] == 2) return $page;
-				else $this->redis->set($redKey, json_encode($page));
+				else $this->redis->setex($redKey, (int) 3600*12*10, json_encode($page));
 			}
 			return json_decode($this->redis->get($redKey), true);
 		} else return $this->getPageDatabase($uri);
@@ -107,7 +107,7 @@ class db extends PDO {
 		if ($this->useRedis) {
 			$redKey = $this->useRedis."-404page";
 			if (!$this->redis->exists($redKey)) 
-				$this->redis->set($redKey, json_encode($this->query('SELECT * FROM `pages` WHERE `id` = 2')->fetch(PDO::FETCH_ASSOC)));
+				$this->redis->setex($redKey, (int) 3600*12*30, json_encode($this->query('SELECT * FROM `pages` WHERE `id` = 2')->fetch(PDO::FETCH_ASSOC)));
 			return json_decode($this->redis->get($redKey), true);
 		} else {
 			return $this->query('SELECT * FROM `pages` WHERE `id` = 2')->fetch(PDO::FETCH_ASSOC);

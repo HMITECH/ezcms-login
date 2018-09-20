@@ -40,7 +40,7 @@ class ezRedirect extends ezCMS {
 		if (isset($_POST['desuri'])) $desurl = trim($_POST['desuri']); else die('Destination URL not set.');
 		// validate 
 		if (strlen($srcurl)<2) die('Source URL must be at least 2 chars.');
-		if (strlen($desurl)<2) die('Destination URL must be at least 2 chars.');
+		if (strlen($desurl)<1) die('Destination URL must be at least 1 chars.');
 		if (substr($srcurl,0,1)<>'/') die('Source URL must begin with /');
 		$stmtCHK = $this->prepare("SELECT `id` FROM `redirects` WHERE `srcurl` = ? ");
 		$stmtCHK->execute(array($srcurl));
