@@ -93,7 +93,6 @@ class ezPages extends ezCMS {
 		// Get the Message to display if any
 		$this->getMessage();
 		$this->msg = str_replace('File','Page',$this->msg);
-
 	}
 	
 	// Function to reorder pages
@@ -110,6 +109,7 @@ class ezPages extends ezCMS {
 	// Function to setup the checkboxes
 	private function setupCheckboxes() {
 		$this->setOptions('nositemap', '', '');
+		$this->setOptions('hidechildpages', '', '');
 		$this->setOptions('useheader', 'Page will display this custom HEADER', 'Page will display the default HEADER');
 		$this->setOptions('useside'  , 'Page will display this custom ASIDE1', 'Page will display the default ASIDE1');
 		$this->setOptions('usesider' , 'Page will display this custom ASIDE2', 'Page will display the default ASIDE2');
@@ -184,7 +184,6 @@ class ezPages extends ezCMS {
 
 		header("Location: ?id=$id&flg=copyfailed");	// failed
 		exit;
-	
 	}
 	
 	// Function to Update the Defaults Settings
@@ -199,7 +198,7 @@ class ezPages extends ezCMS {
 			exit;
 		}
 		
-		// TODO - DELETE REVISIONS
+		// DELETE REVISIONS
 		if (!$this->query("DELETE FROM `git_pages` WHERE `page_id` = $id")) {
 			$this->flg = 'revdelfailed';
 			return;
@@ -222,7 +221,6 @@ class ezPages extends ezCMS {
 		
 		// Failed to update
 		$this->flg = 'failed';
-	
 	}
 	// Function to Update the Defaults Settings
 	private function delRevision() {
@@ -244,7 +242,6 @@ class ezPages extends ezCMS {
 
 		header("Location: ?flg=revdelfailed&id=".$this->id);
 		exit;
-
 	}
 
 	// Function to fetch the revisions
@@ -307,7 +304,7 @@ class ezPages extends ezCMS {
 		static $nestCount;
 
 		$treeSQL = $this->prepare(
-			"SELECT `id`, `title`, `pagename`, `url`, `published`, `description` 
+			"SELECT `id`, `title`, `pagename`, `url`, `published`, `description` , `hidechildpages`
 			FROM  `pages` WHERE `parentid` = ? order by place");
 		$treeSQL->execute( array($parentid) );
 
@@ -334,13 +331,12 @@ class ezPages extends ezCMS {
 					$this->ddOptions .= '<option value="' . $entry['id'] . '" '.$isSel.'>'.
 						str_repeat(' - ',$nestCount - 1) . $entry['pagename'].'</option>';				
 				}
-				$this->buildTree($entry['id']);
+				if (!$entry['hidechildpages']) $this->buildTree($entry['id']);
 				$this->treehtml .= '</li>';
 			}
 			$this->treehtml .= '</ul>';
 			$nestCount -= 1;
 		}
-
 	}
 	
 	// Function to rebuild the sitemap
@@ -398,7 +394,6 @@ class ezPages extends ezCMS {
 		}
 	
 		return $url;
-
 	}
 
 	// Function to Update the Controller
@@ -421,7 +416,7 @@ class ezPages extends ezCMS {
 		$this->fetchPOSTData($txtFlds, $data);
 
 		// get the required post checkboxes 
-		$cksFlds = array('published','useheader','useside','usesider','usefooter','nositemap');
+		$cksFlds = array('published','useheader','useside','usesider','usefooter','nositemap','hidechildpages');
 		$this->fetchPOSTCheck($cksFlds, $data);
 		
 		
@@ -497,11 +492,15 @@ class ezPages extends ezCMS {
 			// update
 			if ($this->edit( 'pages' , $this->id , $data )) {
 				$this->rebuildSitemap();
+				if ($this->useRedis) {
+					$redKey = $this->useRedis."-page-".$data['url'];
+					if ($data['id'] == 2) $redKey = $this->useRedis."-404page";
+					$this->redis->del($redKey);
+				}
 				header("Location: ?id=".$this->id."&flg=saved");	// added
 				exit; 
 			}
 		}
-
 	}
 	
 	// Function to Set the Display Message
@@ -519,7 +518,6 @@ class ezPages extends ezCMS {
 				$this->setMsgHTML('error','COPY FAILED','The page was not copied.');
 				break;
 		}
-
 	}
 
 }

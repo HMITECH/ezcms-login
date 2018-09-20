@@ -32,7 +32,7 @@ $cms = new ezCMS(); // create new instance of CMS Class with loginRequired = tru
 <script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar li:eq(0)").addClass('active');
-	$("#top-bar li:eq(0) ul li:eq(9)").addClass('active');
+	$("#top-bar li:eq(0) ul li:eq(11)").addClass('active');
 </script>
 
 </body></html>

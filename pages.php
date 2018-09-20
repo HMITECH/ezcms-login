@@ -86,7 +86,13 @@ $cms = new ezPages();
 										<label class="checkbox" <?php if ($cms->id < 3) echo 'style="display:none"';?>>
 										  <input id="ckpublished" name="published" type="checkbox"
 										  	<?php echo $cms->page['publishedCheck']; ?>>Published on site
+										  	<label class="checkbox checkRight">
+												<input id="ckchideChild" name="hidechild" type="checkbox"
+											  	<?php echo $cms->page['hidechildpagesCheck']; ?>>
+												Hide child Pages
+											</label>
 										</label>
+
 								</div>
 							  </div>
 							</div>
@@ -786,7 +792,7 @@ $cms = new ezPages();
 <?php } ?>
 <script>
 	$("#top-bar li").removeClass('active');
-	$("#top-bar li:eq(11)").addClass('active');
+	$("#top-bar > li:eq(1)").addClass('active');
 	if(window.location.hash) $('a[href="'+window.location.hash.replace('#','#d-')+'"]').click();
 </script>
 </body></html>

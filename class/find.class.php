@@ -29,7 +29,6 @@ class ezFind extends ezCMS {
 			if (isset($_GET['replaceone'])) $this->replaceOne();
 
 		}
-
 	}
 	
 	private function replaceOne () {
@@ -120,9 +119,7 @@ class ezFind extends ezCMS {
 				$r->success = false;
 				$r->msg = "File save failed!";
 			}
-	
 	}
-	
 	
 	private function findALL () {
 		$r = new stdClass();

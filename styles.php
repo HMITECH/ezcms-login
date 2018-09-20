@@ -118,7 +118,7 @@ $cms = new ezStyles();
 <script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar li:eq(0)").addClass('active');
-	$("#top-bar li:eq(0) ul li:eq(6)").addClass('active');
+	$("#top-bar li:eq(0) ul li:eq(8)").addClass('active');
 	$('#btnsaveas').click( function () {
 		var saveasfile = $('#txtSaveAs').val().trim();
 		if (saveasfile.length < 1) {

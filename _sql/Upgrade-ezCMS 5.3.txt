@@ -1,0 +1,25 @@
+Upgrade to ezCMS 5.3
+
+1. Run SQL 'upgrade.5.3.sql'
+
+2. GIT Update - pull changes from repo
+
+3. Redo Root Files - config.php, index.php, cms.class.php
+Copy the above files from root_files to the web root.
+
+4. Move and https, www, non www redirects to .htaccess file
+
+# Redirect to https
+	RewriteEngine on
+	RewriteCond %{HTTPS} !=on
+	RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Redirect to www
+	RewriteEngine On
+	RewriteCond %{HTTP_HOST} !^www\. [NC]
+	RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+
+#Force non-www:
+	RewriteEngine on
+	RewriteCond %{HTTP_HOST} ^www\.example\.com [NC]
+	RewriteRule ^(.*)$ https://example.com/$1 [L,R=301]

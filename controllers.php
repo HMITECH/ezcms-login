@@ -84,7 +84,7 @@ $cms = new ezController();
 <script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar li:eq(0)").addClass('active');
-	$("#top-bar li:eq(0) ul li:eq(1)").addClass('active');
+	$("#top-bar li:eq(0) ul li:eq(2)").addClass('active');
 </script>
 
 <?php if ($_SESSION['EDITORTYPE'] == 3) { ?>

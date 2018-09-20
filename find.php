@@ -174,7 +174,7 @@ $('#findinDD a').click(function (e) {
 	$(this).parent().addClass('active');
 	if ($(this).data('loc') == 'page')
 		$('#filterDD').parent().parent().show();
-	else
+	else 
 		$('#filterDD').parent().parent().hide();
 	//return false;
 }).eq(0).click();
@@ -269,7 +269,7 @@ $('#frmfind').submit(function (e) {
 </script>
 <script>
 	$("#top-bar li").removeClass('active');
-	$("#top-bar > li:eq(3)").addClass('active');
+	$("#top-bar > li:eq(2)").addClass('active');
 </script>
 </body>
 </html>

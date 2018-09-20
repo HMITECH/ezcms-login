@@ -119,7 +119,7 @@ $cms = new ezLayouts();
 <script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar li:eq(0)").addClass('active');
-	$("#top-bar li:eq(0) ul li:eq(3)").addClass('active');
+	$("#top-bar li:eq(0) ul li:eq(5)").addClass('active');
 	$('#btnsaveas').click( function () {
 		var saveasfile = $('#txtSaveAs').val().trim();
 		if (saveasfile.length < 1) {

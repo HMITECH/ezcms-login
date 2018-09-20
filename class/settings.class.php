@@ -147,6 +147,7 @@ class ezSettings extends ezCMS {
 		if ( $this->add('site',$data) ) {
 			// Save the rev message to the last records
 			$this->edit('site', $this->site['id'], array('revmsg' => $_POST['revmsg']));
+			if ($this->useRedis) $this->redis->del($this->useRedis."-site");
 			header("Location: ?flg=saved");
 			exit;
 		}

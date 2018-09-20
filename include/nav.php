@@ -21,7 +21,9 @@
 			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th-large"></i> Template <b class="caret"></b></a>
 			  <ul class="dropdown-menu">
 				<li><a href="setting.php"><i class="icon-th-list"></i> Defaults Settings</a></li>
+				<li class="divider"></li>
 				<li><a href="controllers.php"><i class="icon-play"></i> URL Router</a></li>
+				<li><a href="redirects.php"><i class="icon-retweet"></i> 404 Redirects</a></li>
 				<li class="divider"></li>
 				<li><a href="layouts.php"><i class="icon-list-alt"></i> PHP Layouts</a></li>
 				<li><a href="includes.php"><i class="icon-share-alt"></i> PHP Includes</a></li>
