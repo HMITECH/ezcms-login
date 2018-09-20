@@ -87,7 +87,7 @@ $cms = new ezPages();
 										  <input id="ckpublished" name="published" type="checkbox"
 										  	<?php echo $cms->page['publishedCheck']; ?>>Published on site
 										  	<label class="checkbox checkRight">
-												<input id="ckchideChild" name="hidechild" type="checkbox"
+												<input id="ckchideChild" name="hidechildpages" type="checkbox"
 											  	<?php echo $cms->page['hidechildpagesCheck']; ?>>
 												Hide child Pages
 											</label>

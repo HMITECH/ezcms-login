@@ -304,7 +304,7 @@ class ezPages extends ezCMS {
 		static $nestCount;
 
 		$treeSQL = $this->prepare(
-			"SELECT `id`, `title`, `pagename`, `url`, `published`, `description` , `hidechildpages`
+			"SELECT `id`, `title`, `pagename`, `url`, `published`, `description`, `hidechildpages`
 			FROM  `pages` WHERE `parentid` = ? order by place");
 		$treeSQL->execute( array($parentid) );
 
@@ -418,13 +418,12 @@ class ezPages extends ezCMS {
 		// get the required post checkboxes 
 		$cksFlds = array('published','useheader','useside','usesider','usefooter','nositemap','hidechildpages');
 		$this->fetchPOSTCheck($cksFlds, $data);
-		
-		
+
 		// Validate here ...
 		if (strlen(trim($data['pagename'])) < 2) die('Page Name must min 2 chars!');
 		if (strlen(trim($data['title'])) < 2) die('Page Title must min 2 chars!');
 		if (isset($data['parentid']))
-			if  (in_array($data['parentid'], $this->childIDS))
+			if (in_array($data['parentid'], $this->childIDS))
 				die('Parent cannot be same page or its child');
 				
 		// if URL is empty ... auto generate it from path.
