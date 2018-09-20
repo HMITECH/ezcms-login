@@ -11,10 +11,10 @@
 
 // **************** DATABASE ****************
 require_once ("cms.class.php"); // REDIS + PDO Class for database access
-$cms = new db; // database handle available in layouts
+$dbh = new db; // database handle available in layouts
 
 // **************** SITE DETAILS ****************
-$site = $cms->getSiteData();
+$site = $dbh->getSiteData();
 
 // **************** REQUESTED URI ****************
 $uri = strtok($_SERVER["REQUEST_URI"],'?'); // get the requested URI
@@ -22,7 +22,7 @@ $siteFolder =  substr(htmlspecialchars($_SERVER["PHP_SELF"]), 0, -10);
 if ($siteFolder) $uri = substr( $uri , strlen($siteFolder) );
 
 // **************** PAGE DETAILS ****************
-$page = $cms->getPageData($uri);
+$page = $dbh->getPageData($uri);
 
 // Setup CMS Template variable to be used in the layouts
 $maincontent = $page["maincontent"];
