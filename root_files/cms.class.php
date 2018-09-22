@@ -7,8 +7,8 @@
  */
 class db extends PDO {
 
-	protected $useRedis = false;
-	protected $redis;
+	public $useRedis = false;
+	public $redis;
 
 	public function __construct() {
 		// read config file 
