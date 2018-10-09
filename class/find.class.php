@@ -44,14 +44,16 @@ class ezFind extends ezCMS {
 			$id = $_GET['id'];
 			$block = $_GET['block'];
 
-			// finc item ... if not found ... error
-			$stmt = $this->prepare("SELECT `id` FROM `pages` WHERE `$block` LIKE CONCAT ('%', ?, '%') AND `id` = ?" );
+			// find item ... if not found ... error
+			$stmt = $this->prepare("SELECT `id`, `url` FROM `pages` WHERE `$block` LIKE CONCAT ('%', ?, '%') AND `id` = ?" );
 			$stmt->execute(array($_POST['find'], $id));
 			if (!$stmt->rowCount()) {
 				$r->success = false;
 				$r->msg = "Find text not found!";
-				die(json_encode($r));			
+				die(json_encode($r));
 			}
+
+			$page = $stmt->fetch();
 	
 			// Create a revision			
 			if (!$this->query("INSERT INTO `git_pages` ( 
@@ -75,6 +77,14 @@ class ezFind extends ezCMS {
 			$stmt = $this->prepare("UPDATE `pages` SET `$block` = REPLACE (`$block`, ?, ?) WHERE id = ?" );
 			if (!$stmt->execute(array($_POST['find'], $_POST['replace'], $id))) $r->success = false;
 
+			// exipre the redis cache here for the page
+			if ($this->useRedis) {
+				// find redis key and remove it ... here and now
+				$redKey = $this->useRedis."-page-".$page['url'];
+				if ($id == 2) $redKey = $this->useRedis."-404page";
+				$this->redis->del($redKey);
+			}
+			
 		} else if ($in == 'php')  {
 			if ($file != 'layout.php') $file = "layout.$file";
 			$this->replaceInFiles( "../$file", $file, $r );

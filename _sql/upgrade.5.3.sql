@@ -21,6 +21,11 @@ ALTER TABLE `pages` ADD `hidechildpages` INT(1) NOT NULL DEFAULT '0' COMMENT 'Hi
 
 ALTER TABLE `git_pages` ADD `hidechildpages` INT(1) NOT NULL DEFAULT '0' COMMENT 'Hide Child Pages in ezCMS' AFTER `nositemap`;
 
+ALTER TABLE `pages` ADD INDEX(`parentid`);
+ALTER TABLE `pages` ADD INDEX(`title`);
+ALTER TABLE `pages` ADD INDEX(`keywords`);
+ALTER TABLE `pages` ADD INDEX(`description`);
+ALTER TABLE `pages` ADD INDEX(`url`);
 
 -- CREATE redirects Tables
 CREATE TABLE IF NOT EXISTS `redirects` (
