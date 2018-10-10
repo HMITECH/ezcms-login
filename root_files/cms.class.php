@@ -53,8 +53,10 @@ class db extends PDO {
 			$redKey = $this->useRedis."-page-".$uri;
 			if (!$this->redis->exists($redKey)) {
 				$page = $this->getPageDatabase($uri);
-				if ($page['id'] == 2) return $page;
-				else $this->redis->setex($redKey, (int) 3600*12*10, json_encode($page));
+				if ($page['id'] == 2) 
+					return $page;
+				else if ($page["published"]) 
+					$this->redis->setex($redKey, (int) 3600*12*10, json_encode($page));
 			}
 			return json_decode($this->redis->get($redKey), true);
 		} else return $this->getPageDatabase($uri);
