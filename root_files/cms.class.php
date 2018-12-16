@@ -68,7 +68,8 @@ class db extends PDO {
 		if ($stmt->rowCount()) {
 			$page = $stmt->fetch(PDO::FETCH_ASSOC);
 			if (!$page["published"]) {
-				 // Check if Admin is logged in - unpublished pages are visible to ADMIN.
+				
+				// Check if Admin is logged in - unpublished pages are visible to ADMIN.
 				if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 				if (!isset($_SESSION['LOGGEDIN'])) $_SESSION['LOGGEDIN'] = false;
 				if (!$_SESSION['LOGGEDIN']) $page = $this->get404Page($uri);
