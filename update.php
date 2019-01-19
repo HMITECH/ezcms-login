@@ -20,6 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if ( is_dir('.git') ) {
 		$r->success = true;
 		$r->msg = shell_exec('git pull');
+		if (!$r->msg) {
+		    $r->success = false;
+		    $r->msg = 'Shell Access Failed, use git pull to update.';		    
+		}		
 	} else {
 		$r->success = false;
 		$r->msg = 'Update repo is missing. Clone https://github.com/HMITECH/ezcms-login';		
