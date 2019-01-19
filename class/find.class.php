@@ -172,7 +172,7 @@ class ezFind extends ezCMS {
 	private function findPagesBlk ( $fld ) {
 		$stmt = $this->prepare(
 			"SELECT `id` , `pagename` as `name`, '$fld' as `block`, `url`, `published` FROM `pages` 
-			WHERE `$fld` LIKE CONCAT ('%' , :findstr , '%')" );
+			WHERE `$fld` LIKE CONCAT ('%' , :findstr , '%') LIMIT 100" );
 		$stmt->bindParam(':findstr', $_POST['find'], PDO::PARAM_STR);
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
