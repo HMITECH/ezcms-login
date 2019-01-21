@@ -84,7 +84,7 @@ $cms = new ezScripts();
 			</div>
 			<input border="0" class="input-block-level tooltipme2" name="txtlnk" onFocus="this.select();"
 				style="cursor: pointer;" onClick="this.select();"  type="text" title="Include this link in layouts or page head"
-				value="&lt;script src=&quot;<?php echo $cms->siteFolder.substr($cms->filename, 2); ?>&quot;" readonly/>
+				value="&lt;script src=&quot;<?php echo $cms->siteFolder.substr($cms->filename, 2); ?>&quot;&gt;&lt;/script&gt;" readonly/>
 			<input type="hidden" name="txtName" id="txtName" value="<?php echo $cms->filename; ?>">
 			<textarea name="txtContents" id="txtContents" class="input-block-level"
 				style="height: 460px; width:100%"><?php echo $cms->content; ?></textarea>
