@@ -168,8 +168,8 @@ $cms = new ezLayouts();
 			cmMode = 'application/x-httpd-php';
 		$('#frmlayout').submit( function() {
 			myCode.save();
+			$('.alert').remove();
 			$.post( $(this).prop('action')+'?ajax', $(this).serialize(), function(data) {
-				$('.alert').remove();
 				$(data).insertBefore('#revBlock');
 			}).fail( function() {
 	            alert( "Request Failed" );
