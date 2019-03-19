@@ -135,6 +135,7 @@ $cms = new ezStyles();
 		$('#Submit').click();
 		return false;
 	});
+	$('title').text( location.search.split('=')[1] );
 </script>
 <?php if ($_SESSION['EDITORTYPE'] == 3) { ?>
 

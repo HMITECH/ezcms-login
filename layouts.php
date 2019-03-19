@@ -141,6 +141,8 @@ $cms = new ezLayouts();
 		$('#pagesBlock').slideToggle();
 		return false;
 	});
+	//$('title').text('<?php echo $cms->filename; ?>');
+	$('title').text( location.search.split('=')[1] );
 </script>
 <?php if ($_SESSION['EDITORTYPE'] == 3) { ?>
 
