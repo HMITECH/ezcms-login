@@ -19,7 +19,7 @@ $stats = $cms->query('SELECT COUNT(DISTINCT `url`) as `ispublished` from `pages`
       <div class="span6"> 
   	    <a href="../sitemap.xml" target="_blank"><strong><?php echo $stats['ispublished']; ?></strong> published page(s)</a>		  
 	  </div>
-      <div class="span3"> ezCMS Version:<strong>5.3</strong> </div>
+      <div class="span3"> ezCMS Version:<strong>5.4</strong> </div>
     </div>
   </div>
 </div>
@@ -36,6 +36,25 @@ $('.tooltipme2').tooltip();
 // Confirm Delete Action
 $('.conf-del').click( function () {
 	return confirm('Confirm Delete Action ?');
+});
+
+// expand srink edit block size
+$('#toggleEditSize').click( function () {
+
+	var btnIcon = $(this).find('i');
+
+	if (btnIcon.hasClass('icon-chevron-left')) {
+		btnIcon.removeClass('icon-chevron-left').addClass('icon-chevron-right');
+		$('#editBlock > div').eq(0).hide()
+		$('#editBlock > div').eq(1).removeClass('span9')
+	} else {
+		btnIcon.removeClass('icon-chevron-right').addClass('icon-chevron-left');
+		$('#editBlock > div').eq(0).show()
+		$('#editBlock > div').eq(1).addClass('span9')
+	}
+
+
+	return false;
 });
 
 // Open the treeview to selected item

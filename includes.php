@@ -37,6 +37,7 @@ $cms = new ezIncludes();
 				<form id="frmlayout" action="includes.php" method="post" enctype="multipart/form-data">
 					<div class="navbar">
 						<div class="navbar-inner">
+							<a href="#" id="toggleEditSize" class="btn"><i class="icon-chevron-left"></i></a>
 							<input type="submit" name="Submit" id="Submit" value="Save Changes" class="btn btn-primary">
 							<div class="btn-group">
 							  <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">

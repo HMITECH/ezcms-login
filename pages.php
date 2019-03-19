@@ -44,7 +44,10 @@ $cms = new ezPages();
 
 				<form id="frmPage" action="" method="post" enctype="multipart/form-data">
 				<div class="navbar">
-					<div class="navbar-inner"><?php echo $cms->btns ?></div><!-- /navbar-inner  -->
+					<div class="navbar-inner">
+						<a href="#" id="toggleEditSize" class="btn"><i class="icon-chevron-left"></i></a>
+						<?php echo $cms->btns ?>
+					</div><!-- /navbar-inner  -->
 				</div>
 
 				<?php echo $cms->msg; ?>
