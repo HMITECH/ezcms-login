@@ -61,7 +61,6 @@ class ezLayouts extends ezCMS {
 		
 		// Get the Revisions
 		$this->getRevisions();
-
 	}
 	
 	// Function to Update the Defaults Settings
@@ -88,7 +87,6 @@ class ezLayouts extends ezCMS {
 		
 		header("Location: ?flg=revdelfailed$show");
 		exit;
-	
 	}
 	
 	// Function to Build Treeview HTML
@@ -193,7 +191,7 @@ class ezLayouts extends ezCMS {
 	private function update() {
 	
 		// Check all the variables are posted
-		if ( (!isset($_POST['Submit'])) || (!isset($_POST['txtContents'])) || (!isset($_POST["txtName"])) ) {
+		if ( (!isset($_POST['txtContents'])) || (!isset($_POST["txtName"])) ) {
 			header('HTTP/1.1 400 BAD REQUEST');
 			die('Invalid Request');
 		}
@@ -202,9 +200,11 @@ class ezLayouts extends ezCMS {
 		$contents = $_POST["txtContents"];
 		$show = substr($filename, 7 , strlen($filename)-7);
 		
+		if (isset($_GET['ajax'])) $ajax = true; else $ajax = false;
 		
 		// Check permissions
 		if (!$this->usr['editlayout']) {
+			if ($ajax) $this->sendAjaxMsg('noperms');
 			header("Location: ?flg=noperms&show=$show");
 			exit;
 		}
@@ -220,6 +220,7 @@ class ezLayouts extends ezCMS {
 		
 			// Check if writeable
 			if (!is_writable("../$filename")) {
+				if ($ajax) $this->sendAjaxMsg('unwriteable');
 				$this->flg = 'unwriteable';
 				$this->filename = $filename;
 				$this->content = htmlspecialchars($contents);
@@ -229,6 +230,7 @@ class ezLayouts extends ezCMS {
 			// Check if nothing has changed		
 			$original = file_get_contents("../$filename");
 			if ($original == $contents) {
+				if ($ajax) $this->sendAjaxMsg('nochange');
 				header("Location: ?flg=nochange&show=$show");
 				exit;
 			}
@@ -239,24 +241,26 @@ class ezLayouts extends ezCMS {
 							'revmsg' => $_POST['revmsg'],
 							'createdby' => $this->usr['id']);
 			if ( !$this->add('git_files', $data) ) {
+				if ($ajax) $this->sendAjaxMsg('revfailed');
 				header("Location: ?flg=revfailed&show=$show");
 				exit;
-			}			
-			
+			}
+
 		}
 		
 		// Save the layout file
 		if (file_put_contents("../$filename", $contents ) !== false) {
+			if ($ajax) $this->sendAjaxMsg('saved');
 			header("Location: ?flg=saved&show=$show");
 			exit;
 		}
 		
 		// Failed to update layout
+		if ($ajax) $this->sendAjaxMsg('failed');
 		$this->flg = 'failed';
 		$this->filename = $filename;
 		$this->content = htmlspecialchars($contents);
-
 	}
-	
+
 }
 ?>

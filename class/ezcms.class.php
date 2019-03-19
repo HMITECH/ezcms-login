@@ -177,6 +177,13 @@ class ezCMS extends db {
 		return implode(', ', $t); 
 	}
 
+	// Send Message HTML for ajax requests
+	public function sendAjaxMsg($flg) {
+		$this->flg = $flg;
+		$this->getStdFlgMessage();
+		die($this->msg);
+	}
+
 	// Function to Set the Display Message
 	private function getStdFlgMessage() {
 

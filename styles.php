@@ -157,6 +157,16 @@ $cms = new ezStyles();
 		var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
 		var	cmTheme = '<?php echo $_SESSION["CMTHEME"]; ?>',
 			cmMode = 'css';
+		$('#frm').submit( function() {
+			myCode.save();
+			$.post( $(this).prop('action')+'?ajax', $(this).serialize(), function(data) {
+				$('.alert').remove();
+				$(data).insertBefore('#revBlock');
+			}).fail( function() {
+	            alert( "Request Failed" );
+			});
+			return false;
+		});
 	</script>
 	<script src="js/gitFileCode.js"></script>
 

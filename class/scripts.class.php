@@ -61,7 +61,6 @@ class ezScripts extends ezCMS {
 		
 		// Get the Revisions
 		$this->getRevisions();
-		
 	}
 
 	// Function to Update the Defaults Settings
@@ -88,7 +87,6 @@ class ezScripts extends ezCMS {
 		
 		header("Location: ?flg=revdelfailed$show");
 		exit;
-	
 	}
 		
 	// Function to fetch the revisions
@@ -178,7 +176,7 @@ class ezScripts extends ezCMS {
 	private function update() {
 	
 		// Check all the variables are posted
-		if ( (!isset($_POST['Submit'])) || (!isset($_POST['txtContents'])) || (!isset($_POST["txtName"])) ) {
+		if ( (!isset($_POST['txtContents'])) || (!isset($_POST["txtName"])) ) {
 			header('HTTP/1.1 400 BAD REQUEST');
 			die('Invalid Request');
 		}
@@ -188,8 +186,11 @@ class ezScripts extends ezCMS {
 		$show = '';
 		if ($filename != "../main.js") $show = '&show='.substr($filename, 18 , strlen($filename)-18);
 
+		if (isset($_GET['ajax'])) $ajax = true; else $ajax = false;
+
 		// Check permissions
 		if (!$this->usr['editjs']) {
+			if ($ajax) $this->sendAjaxMsg('noperms');
 			header("Location: ?flg=noperms$show");
 			exit;
 		}
@@ -205,6 +206,7 @@ class ezScripts extends ezCMS {
 
 			// Check if writeable
 			if (!is_writable($filename)) {
+				if ($ajax) $this->sendAjaxMsg('unwriteable');
 				$this->flg = 'unwriteable';
 				$this->filename = $filename;
 				$this->content = htmlspecialchars($contents);
@@ -214,6 +216,7 @@ class ezScripts extends ezCMS {
 			// Check if nothing has changed		
 			$original = file_get_contents($filename);
 			if ($original == $contents) {
+				if ($ajax) $this->sendAjaxMsg('nochange');
 				header("Location: ?flg=nochange$show");
 				exit;
 			}
@@ -224,6 +227,7 @@ class ezScripts extends ezCMS {
 							'revmsg' => $_POST['revmsg'],
 							'createdby' => $this->usr['id']);
 			if ( !$this->add('git_files', $data) ) {
+				if ($ajax) $this->sendAjaxMsg('revfailed');
 				header("Location: ?flg=revfailed$show");
 				exit;
 			}			
@@ -232,15 +236,16 @@ class ezScripts extends ezCMS {
 		
 		// Save the file
 		if (file_put_contents($filename, $contents ) !== false) {
+			if ($ajax) $this->sendAjaxMsg('saved');
 			header("Location: ?flg=saved$show");
 			exit;
 		}
 		
 		// Failed to update
+		if ($ajax) $this->sendAjaxMsg('failed');
 		$this->flg = 'failed';
 		$this->filename = $filename;
 		$this->content = htmlspecialchars($contents);
-		
 	}
 	
 }
