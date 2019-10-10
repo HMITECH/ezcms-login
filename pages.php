@@ -121,7 +121,6 @@ $cms = new ezPages();
 							</div>
 						</div>
 
-
 						<div class="row">
 							<div class="span6">
 							  <div class="control-group">
@@ -167,6 +166,39 @@ $cms = new ezPages();
 									title="Choose a Layout to render the content of this Page."
 									class="input-block-level tooltipme2">
 										<?php echo $cms->slOptions; ?></select></div>
+							  </div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="span6">
+							  <div class="control-group">
+								<label class="control-label" for="txtTitle">Search Priority</label>
+								<div class="controls">
+									<input type="number" id="txtsprio" 
+										name="priority" min="0" max="100"
+										placeholder="Search priority 0 - 100"
+										title="Seach Priority of the page"
+										data-toggle="tooltip"
+										value="<?php echo $cms->page['priority']; ?>"
+										data-placement="top" minlength="2"
+										class="input-block-level tooltipme2" 
+										required>
+								</div>
+							  </div>
+							</div>
+							<div class="span6">
+							  <div class="control-group">
+								<label class="control-label" for="txtName">Featured Image</label>
+								<div class="controls">
+									<input type="text" id="txtimg" name="img"
+										placeholder="Featured image of the page"
+										title="Enter the full path of the image here."
+										data-toggle="tooltip"
+										value="<?php echo $cms->page['img']; ?>"
+										data-placement="top" minlength="2"
+										class="input-block-level tooltipme2">
+								</div>
 							  </div>
 							</div>
 						</div>

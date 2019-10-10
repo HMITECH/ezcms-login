@@ -116,7 +116,7 @@ a.label.label-info {
 #difBlockSide1:after   {content: "Aside 1 Block";}
 #difBlockSide2:after   {content: "Aside 2 Block";}
 #difBlockFooter:after  {content: "Footer Block" ;}
-
+#tbloading {display: none;margin-top: 12px;}
 #push,#footer {height: 30px;}
 #footer { 
 	height: 30px; 

@@ -90,7 +90,7 @@ class ezUsers extends ezCMS {
 								FROM `git_files` WHERE `createdby` = ".intval($this->id).")
 							UNION (SELECT `id`, 3 as `type`, '' as `det`, `revmsg`, `createdon` 
 								FROM `site` WHERE `createdby` = ".intval($this->id).")
-							ORDER BY `createdon` DESC")->fetchAll(PDO::FETCH_ASSOC);
+							ORDER BY `createdon` DESC LIMIT 200")->fetchAll(PDO::FETCH_ASSOC);
 		
 		foreach ($results as $entry) {
 		

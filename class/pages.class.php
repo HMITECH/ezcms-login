@@ -410,7 +410,9 @@ class ezPages extends ezCMS {
 		
 		// get the required post varables 
 		$txtFlds = array('pagename', 'title', 'keywords', 'description', 'maincontent', 'headercontent',
-			 'sidecontent', 'sidercontent', 'sidercontent', 'footercontent','head', 'notes', 'layout' );
+			 'sidecontent', 'sidercontent', 'sidercontent', 
+			 'footercontent','head', 'notes', 'layout',
+			 'priority','img' );
 		if ( ($this->id != 1) && ($this->id != 2) )
 			array_push($txtFlds, 'parentid', 'url');
 		$this->fetchPOSTData($txtFlds, $data);
@@ -477,12 +479,14 @@ class ezPages extends ezCMS {
 				  `page_id`, `pagename`, `title`, `keywords`, `description`, `maincontent`,
 				  `useheader` , `headercontent` , `usefooter` , `footercontent` , `useside` ,
 				   `sidecontent` , `published` , `parentid` , `url` , `revmsg`,
-				   `sidercontent` , `usesider` ,`head` , `notes`, `layout` , `nositemap` , `createdby` )
+				   `sidercontent` , `usesider` ,`head` , `notes`, `layout` , `nositemap` , 
+				   `priority`, `img`, `createdby` )
 				SELECT 
 				  `id` AS page_id, `pagename`, `title`, `keywords`, `description`, `maincontent`,
 				  `useheader` , `headercontent` , `usefooter` , `footercontent` ,
 				  `useside` , `sidecontent` , `published` , `parentid` , `url` , ".$this->quote($_POST['revmsg']).",
-				  `sidercontent` , `usesider` ,`head` , `notes`, `layout` , `nositemap` , 
+				  `sidercontent` , `usesider` ,`head` , `notes`, `layout` , `nositemap`,
+				  `priority`, `img`,
 				  '".$_SESSION['EZUSERID']."' as `createdby`  FROM `pages` WHERE `id` = ".$this->id)) {
 				header("Location: ?flg=revfailed&id=".$this->id);
 				exit;

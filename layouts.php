@@ -37,6 +37,7 @@ $cms = new ezLayouts();
 				<form id="frmlayout" action="layouts.php" method="post" enctype="multipart/form-data">
 					<div class="navbar">
 						<div class="navbar-inner">
+							<img src="img/ajax-loader.gif" id="tbloading">
 							<a href="#" id="toggleEditSize" class="btn"><i class="icon-chevron-left"></i></a>
 							<input type="submit" name="Submit" id="Submit" value="Save Changes" class="btn btn-primary">
 							<div class="btn-group">
@@ -170,7 +171,11 @@ $cms = new ezLayouts();
 		$('#frmlayout').submit( function() {
 			myCode.save();
 			$('.alert').remove();
+			$('#tbloading').parent().children().hide();
+			$('#tbloading').show();
 			$.post( $(this).prop('action')+'?ajax', $(this).serialize(), function(data) {
+				$('#tbloading').parent().children().show();
+				$('#tbloading').hide();
 				$(data).insertBefore('#revBlock');
 			}).fail( function() {
 	            alert( "Request Failed" );

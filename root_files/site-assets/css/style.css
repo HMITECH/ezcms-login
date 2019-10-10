@@ -1,0 +1,50 @@
+/*
+ * HMI Technologies Mumbai
+ ** CSS **
+ *
+ * This is the default CSS file. inner
+ *
+ * You should delete these sample styes and put in your own.
+*/
+
+body, html {
+	margin: 0;
+    font-family: sans-serif;
+    line-height: 2;
+    background: #444;
+}
+
+header, footer {
+    background: #222;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+header a, footer a {
+    color: red;
+}
+
+nav a {
+    background: #666;
+    padding: 5px 30px;
+    color: #fff;
+    text-decoration: none;
+    margin: 5px 10px;
+    border-radius: 10px;
+}
+
+table {
+	background:#fff;
+    min-height: 300px;
+    width: 100%;
+}
+
+table td {
+    padding: 10px;
+}
+
+table td.asidebar {
+	background:#eee;
+	width: 20%;
+}
