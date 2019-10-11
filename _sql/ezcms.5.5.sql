@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   KEY `place` (`place`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='the web pages';
 
-INSERT INTO `pages` (`id`, `pagename`, `title`, `keywords`, `description`, `maincontent`, `useheader`, `headercontent`, `usefooter`, `footercontent`, `useside`, `sidecontent`, `published`, `parentid`, `place`, `url`, `sidercontent`, `usesider`, `head`, `layout`, `nositemap`, `createdby`) VALUES
+INSERT INTO `pages` (`id`, `pagename`, `title`, `keywords`, `description`, `maincontent`, `useheader`, `headercontent`, `usefooter`, `footercontent`, `useside`, `sidecontent`, `published`, `parentid`, `place`, `url`, `sidercontent`, `usesider`, `head`, `layout`, `nositemap`, `notes`, `createdby`) VALUES
 (1,
 	'home',
 	'Home Page',
@@ -105,7 +105,7 @@ INSERT INTO `pages` (`id`, `pagename`, `title`, `keywords`, `description`, `main
 	'/',
 	'', 0,
 	'<!--  Head content  -->',
-	'layout.php', 0, 1),
+	'layout.php', 0, '', 1),
 (2,
 	'404 Page',
 	'Page not found',
@@ -121,7 +121,7 @@ INSERT INTO `pages` (`id`, `pagename`, `title`, `keywords`, `description`, `main
 	'/.',
 	'', 0,
 	'',
-	'layout.full-width.php', 0, 1),
+	'layout.full-width.php', 0, '', 1),
 (3,
 	'contact',
 	'Contact Page',
@@ -136,7 +136,7 @@ INSERT INTO `pages` (`id`, `pagename`, `title`, `keywords`, `description`, `main
 	'/contact',
 	'', 0,
 	'',
-	'layout.right-aside.php', 0, 1),
+	'layout.right-aside.php', 0, '', 1),
 (4,
 	'about',
 	'About Page',
@@ -151,7 +151,7 @@ INSERT INTO `pages` (`id`, `pagename`, `title`, `keywords`, `description`, `main
 	'/about',
 	'', 0,
 	'',
-	'layout.left-aside.php', 0, 1);
+	'layout.left-aside.php', 0, '', 1);
 
 DROP TABLE IF EXISTS site;
 CREATE TABLE IF NOT EXISTS `site` (
