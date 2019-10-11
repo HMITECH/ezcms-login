@@ -176,12 +176,12 @@ $cms = new ezPages();
 								<label class="control-label" for="txtTitle">Search Priority</label>
 								<div class="controls">
 									<input type="number" id="txtsprio" 
-										name="priority" min="0" max="100"
-										placeholder="Search priority 0 - 100"
+										name="priority" min="0" max="999"
+										placeholder="Search priority 0 - 999"
 										title="Seach Priority of the page"
 										data-toggle="tooltip"
 										value="<?php echo $cms->page['priority']; ?>"
-										data-placement="top" minlength="2"
+										data-placement="top"
 										class="input-block-level tooltipme2" 
 										required>
 								</div>
