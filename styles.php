@@ -61,12 +61,8 @@ $cms = new ezStyles();
 
 					</div>
 					<?php echo $cms->deletebtn; ?>
-					<?php if ($_SESSION['EDITORTYPE'] == 3) {?>
 					<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup><?php echo $cms->revs['cnt']; ?></sup></a>
-					<?php } ?>
-					<?php if ($_SESSION['EDITORTYPE'] == 3) {?>
 					<a id="showdiff" href="#" class="btn btn-inverted btn-danger">Review DIFF</a>
-					<?php } ?>
 				</div>
 			</div>
 			<?php echo $cms->msg; ?>
@@ -139,57 +135,39 @@ $cms = new ezStyles();
 	});
 	$('title').text( location.search.split('=')[1] );
 </script>
-<?php if ($_SESSION['EDITORTYPE'] == 3) { ?>
-
-	<script src="codemirror/lib/codemirror.js"></script>
-	<script src="codemirror/mode/javascript/javascript.js"></script>
-	<script src="codemirror/mode/htmlmixed/htmlmixed.js"></script>
-	<script src="codemirror/addon/edit/matchbrackets.js"></script>
-	<script src="codemirror/mode/xml/xml.js"></script>
-	<script src="codemirror/addon/fold/foldcode.js"></script>
-	<script src="codemirror/addon/fold/foldgutter.js"></script>
-	<script src="codemirror/addon/fold/brace-fold.js"></script>
-	<script src="codemirror/addon/fold/xml-fold.js"></script>
-	<script src="codemirror/addon/fold/markdown-fold.js"></script>
-	<script src="codemirror/addon/fold/comment-fold.js"></script>
-	<script src="codemirror/addon/merge/diff_match_patch.js"></script>
-	<script src="codemirror/addon/merge/merge.js"></script>
-	<script src="codemirror/mode/css/css.js"></script>
-	<script src="codemirror/mode/clike/clike.js"></script>
-	<script>
-		var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
-		var	cmTheme = '<?php echo $_SESSION["CMTHEME"]; ?>',
-			cmMode = 'css';
-		$('#frm').submit( function() {
-			myCode.save();
-			$('.alert').remove();
-			$('#tbloading').parent().children().hide();
-			$('#tbloading').show();
-			$.post( $(this).prop('action')+'?ajax', $(this).serialize(), function(data) {
-				$('#tbloading').parent().children().show();
-				$('#tbloading').hide();
-				$(data).insertBefore('#revBlock');
-			}).fail( function() {
-	            alert( "Request Failed" );
-			});
-			return false;
+<script src="codemirror/lib/codemirror.js"></script>
+<script src="codemirror/mode/javascript/javascript.js"></script>
+<script src="codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script src="codemirror/addon/edit/matchbrackets.js"></script>
+<script src="codemirror/mode/xml/xml.js"></script>
+<script src="codemirror/addon/fold/foldcode.js"></script>
+<script src="codemirror/addon/fold/foldgutter.js"></script>
+<script src="codemirror/addon/fold/brace-fold.js"></script>
+<script src="codemirror/addon/fold/xml-fold.js"></script>
+<script src="codemirror/addon/fold/markdown-fold.js"></script>
+<script src="codemirror/addon/fold/comment-fold.js"></script>
+<script src="codemirror/addon/merge/diff_match_patch.js"></script>
+<script src="codemirror/addon/merge/merge.js"></script>
+<script src="codemirror/mode/css/css.js"></script>
+<script src="codemirror/mode/clike/clike.js"></script>
+<script>
+	var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
+	var	cmTheme = '<?php echo $_SESSION["CMTHEME"]; ?>',
+		cmMode = 'css';
+	$('#frm').submit( function() {
+		myCode.save();
+		$('.alert').remove();
+		$('#tbloading').parent().children().hide();
+		$('#tbloading').show();
+		$.post( $(this).prop('action')+'?ajax', $(this).serialize(), function(data) {
+			$('#tbloading').parent().children().show();
+			$('#tbloading').hide();
+			$(data).insertBefore('#revBlock');
+		}).fail( function() {
+            alert( "Request Failed" );
 		});
-	</script>
-	<script src="js/gitFileCode.js"></script>
-
-<?php } else { ?>
-
-	<script language="javascript" type="text/javascript" src="js/edit_area/edit_area_full.js"></script>
-	<script>
-		editAreaLoader.init({
-			id:"txtContents",
-			syntax: "css",
-			allow_toggle: true,
-			start_highlight: true,
-			toolbar: "search, go_to_line, |, undo, redo, |, select_font, |, syntax_selection, |, change_smooth_selection, highlight, reset_highlight"
-		});
-	</script>
-
-<?php } ?>
-
+		return false;
+	});
+</script>
+<script src="js/gitFileCode.js"></script>
 </body></html>

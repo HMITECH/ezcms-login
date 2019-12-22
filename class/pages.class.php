@@ -148,10 +148,8 @@ class ezPages extends ezCMS {
 		$this->btns .= '<a href="?copyid='.$this->id.'" class="btn btn-warning">Copy</a>';
 		if ($this->id > 2)
 			$this->btns .= '<a href="?delid='.$this->id.'" class="btn btn-danger conf-del">Delete</a>';
-		if ($_SESSION['EDITORTYPE'] == 3)
-			$this->btns .= '<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup>'.$this->revs['cnt'].'</sup></a>';
-		if ($_SESSION['EDITORTYPE'] == 3)
-			$this->btns .= '<a id="showdiff" href="#" class="btn btn-inverted btn-danger">Review DIFF</a>';	
+		$this->btns .= '<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup>'.$this->revs['cnt'].'</sup></a>';
+		$this->btns .= '<a id="showdiff" href="#" class="btn btn-inverted btn-danger">Review DIFF</a>';	
 	}
 	
 	// Function to Copy a Page 
