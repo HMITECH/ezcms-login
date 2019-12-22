@@ -57,9 +57,6 @@ if ($stmt->rowCount()) {
 	//login the user
 	$_SESSION['LOGGEDIN']   = true;  // login flag to TRUE
 	$_SESSION['EZUSERID']   = $user['id']; // User's ID
-	
-	// TODO - Move to database later ...
-	$_SESSION['EDITORTYPE'] = $user['editor']; // Set editor to code mirror on login
 	$_SESSION["CMTHEME"]    = $user['cmtheme']; // Default Code Mirror theme
 	
 	// Encrypt the password on first login if is not.

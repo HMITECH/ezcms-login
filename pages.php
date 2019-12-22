@@ -403,10 +403,7 @@ $cms = new ezPages();
 	});
 
 })(jQuery);</script>
-
-
 <?php include('include/footer.php'); ?>
-
 <script>
 
 	$('#left-tree.treeview li a').click( function() {
@@ -473,67 +470,7 @@ $cms = new ezPages();
 	$('.nopubmsg').click( function () {
 		return confirm('The page is Not published, its only visible to you.');
 	});
-
 </script>
-
-
-<?php if ($_SESSION['EDITORTYPE'] == 0) { ?>
-	<script type="text/javascript" src="ckeditor/ckeditor.js"></script>
-	<script>
-	CKEDITOR.replace( 'txtMain'  , { uiColor : '#AAAAFF' });
-	CKEDITOR.replace( 'txtHeader', { uiColor : '#59ACFF' });
-	CKEDITOR.replace( 'txtrSide' , { uiColor : '#FFD5AA' });
-	CKEDITOR.replace( 'txtSide'  , { uiColor : '#FFAAAA' });
-	CKEDITOR.replace( 'txtFooter', { uiColor : '#CCCCCC' });
-	</script>
-<?php } else if ($_SESSION['EDITORTYPE'] == 1) { ?>
-	<script language="javascript" type="text/javascript" src="js/edit_area/edit_area_full.js"></script>
-	<script>
-	var txtMain_loaded = false;
-	var txtHeader_loaded = false;
-	var txtFooter_loaded = false;
-	var txtSide_loaded = false;
-	var txtSider_loaded = false;
-	var txtHead_loaded = false;
-	var getEditAreaJSON = function (strID) {
-		return {
-			id: strID,
-			syntax: "html",
-			allow_toggle: false,
-			start_highlight: true,
-			toolbar: "search, go_to_line, |, undo, redo, |, select_font, |, syntax_selection, |, change_smooth_selection, highlight, reset_highlight"
-		}
-	}
-	$('#myTab a').click(function (e) {
-		e.preventDefault();
-		if ((!txtMain_loaded)&&($(this).attr('href')=='#d-content')) {
-			editAreaLoader.init(getEditAreaJSON("txtMain"));
-			txtMain_loaded = true;
-		}
-		if ((!txtHeader_loaded)&&($(this).attr('href')=='#d-header')) {
-			editAreaLoader.init(getEditAreaJSON("txtHeader"));
-			txtHeader_loaded = true;
-		}
-		if ((!txtFooter_loaded)&&($(this).attr('href')=='#d-footer')) {
-			editAreaLoader.init(getEditAreaJSON("txtFooter"));
-			txtFooter_loaded = true;
-		}
-		if ((!txtSider_loaded)&&($(this).attr('href')=='#d-siderbar')) {
-			editAreaLoader.init(getEditAreaJSON("txtrSide"));
-			txtSider_loaded = true;
-		}
-		if ((!txtSide_loaded)&&($(this).attr('href')=='#d-sidebar')) {
-			editAreaLoader.init(getEditAreaJSON("txtSide"));
-			txtSide_loaded = true;
-		}
-		if ((!txtHead_loaded)&&($(this).attr('href')=='#d-head')) {
-			editAreaLoader.init(getEditAreaJSON("txtHead"));
-			txtHead_loaded = true;
-		}
-	});
-	</script>
-
-<?php } else if ($_SESSION['EDITORTYPE'] == 3) { ?>
 
 	<script src="codemirror/lib/codemirror.js"></script>
 	<script src="codemirror/mode/javascript/javascript.js"></script>
@@ -822,9 +759,7 @@ $cms = new ezPages();
 	myCodeSide2 = CodeMirror.fromTextArea(document.getElementById("txtrSide"), codeMirrorJSON);
 	myCodeHead = CodeMirror.fromTextArea(document.getElementById("txtHead"), codeMirrorJSON);
 	myCodeNotes = CodeMirror.fromTextArea(document.getElementById("txtNotes"), codeMirrorJSON);
-
 </script>
-<?php } ?>
 <script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar > li:eq(1)").addClass('active');

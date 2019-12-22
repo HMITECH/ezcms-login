@@ -57,10 +57,7 @@ class ezCMS extends db {
 		if (isset($_GET['cmsBgColor'])) 
 			if (isset($this->usr['id']))
 				 die( $this->edit( 'users', $this->usr['id'], array('cmscolor' => $_GET['cmsBgColor']) ) );
-			else die('usr not set');			
-		
-		// Change editor type
-		if (isset($_GET['etype'])) $this->chgEditor();
+			else die('usr not set');
 		
 		// Change Code Mirror Theme
 		if (isset($_GET['theme'])) $this->chgEditorTheme();
@@ -149,15 +146,6 @@ class ezCMS extends db {
 	// Fetch POST checkbox data and place into array
 	protected  function fetchPOSTCheck($f, &$d) { 
 		foreach($f as $k) $d[$k] = (isset($_POST[$k])) ? 1 : 0;
-	}
-
-	// Change editor type
-	private function chgEditor() {
-		$editor  = intval($_GET['etype']);
-		if ( ($editor<0) || ($editor>3)  ) die('Invalid Editor');
-		$_SESSION['EDITORTYPE']=$editor;
-		// Save to database
-		$this->query("UPDATE `users` SET `editor` = '$editor' WHERE id = ".$this->usr['id']);
 	}
 
 	// CHange Code Mirror Theme

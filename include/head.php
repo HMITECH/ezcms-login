@@ -17,14 +17,12 @@
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
 <link href="js/jquery.treeview/jquery.treeview.css" rel="stylesheet">
-<?php if ((isset($_SESSION['EDITORTYPE'])) &&  ($_SESSION['EDITORTYPE'] == 3)) { ?>
-	<link href="codemirror/lib/codemirror.css" rel="stylesheet">
-	<link rel="stylesheet" href="codemirror/addon/fold/foldgutter.css" />
-	<link rel="stylesheet" href="codemirror/addon/merge/merge.css" />
-	<?php if ($_SESSION["CMTHEME"]!='default') { ?>
-		<link rel="stylesheet" href="codemirror/theme/<?php echo $_SESSION["CMTHEME"]; ?>.css">
-	<?php } ?>
-	<link rel="stylesheet" href="codemirror/addon/hint/show-hint.css">
+<link href="codemirror/lib/codemirror.css" rel="stylesheet">
+<link rel="stylesheet" href="codemirror/addon/fold/foldgutter.css" />
+<link rel="stylesheet" href="codemirror/addon/merge/merge.css" />
+<?php if ((isset($_SESSION["CMTHEME"])) && ($_SESSION["CMTHEME"]!='default')) { ?>
+	<link rel="stylesheet" href="codemirror/theme/<?php echo $_SESSION["CMTHEME"]; ?>.css">
 <?php } ?>
+<link rel="stylesheet" href="codemirror/addon/hint/show-hint.css">
 <link href="css/custom.css" rel="stylesheet">
 <script src="js/jquery-1.9.1.min.js"></script>

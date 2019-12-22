@@ -20,7 +20,7 @@
 		  <li class="dropdown">
 			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th-large"></i> Template <b class="caret"></b></a>
 			  <ul class="dropdown-menu">
-				<li><a href="setting.php"><i class="icon-th-list"></i> Defaults Settings</a></li>
+				<li><a href="setting.php"><i class="icon-th-list"></i> Defaults Blocks</a></li>
 				<li class="divider"></li>
 				<li><a href="controllers.php"><i class="icon-play"></i> URL Router</a></li>
 				<li><a href="redirects.php"><i class="icon-retweet"></i> 404 Redirects</a></li>
@@ -45,9 +45,8 @@
 				</blockquote>
 				<div><input id="txtbgcolor" type="color"></div>
 				<hr>
-				<?php if ($_SESSION['EDITORTYPE'] == 3) { ?>
 				<blockquote>
-				  <p><i class="icon-edit"></i> Code Mirror Theme</p>
+				  <p><i class="icon-edit"></i> ezCMS Theme</p>
 				</blockquote>
 				<div>
 				  <select id="slCmTheme">
@@ -68,29 +67,18 @@
 					<option>xq-light</option><option>yeti</option><option>zenburn</option>
 				  </select>
 				</div>
-			  <?php } ?>
 			  </div>
 		  </li>
 		</ul>
 		
 		<ul class="nav pull-right">
 			<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-share"></i>
-					Welcome <?php echo $cms->usr['username']; ?> <b class="caret"></b></a>
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-share"></i> Welcome
+					<?php echo $cms->usr['username']; ?> <b class="caret"></b></a>
 				<ul class="dropdown-menu">
 					<li><a href="update.php"><i class="icon-download"></i> Update ezCMS</a></li>
 					<li class="divider"></li>
 					<li><a href="profile.php"><i class="icon-comment"></i> Change Password</a></li>
-					<li class="divider"></li>
-					<li class="nav-header">Select Editor</li>
- 					<li <?php if ($_SESSION['EDITORTYPE'] == 3) echo 'class="active"'; ?> >
-						<a href="?etype=3"><i class="icon-edit"></i> Code Mirror</a></li> 
- 					<li <?php if ($_SESSION['EDITORTYPE'] == 0) echo 'class="active"'; ?> >
-						<a href="?etype=0"><i class="icon-calendar"></i> CK Editor</a></li>
- 					<li <?php if ($_SESSION['EDITORTYPE'] == 1) echo 'class="active"'; ?> >
-						<a href="?etype=1"><i class="icon-folder-close"></i> Edit Area</a></li>
- 					<li <?php if ($_SESSION['EDITORTYPE'] == 2) echo 'class="active"'; ?> >
-						<a href="?etype=2"><i class="icon-hdd"></i> Text Area</a></li>
 					<li class="divider"></li>
 					<li><a href="scripts/logout.php"><i class="icon-off"></i> Logout</a></li>
 				</ul>
