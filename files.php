@@ -23,7 +23,7 @@ $cms = new ezCMS(); // create new instance of CMS Class with loginRequired = tru
 	<?php include('include/nav.php'); ?>
 	<div class="container"><div class="white-boxed">
 		<iframe id="shrFrm" src="filemanager/dialog.php" frameborder='0' 
-			marginheight='0' marginwidth='0' scrolling="no"></iframe>
+			marginheight='0' marginwidth='0'></iframe>
 	</div></div>
 	<br><br>
 </div><!-- /wrap  -->
