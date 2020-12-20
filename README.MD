@@ -10,6 +10,10 @@ This repo is used to update ezCMS. It has copy of the login or admin folder whic
 
 ### How do I get set up? ###
 
+* See How to install ezCMS.md
+* See How to install ezCMS on AWS.md
+
+
 #### Using the CLI ####
 
 * CLone this repo inside the root of your ezCMS.
