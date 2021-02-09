@@ -12,6 +12,9 @@
 require_once ("class/ezcms.class.php"); // CMS Class for database access
 $cms = new ezCMS(false); // create new instance of CMS Class with loginRequired = false
 
+header( 'X-FRAME-OPTIONS: deny' );
+header( "Content-Security-Policy: frame-ancestors 'none';" );
+
 // Redirect the user if already logged in
 if ($_SESSION['LOGGEDIN'] == true) {
 	header("Location: pages.php");
@@ -43,6 +46,7 @@ switch ($cms->flg) {
 ?><!DOCTYPE html><html lang="en"><head>
 
 	<title>Login : ezCMS Admin</title>
+	<meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none';">
 	<?php include('include/head.php'); ?>
 
 </head><body>
