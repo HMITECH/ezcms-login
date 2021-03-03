@@ -407,7 +407,7 @@ $config = array(
 
 
     //Empty filename permits like .htaccess, .env, ...
-    'empty_filename'                          => false,
+    'empty_filename'                          => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -417,7 +417,7 @@ $config = array(
     | If you want to accept files without extension, remember to add '' extension on allowed extension
     |
     */
-    'files_without_extension'	              => false,
+    'files_without_extension'	              => true,
 
     /******************
     * TUI Image Editor config
