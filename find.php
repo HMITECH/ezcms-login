@@ -49,6 +49,7 @@ $cms = new ezFind();
 							<li><a data-loc="php" href="#"><i class="icon-list-alt"></i> PHP Layouts</a></li>
 							<li><a data-loc="css" href="#"><i class="icon-pencil"></i> CSS Stylesheets</a></li>
 							<li><a data-loc="js" href="#"><i class="icon-align-left"></i> JS Javascripts</a></li>
+							<li><a data-loc="inc" href="#"><i class="icon-share-alt"></i> PHP Includes</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -213,9 +214,11 @@ $('#frmfind').submit(function (e) {
 						} else if ($('#findinTxt').val()=='css') {
 							lnk = 'styles.php?show='+data.results[k].name;
 							if (data.results[k].inroot == 1 ) lnk = 'styles.php';
-						} else if ($('#findinTxt').val()=='js') {					
+						} else if ($('#findinTxt').val()=='js') {
 							lnk = 'scripts.php?show='+data.results[k].name;
 							if (data.results[k].inroot == 1 ) lnk = 'scripts.php';
+						} else if ($('#findinTxt').val()=='inc') {
+							lnk = 'includes.php?show='+data.results[k].name;
 						}
 						row += '<td><a target="_blank" href="'+lnk+'">EDIT</a> '+
 								'<a href="#" class="replaceOnelnk" data-lnk="'+data.results[k].name+'">| REPLACE</a></td>';		
