@@ -94,6 +94,9 @@ class ezFind extends ezCMS {
 		} else if ($in == 'css')  {
 			if ($file != 'style.css') $file = "site-assets/css/$file";
 			$this->replaceInFiles( "../$file", "../$file", $r );
+		} else if ($in == 'inc')  {
+			$file = "includes/$file";
+			$this->replaceInFiles( "../$file", "../$file", $r );
 		} else {
 			$r->success = false;
 			$r->msg = "File Type not found!";
@@ -137,16 +140,20 @@ class ezFind extends ezCMS {
 		$in = $_POST['findinTxt'];
 		if ($in == 'page') $r->results = $this->findPages();
 		if ($in == 'php' ) $r->results = $this->findFiles ('layout.php', '../layout.'         , '*.php'); 
-		if ($in == 'css' ) $r->results = $this->findFiles ('style.css' , '../site-assets/css/', '*.css');
-		if ($in == 'js'  ) $r->results = $this->findFiles ('main.js'   , '../site-assets/js/' , '*.js'); 
+		if ($in == 'css' ) $r->results = $this->findFiles ('style.css', '../site-assets/css/', '*.css');
+		if ($in == 'js'  ) $r->results = $this->findFiles ('main.js', '../site-assets/js/' , '*.js'); 
+		if ($in == 'inc'  ) $r->results = $this->findFiles ('include.php', '../includes/' , '*.php');
 		die(json_encode($r));
 	}
 
 	private function findFiles ($mainFile, $path, $type) {	
 		$results = array();
-		$content = file_get_contents("../$mainFile"); 
-		if (strpos($content, $_POST['find']) !== false)
-			array_push($results, array('name' => $mainFile, 'inroot' => 1));
+		if (file_exists("../$mainFile")) {
+			$content = file_get_contents("../$mainFile"); 
+			if (strpos($content, $_POST['find']) !== false)
+				array_push($results, array('name' => $mainFile, 'inroot' => 1));			
+		}
+
 		$pathLen = strlen($path);
 		foreach (glob($path.$type) as $entry) {
 			$content = file_get_contents($entry);
