@@ -494,8 +494,9 @@ class ezPages extends ezCMS {
 			if ($this->edit( 'pages' , $this->id , $data )) {
 				$this->rebuildSitemap();
 				if ($this->useRedis) {
-					$redKey = $this->useRedis."-page-".$data['url'];
-					if ($data['id'] == 2) $redKey = $this->useRedis."-404page";
+					if ($this->id == 1) $redKey = $this->useRedis."-page-/";
+					elseif ($this->id == 2) $redKey = $this->useRedis."-404page";
+					else $redKey = $this->useRedis."-page-".$data['url'];
 					$this->redis->del($redKey);
 				}
 				header("Location: ?id=".$this->id."&flg=saved");	// added
