@@ -19,6 +19,7 @@ $cms = new ezRedirect();
 	<title>Redirects : ezCMS Admin</title>
 	<?php include('include/head.php'); ?>
 	<style>
+	.table { table-layout: fixed; }
 	textarea { height: auto; }
 	td.title, td.keywords, td.description { text-transform: capitalize;	}
 	</style>
@@ -41,12 +42,12 @@ $cms = new ezRedirect();
 			</form>
 			<table id="resultsTable" class="table table-striped">
 			<thead><tr>
-				<th>ENABLED</th>
-				<th>SOURCE URL</th>
-				<th>TARGET URL</th>
-				<th>301 COUNT</th>
-				<th>404 COUNT</th>
-				<th>ACTION</th>
+				<th width="5%">ENABLED</th>
+				<th width="35%">SOURCE URL</th>
+				<th width="35%">TARGET URL</th>
+				<th width="8%">301 COUNT</th>
+				<th width="8%">404 COUNT</th>
+				<th width="9%">ACTION</th>
 			</tr></thead>
 			<tbody><tr><td colspan="6">Loading ... please wait</td></tr></tbody></table>
 		</div>
