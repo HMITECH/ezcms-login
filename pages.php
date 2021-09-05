@@ -19,15 +19,9 @@ $cms = new ezPages();
 	<title>Pages : ezCMS Admin</title>
 	<?php include('include/head.php'); ?>
 	<style>
-		[draggable] {
-			user-select: none;
-		}
-		#left-tree li ul li {
-			border-top: 2px dashed #fff;
-		}
-		#left-tree .over {
-		  border-top: 2px dashed #000;
-		}
+		[draggable] { user-select: none; }
+		#left-tree li ul li { border-top: 2px dashed #fff;}
+		#left-tree .over { border-top: 2px dashed #000;}
 	</style>
 
 </head><body>

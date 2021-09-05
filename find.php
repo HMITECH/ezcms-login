@@ -19,23 +19,18 @@ $cms = new ezFind();
 	<title>Find Replace : ezCMS Admin</title>
 	<?php include('include/head.php'); ?>
 	<style>
-	textarea { height: auto; }
-	#frmreplace { display:none }
-	.row-fluid > .span9 {min-height: 240px;}
-	.icon-ok { background-color: green; }
-	.icon-remove { background-color: red; }
-	.replaceOnelnk { color: red; }
-	td.title, td.keywords, td.description { text-transform: capitalize;	}
+		#frmfind textarea { height: auto; }
+		#resultsTable .replaceOnelnk { color: red; }
+		#resultsTable .title, #resultsTable .keywords, 
+		#resultsTable .description { text-transform: capitalize; }
 	</style>
 
 </head><body>
-
 <div id="wrap">
 	<?php include('include/nav.php'); ?>
 	<div class="container">
-	  <div class="row-fluid">
+	  <div id="editBlock" class="row-fluid">
 		<div class="span3">
-		
 		  <div class="white-boxed"><form id="frmfind"  method="post" action="#">
 			<div class="navbar"><div class="navbar-inner">
 				<input type="submit" name="find" class="btn btn-primary pull-left" value="Find All">
@@ -54,7 +49,6 @@ $cms = new ezFind();
 					</li>
 				</ul>
 			</div></div>
-
 			<div class="control-group">
 				<label class="control-label">FIND TEXT</label>
 				<div class="controls">
@@ -71,31 +65,50 @@ $cms = new ezFind();
 			</div>
 			<input type="hidden" name="findinTxt" id="findinTxt" />
 		  </form></div><br>
-			
 		</div>
 		<div class="span9 white-boxed">
-			<div class="navbar"><div class="navbar-inner">
-				<a href="#" id="repall" class="btn btn-danger pull-left hide">Replace All</a>
+			<div id="exenavbar" class="navbar"><div class="navbar-inner">
+				<button id="toggleEditSize" class="btn pull-left"><i class="icon-chevron-left"></i></button>
 				<a class="brand" onclick="return false" href=""><small id="findinlbl"></small></a>
-				<ul class="nav pull-right">
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-filter"></i>
-							FILTER <b class="caret"></b></a>
-						<ul id="filterDD" class="dropdown-menu">
-							<li><a href="#"><i id="ckpub" class="icon-ok"></i> Not Published</a></li>
-							<li><a href="#"><i id="cktitle" class="icon-ok"></i> Title Tag</a></li>
-							<li><a href="#"><i id="ckcontent" class="icon-ok"></i> Content</a></li>
-							<li><a href="#"><i id="ckheader" class="icon-ok"></i> Header</a></li>
-							<li><a href="#"><i id="ckfooter" class="icon-ok"></i> Footer</a></li>
-							<li><a href="#"><i id="ckaside1" class="icon-ok"></i> Aside #1</a></li>
-							<li><a href="#"><i id="ckaside2" class="icon-ok"></i> Aside #2</a></li>
-							<li><a href="#"><i id="ckhead" class="icon-ok"></i> Page Head</a></li>
-							<li><a href="#"><i id="ckdesc" class="icon-ok"></i> Description</a></li>
-							<li><a href="#"><i id="ckkeyw" class="icon-ok"></i> Keywords</a></li>
-						</ul>
-					</li>
-				</ul>
+				<button id="replace" class="btn btn-success pull-right hide">
+					Replace Checked</button>
 			</div></div>
+			<div id="progressbox" class="alert alert-block alert-info text-center hide">
+				<h4>REPLACE is running for Page 
+					<span class="runrow"></span> of <span class="totrow"></span></h4>
+				<i>Processing pagename pageurl here</i>
+				<div class="progress progress-striped active">
+					<div class="bar"></div>
+				</div>
+				<button id="stopexe" class="btn btn-danger" type="button">
+					Stop Replace Execution</button>
+			</div>
+			<ul id="pager" class="pager hide">
+				<li class="previous">
+					<a href="#" class="first"><i class="icon-fast-backward"></i>
+						First Page</a>
+				</li>
+				<li class="previous">
+					<a href="#" class="prev"><i class="icon-step-backward"></i> 
+						Previous Page</a>
+				</li>
+				<li class="pagesbox"><span>Page 
+					<input type="number" value="1" min="1" id="currpage" 
+						class="span3"> of 
+					<input type="number" value="1325" id="numbpages" 
+						class="span3" disabled>
+					<button id="checkfull" class="btn btn-small" 
+						type="button">CHECK ALL</button>
+				</span></li>
+				<li class="next">
+					<a href="#" class="last">Last Page 
+						<i class="icon-fast-forward"></i></a>
+				</li>				
+				<li class="next">
+					<a href="#" class="next">Next Page 
+						<i class="icon-step-forward"></i></a>
+				</li>
+			</ul>
 			<table id="resultsTable" class="table table-striped"><thead>
 			<tr><th>Search Results</th></tr></thead><tbody>
 			<tr><td>No Results</td></tr></tbody></table>
@@ -104,175 +117,7 @@ $cms = new ezFind();
 	</div>
 	<br><br>
 </div><!-- /wrap  -->
-
 <?php include('include/footer.php'); ?>
-<script>
-var applyFilters = function () {
-	$('#resultsTable tr').show();
-	if ($('#cktitle').hasClass('icon-remove')) 
-		$('#resultsTable td.title').closest('tr').hide();
-	if ($('#ckcontent').hasClass('icon-remove')) 
-		$('#resultsTable td.maincontent').closest('tr').hide();
-	if ($('#ckheader').hasClass('icon-remove')) 
-		$('#resultsTable td.headercontent').closest('tr').hide();
-	if ($('#ckfooter').hasClass('icon-remove')) 
-		$('#resultsTable td.footercontent').closest('tr').hide();
-	if ($('#ckaside1').hasClass('icon-remove')) 
-		$('#resultsTable td.sidecontent').closest('tr').hide();
-	if ($('#ckaside2').hasClass('icon-remove')) 
-		$('#resultsTable td.sidercontent').closest('tr').hide();
-	if ($('#ckhead').hasClass('icon-remove')) 
-		$('#resultsTable td.head ').closest('tr').hide();
-	if ($('#ckdesc').hasClass('icon-remove')) 
-		$('#resultsTable td.description').closest('tr').hide();
-	if ($('#ckkeyw').hasClass('icon-remove')) 
-		$('#resultsTable td.keywords').closest('tr').hide();
-	if ($('#ckpub').hasClass('icon-remove')) 
-		$('#resultsTable tbody i.icon-remove').closest('tr').hide();
-}
-
-$('#resultsTable').on("click", ".replaceOnelnk", function() {
-
-	// ajax to the server
-	var param, that = this;
-	
-	if ($('#findinTxt').val() == 'page') 
-		params =  '&id='+$(this).data('id')+'&block='+$(this).data('block');
-	else params =  '&file='+$(this).data('lnk');
-	
-	$.post( 'find.php?replaceone'+params, $('#frmfind').serialize(), 
-		function(data) {
-			if (data.success) {
-				$(that).after('<label class="label label-success">REPLACED</label>');
-				$(that).closest('tr').css('text-decoration','line-through');
-				$(that).remove();
-			} else alert('Error: '+ data.msg);
-	}, 'json').fail( function() { 
-		alert('Failed: The request failed.'); 
-	});	
-	
-	return false;
-});
-$('#repall').click(function (e) {
-	e.preventDefaults;
-	
-	$.post( 'find.php?replaceall', $('#frmfind').serialize(), 
-		function(data) {
-			if (data.success) {
-				
-			} else alert('Error: '+ data.msg);
-	}, 'json').fail( function() { 
-		alert('Failed: The request failed.'); 
-	});	
-	
-	return false;
-});
-$('#findinDD a').click(function (e) {
-	e.preventDefaults;
-	$('#findinlbl').html('WHERE : ' + $(this).html());
-	$('#findinTxt').val($(this).data('loc'));
-	$('#findinDD li').removeClass('active');
-	$(this).parent().addClass('active');
-	if ($(this).data('loc') == 'page')
-		$('#filterDD').parent().parent().show();
-	else 
-		$('#filterDD').parent().parent().hide();
-	//return false;
-}).eq(0).click();
-$('#filterDD a').click(function (e) {
-	e.preventDefaults;
-	var thisIcon = $(this).find('i');
-	if ( $(thisIcon).hasClass('icon-ok') )
-		$(thisIcon).removeClass('icon-ok').addClass('icon-remove');
-	else 
-		$(thisIcon).removeClass('icon-remove').addClass('icon-ok');
-	applyFilters();
-	return false;
-});
-
-$('#frmfind').submit(function (e) {
-	
-	e.preventDefaults;
-	
-	// ajax to the server
-	$.post( 'find.php?fetchall', $( this ).serialize(), 
-		function(data) {
-			if (data.success) {
-				var row, lnk, blockCap, pagehash, findinTxt = $('#findinTxt').val();
-				var headerRow = '<th>NAME</th><th>PUBLISHED</th><th>BLOCK</th><th>ACTION</th>';
-				if (findinTxt != 'page') headerRow = '<th>NAME</th><th>ACTION</th>';
-
-				$('#resultsTable tbody').empty();
-				$('#resultsTable thead tr').empty().html(headerRow);
-			
-				for(var k in data.results) {
-					row = '<td>'+data.results[k].name+'</td>';
-					if (findinTxt != 'page') {
-						if ($('#findinTxt').val()=='php') {
-							lnk = 'layouts.php?show='+data.results[k].name;
-							if (data.results[k].name == 'layout.php' ) lnk = 'layouts.php';
-						} else if ($('#findinTxt').val()=='css') {
-							lnk = 'styles.php?show='+data.results[k].name;
-							if (data.results[k].inroot == 1 ) lnk = 'styles.php';
-						} else if ($('#findinTxt').val()=='js') {
-							lnk = 'scripts.php?show='+data.results[k].name;
-							if (data.results[k].inroot == 1 ) lnk = 'scripts.php';
-						} else if ($('#findinTxt').val()=='inc') {
-							lnk = 'includes.php?show='+data.results[k].name;
-						}
-						row += '<td><a target="_blank" href="'+lnk+'">EDIT</a> '+
-								'<a href="#" class="replaceOnelnk" data-lnk="'+data.results[k].name+'">| REPLACE</a></td>';		
-					} else {
-						if (data.results[k].published == '1') 
-							row += '<td><i class="icon-ok icon-white"></i></td>';
-						else 
-							row += '<td><i class="icon-remove icon-white"></i></td>';
-						blockCap = data.results[k].block;
-						pagehash = '';
-						if (blockCap == 'maincontent' ) {
-							pagehash = '#content';
-							blockCap = 'Content';
-						} else if (blockCap == 'headercontent' ) {
-							pagehash = '#header';
-							blockCap = 'Header';
-						} else if (blockCap == 'footercontent' ) {
-							pagehash = '#footers';
-							blockCap = 'Footer';
-						} else if (blockCap == 'head' ) {
-							pagehash = '#head';
-							blockCap = 'Page Head';
-						} else if (blockCap == 'sidecontent' ) {
-							pagehash = '#sidebar';
-							blockCap = 'Aside #1';
-						} else if (blockCap == 'sidercontent') {
-							pagehash = '#siderbar';
-							blockCap = 'Aside #2';
-						}
-						row += '<td class="'+data.results[k].block+'">'+blockCap+'</td>';
-						row += '<td><a target="_blank" href="'+data.results[k].url+'">VIEW</a> | '+
-								'<a target="_blank" href="pages.php?id='+data.results[k].id+pagehash+'">EDIT</a>' +
-								' | <a href="#" data-id="'+data.results[k].id+'" data-block="'+data.results[k].block+
-								'" class="replaceOnelnk">REPLACE</a></td>';
-					}
-					$('<tr></tr>').html(row).appendTo('#resultsTable tbody');
-				}
-
-				if ($('#resultsTable tbody').html() == '') 
-					$('#resultsTable tbody').html('<tr><td colspan="4">Nothing found</td></tr>');
-				applyFilters();
-				
-			} else alert('Error: '+ data.msg);
-	}, 'json').fail( function() { 
-		alert('Failed: The request failed.'); 
-	});
-	
-	return false;
-	
-});
-</script>
-<script>
-	$("#top-bar li").removeClass('active');
-	$("#top-bar > li:eq(2)").addClass('active');
-</script>
+<script src="js/find.js"></script>
 </body>
 </html>
