@@ -41,7 +41,7 @@ class ezFind extends ezCMS {
 
 		if ($in == 'page')  {
 		
-			$id = $_GET['id'];
+			$id = intval($_GET['id']);
 			$block = $_GET['block'];
 
 			// find item ... if not found ... error
