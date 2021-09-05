@@ -38,6 +38,14 @@
 		  <li><a href="find.php"><i class="icon-search"></i> Find</a></li>
 		  <li><a href="users.php"><i class="icon-user"></i> Users</a></li>
 		  <li class="dropdown">
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> Macros <b class="caret"></b></a>
+			  <ul class="dropdown-menu">
+				<li><a href="macros.php"><i class="icon-pencil"></i> Manage</a></li>
+				<li class="divider"></li>
+				<li><a href="macro.php"><i class="icon-play"></i> Execute</a></li>
+			  </ul>
+		  </li>
+		  <li class="dropdown">
 			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> CMS <b class="caret"></b></a>
 			  <div id="divbgcolor" class="dropdown-menu">
 				<blockquote>

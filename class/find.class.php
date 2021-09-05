@@ -47,11 +47,8 @@ class ezFind extends ezCMS {
 			// find item ... if not found ... error
 			$stmt = $this->prepare("SELECT `id`, `url` FROM `pages` WHERE `$block` LIKE CONCAT ('%', ?, '%') AND `id` = ?" );
 			$stmt->execute(array($_POST['find'], $id));
-			if (!$stmt->rowCount()) {
-				$r->success = false;
-				$r->msg = "Find text not found!";
-				die(json_encode($r));
-			}
+			if (!$stmt->rowCount()) 
+				die(json_encode(['success'=>false, 'msg'=>'Find text not found!']));
 
 			$page = $stmt->fetch();
 

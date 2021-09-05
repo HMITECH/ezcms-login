@@ -15,7 +15,7 @@
       	&copy; HMI Technologies</a></div>
       <div class="span6">
   	    <a href="../sitemap.xml" target="_blank">SITEMAP</a></div>
-      <div class="span3"> ezCMS Version:<strong>5.8</strong></div>
+      <div class="span3"> ezCMS Version:<strong>5.9</strong></div>
     </div>
   </div>
 </div>
