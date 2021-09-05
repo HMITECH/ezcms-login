@@ -104,7 +104,7 @@ $cms = new ezUsers();
 						<label class="checkbox">
 							<input name="editlayout" type="checkbox" value="checkbox"
 								<?php echo $cms->thisUser['editlayoutCheck']; ?>>
-							Manage Layouts</label><?php echo $cms->thisUser['editlayoutMsg']; ?><br><br>
+							Manage Layouts &amp; Macros</label><?php echo $cms->thisUser['editlayoutMsg']; ?><br><br>
 						<label class="checkbox">
 							<input name="editcss" type="checkbox" id="ckeditcss" value="checkbox"
 								<?php echo $cms->thisUser['editcssCheck']; ?>>

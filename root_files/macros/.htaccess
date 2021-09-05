@@ -1,0 +1,20 @@
+# ------------------------------------------------------------------- 
+#
+#* Code written by mo.ahmed@hmi-tech.net
+#
+#* HMI Technologies 
+#
+#* Module: Apache rewrites (.htacess) ezCMS includes folder
+#
+# -------------------------------------------------------------------
+
+# ------------------------------------------------------------------- 
+#* Block direct browser access to includes folder
+#* Notes: This files in this folder can only be include in php layouts.
+
+<Limit GET POST PUT DELETE>
+	deny from all
+</Limit>
+
+#* END: Rewrite URLs to Controller
+# ------------------------------------------------------------------- 
