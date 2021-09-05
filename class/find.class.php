@@ -54,25 +54,11 @@ class ezFind extends ezCMS {
 			}
 
 			$page = $stmt->fetch();
-	
-			// Create a revision			
-			if (!$this->query("INSERT INTO `git_pages` ( 
-				  `page_id`, `pagename`, `title`, `keywords`, `description`, `maincontent`,
-				  `useheader` , `headercontent` , `usefooter` , `footercontent` , `useside` ,
-				  `sidecontent` , `published` , `parentid` , `url` , `revmsg`,
-				  `sidercontent` , `usesider` ,`head` , `notes`, `layout` , `nositemap` , `createdby` )
-				SELECT 
-				  `id` AS page_id, `pagename`, `title`, `keywords`, `description`, `maincontent`,
-				  `useheader` , `headercontent` , `usefooter` , `footercontent` ,
-				  `useside` , `sidecontent` , `published` , `parentid` , `url` , 'Find and Replace',
-				  `sidercontent` , `usesider` ,`head` , `notes`, `layout` , `nositemap` , 
-				  '".$this->usr['id']."' as `createdby`  FROM `pages` WHERE `id` = '$id'")) {
 
-				$r->success = false;
-				$r->msg = "Failed to create revision";
-				die(json_encode($r));
-			}
-
+			// Create a revision
+			if (!$this->pageRevision($id, 'Find and Replace')) 
+				die(json_encode(['success'=>false, 'msg'=>'Failed to create revision']));
+			
 			// do replace
 			$stmt = $this->prepare("UPDATE `pages` SET `$block` = REPLACE (`$block`, ?, ?) WHERE id = ?" );
 			if (!$stmt->execute(array($_POST['find'], $_POST['replace'], $id))) $r->success = false;

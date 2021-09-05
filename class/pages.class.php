@@ -472,20 +472,8 @@ class ezPages extends ezCMS {
 				return;
 			}
 
-			// Create a revision			
-			if (!$this->query("INSERT INTO `git_pages` ( 
-				  `page_id`, `pagename`, `title`, `keywords`, `description`, `maincontent`,
-				  `useheader` , `headercontent` , `usefooter` , `footercontent` , `useside` ,
-				   `sidecontent` , `published` , `parentid` , `url` , `revmsg`,
-				   `sidercontent` , `usesider` ,`head` , `notes`, `layout` , `nositemap` , 
-				   `priority`, `img`, `createdby` )
-				SELECT 
-				  `id` AS page_id, `pagename`, `title`, `keywords`, `description`, `maincontent`,
-				  `useheader` , `headercontent` , `usefooter` , `footercontent` ,
-				  `useside` , `sidecontent` , `published` , `parentid` , `url` , ".$this->quote($_POST['revmsg']).",
-				  `sidercontent` , `usesider` ,`head` , `notes`, `layout` , `nositemap`,
-				  `priority`, `img`,
-				  '".$_SESSION['EZUSERID']."' as `createdby`  FROM `pages` WHERE `id` = ".$this->id)) {
+			// Create a revision
+			if (!$this->pageRevision($this->id, $_POST['revmsg'])){
 				header("Location: ?flg=revfailed&id=".$this->id);
 				exit;
 			}

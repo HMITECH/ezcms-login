@@ -70,7 +70,6 @@ class ezCMS extends db {
 		
 		// Load message for standard flags
 		$this->getStdFlgMessage();
-		
 	}
 	
 	// this function will set the formatted html to display
@@ -78,6 +77,13 @@ class ezCMS extends db {
 		$this->msg = '<div class="alert alert-'.$class.'">
 			<button type="button" class="close" data-dismiss="alert">x</button>
 			<strong>'.$caption.'</strong><br>'.$subcaption.'</div>';
+	}
+
+	// this function will set the formatted html to display
+	protected function pageRevision ($id, $msg) {
+		$msg = $this->quote($msg);
+		$userID = $_SESSION['EZUSERID'];
+		return $this->query("INSERT INTO `git_pages` (`page_id`,`pagename`,`title`,`keywords`,`description`,`maincontent`,`useheader`,`headercontent`,`usefooter`,`footercontent`,`useside`,`sidecontent`,`published`,`parentid`,`url`,`revmsg`,`sidercontent`,`usesider`,`head`,`notes`,`layout`,`nositemap`,`priority`,`img`, `createdby`) SELECT `id` AS page_id,`pagename`,`title`,`keywords`,`description`,`maincontent`,`useheader`,`headercontent`,`usefooter`,`footercontent`,`useside`,`sidecontent`,`published`,`parentid`,`url`,$msg,`sidercontent`,`usesider`,`head`,`notes`,`layout`,`nositemap`,`priority`,`img`,'$userID' as `createdby` FROM `pages` WHERE `id`=$id");
 	}
 	
 	// Add to Database table and returns new ID, false if failed
