@@ -1,12 +1,11 @@
 /*
-
- * Code written by mo.ahmed@hmi-tech.net
- * 
- * Version 2.0.0 Dated 23-Dec-2012
- * HMI Technologies Mumbai (2012-13)
+ * ezCMS Code written by mo.ahmed@hmi-tech.net & mosh.ahmed@gmail.com
+ *
+ * HMI Technologies Mumbai
  *
  * CSS Document for ezSite login section ** 
-*/
+ * 
+ */
 @charset "utf-8";
 html,body {height: 100%;}
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover,
@@ -29,44 +28,27 @@ a,button { outline:none; }
 	height: 100%;
 	margin: 0 auto -30px;
 }
-textarea {
-	height: 300px; 
-	width: 100%;
-    box-sizing: border-box;
-}
-#txtDesc, #txtKeywords {
-	height:auto;
-}
-#wrap .container {
-	padding-top:60px;
-	margin: 0 auto; 
-	width:98%;
-}
+textarea { height: 300px;  width: 100%; box-sizing: border-box; }
+#txtDesc, #txtKeywords { height:auto;}
+#wrap .container { padding-top:60px; margin: 0 auto; width:98%; }
 .countDisplay {float: right;}
 .checkRight { float: right; }
-.row {
-    width: 100%;
-    margin: 0;
-}
-.slRootMsg {
-	margin: 0 0 3px;
-	padding: 5px 10px;
-	font-weight:bold;
-}
-a.label.label-info {
-    font-size: 1em;
-    border-radius: 0;
-    padding: 3px 6px;
-}
+.row { width: 100%; margin: 0;}
+.slRootMsg { margin: 0 0 3px; padding: 5px 10px; font-weight:bold;}
+a.label.label-info { font-size: 1em; border-radius: 0;padding: 3px 6px; }
 #divbgcolor { padding:10px; }
 #left-tree > li > a, 
-#left-tree > li > ul > li > a {
-    font-weight: bold;
-}
-#shrFrm {
-	width:100%;
-	min-height:500px;
-}
+#left-tree > li > ul > li > a { font-weight: bold; }
+/*iframe Block - file manager*/
+#shrFrm { width:100%; min-height:500px; }
+/*Results Table*/
+#resultsTable input[type="checkbox"] { margin: 3px 5px; }
+/*Pages Block*/
+#pager { margin-bottom: 0px; }
+#pager a { margin: 0 5px;}
+#pager .pagesbox { font-size: 1.1em; letter-spacing: 1px; }
+#pager .pagesbox input { margin: 0; }
+/*Revision Block*/
 #revBlock, #pagesBlock {display:none;}
 #revBlock,
 #pagesBlock,
@@ -158,10 +140,7 @@ div.white-boxed {
 	padding: 7px 9px;}
 
 @media (max-width: 980px) {
-	#wrap .container {
-		padding-top:0;
-		margin-bottom:50px;
-	}
+	#wrap .container { padding-top:0; margin-bottom:50px; }
 }
 
 @media (max-width: 767px) {
@@ -176,7 +155,5 @@ div.white-boxed {
 		float: none;
 		padding-left: 5px;
 		padding-right: 5px;}   
-	.form-signin {
-		padding: 10px 20px 20px;
-		margin: 10px auto 10px;}      
+	.form-signin { padding: 10px 20px 20px; margin: 10px auto 10px;}      
 }
