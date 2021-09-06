@@ -107,8 +107,7 @@ class ezMacros extends ezCMS {
 			$entry = basename($entry);
 			if ($entry != 'macro.php') {
 				$myclass = ($this->filename == $entry) ? 'label label-info' : '';
-				$this->treehtml .= '<li><i class="icon-cog"></i> <a href="macros.php?show='.
-					$entry.'" class="'.$myclass.'">'.$entry.'</a></li>';
+				$this->treehtml .= '<li><i class="icon-play"></i> <a href="macros.php?show='.$entry.'" class="'.$myclass.'">'.$entry.'</a></li>';
 			}
 		}
 		$this->treehtml .= '</ul>';

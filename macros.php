@@ -27,7 +27,7 @@ $cms = new ezMacros();
 		  <div id="editBlock" class="row-fluid">
 			<div class="span3 white-boxed">
 				<ul id="left-tree">
-				  <li><i class="icon-plus"></i>
+				  <li><i class="icon-cog"></i>
 					<a class="<?php echo $cms->homeclass; ?>" href="macros.php">macro.php</a>
 					<?php echo $cms->treehtml; ?>
 				  </li>
@@ -84,6 +84,7 @@ $cms = new ezMacros();
 								class="input-block-level tooltipme2">
 						</div>
 					</div>
+					<input border="0" class="input-block-level tooltipme2" type="text" title="Macro File" value="<?php echo $cms->filename; ?>" readonly/>
 					<textarea name="txtContents" id="txtContents" class="input-block-level"><?php echo $cms->content; ?></textarea>
 				</form>
 			</div>
@@ -128,11 +129,6 @@ $cms = new ezMacros();
 		}
 		$('#txtName').val(saveasfile+'.php');
 		$('#Submit').click();
-		return false;
-	});
-	// Show the pages used in block
-	$('#showPages').click(function () {
-		$('#pagesBlock').slideToggle();
 		return false;
 	});
 </script>

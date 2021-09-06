@@ -85,9 +85,9 @@ $cms = new ezIncludes();
 								class="input-block-level tooltipme2">
 						</div>
 					</div>
-				<input border="0" class="input-block-level tooltipme2" name="txtlnk" onFocus="this.select();"
-				style="cursor: pointer;" onClick="this.select();"  type="text" title="Include this in your layouts"
-				value="&lt;?php include ( &quot;includes/<?php echo $cms->filename; ?>&quot; ); ?&gt;" readonly/>
+					<input border="0" class="input-block-level tooltipme2" name="txtlnk" onFocus="this.select();"
+					style="cursor: pointer;" onClick="this.select();"  type="text" title="Include this in your layouts"
+					value="&lt;?php include ( &quot;includes/<?php echo $cms->filename; ?>&quot; ); ?&gt;" readonly/>
 
 					<textarea name="txtContents" id="txtContents" class="input-block-level"><?php echo $cms->content; ?></textarea>
 				</form>

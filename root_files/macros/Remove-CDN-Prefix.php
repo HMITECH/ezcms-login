@@ -19,8 +19,8 @@ $count = count($imgs);
 if ($count) {
 	$this->log("Found $count Images",'info');
 	$i = 0;
-	// &$imgs instead of $imgs to pass by referance
-	foreach($imgs as &$img) {
+
+	foreach($imgs as $img) {
 		$file = substr($img->src,1);
 		$parts = explode('/', $file);
 		// check image is from CDN before update.
