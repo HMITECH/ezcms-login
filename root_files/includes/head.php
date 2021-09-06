@@ -7,6 +7,6 @@
     <meta name="description" content="<?php echo $page["description"]; ?>">
 
     <link rel="stylesheet" href="<?php echo $siteFolder; ?>/style.css">
-    <script src="<?php echo $siteFolder; ?>/main.js"></script>
+    <script src="/main.js"></script>
 
     <?php echo $page["head"]; ?>
