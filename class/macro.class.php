@@ -92,7 +92,7 @@ class ezMacro extends ezCMS {
 			include ( "../macros/$macro" );
 			return @$html->innertext;
 		} catch(ParseError $e) {
-			die(json_encode(['success'=>false, 'msg'=>$e->getMessage()]));
+			die(json_encode(['success'=>false, 'msg'=>$e->getMessage().' line no: '.$e->getLine()]));
 		}
 	}
 
