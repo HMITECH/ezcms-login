@@ -20,8 +20,7 @@ if ($count) {
 	
 	$this->log("Found $count Images",'info');
 	$i = 0;
-	// &$imgs instead of $imgs to pass by referance
-	foreach($imgs as &$img) {
+	foreach($imgs as $img) {
 		$src = $img->src;
 		if ($src[0]==='/') {
 			// begins with / so local
