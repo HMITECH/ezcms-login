@@ -77,7 +77,8 @@ var ezCMSjs = {
 			$('#progressbox .bar').width( ((1/total)*100)+'%');
 		} else {
 			$('#progressbox').hide();
-			$('#exenavbar, #pager').show();
+			$('#exenavbar').show();
+			if (ezCMSjs.numbPages>1) $('#pager').show();
 		}
 	},
 
