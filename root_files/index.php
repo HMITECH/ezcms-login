@@ -18,8 +18,8 @@ $site = $dbh->getSiteData();
 
 // **************** REQUESTED URI ****************
 $uri = strtok($_SERVER["REQUEST_URI"],'?'); // get the requested URI
-$siteFolder =  substr(htmlspecialchars($_SERVER["PHP_SELF"]), 0, -10);
-if ($siteFolder) $uri = substr( $uri , strlen($siteFolder) );
+// $siteFolder =  substr(htmlspecialchars($_SERVER["PHP_SELF"]), 0, -10);
+// if ($siteFolder) $uri = substr( $uri , strlen($siteFolder) );
 
 // **************** PAGE DETAILS ****************
 $page = $dbh->getPageData($uri);
