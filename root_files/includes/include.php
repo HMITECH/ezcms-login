@@ -1,7 +1,7 @@
 <?php 
 /* 
-
-empty include file 
-
+ * 
+ * This is an empty include file, copy to create new.
+ * 
 */ 
 ?>

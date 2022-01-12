@@ -6,7 +6,7 @@
     <meta name="keywords" content="<?php echo $page["keywords"]; ?>">
     <meta name="description" content="<?php echo $page["description"]; ?>">
 
-    <link rel="stylesheet" href="<?php echo $siteFolder; ?>/style.css">
+    <link rel="stylesheet" href="/style.css">
     <script src="/main.js"></script>
 
     <?php echo $page["head"]; ?>
