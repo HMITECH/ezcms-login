@@ -1,6 +1,10 @@
 # ezCMS UPDATE REPO README #
 
-This is main ezCMS install repository
+This project has been decapited.
+Use ezcms-login repo now
+https://github.com/HMITECH/ezcms-login
+
+
 
 ### What is this repository for? ###
 
