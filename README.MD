@@ -1,6 +1,9 @@
 # ezCMS UPDATE REPO README #
 
-This is main ezCMS install repository
+ezCMS is website content management system for coders, 
+providing access to the code directly using code mirror.
+
+This is main ezCMS install repository.
 
 ### What is this repository for? ###
 
