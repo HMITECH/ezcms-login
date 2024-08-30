@@ -2899,7 +2899,8 @@ class imageLib {
 		#
 	{
 
-		if ( ! is_resource($this->imageResized))
+		if (!is_resource($this->imageResized) && 
+			!($this->imageResized instanceof \GdImage))
 		{
 			if ($this->debug)
 			{
