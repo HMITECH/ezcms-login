@@ -98,13 +98,16 @@ class ezIncludes extends ezCMS {
 	
 	// Function to Build Treeview HTML
 	private function buildTree() {
+
+		$files = glob("../includes/*.php");
 		$this->treehtml = '<ul>';
-		foreach (glob("../includes/*.php") as $entry) {
-			
-			$entry = basename($entry);
-			if ($entry != 'include.php') {
-				$myclass = ($this->filename == $entry) ? 'label label-info' : '';
-				$this->treehtml .= '<li><i class="icon-share-alt"></i> <a href="includes.php?show='.
+		for ($x = 0; $x < count($files); $x++) {
+			$file = $files[$x];
+			$entry = basename($file);
+			if ($entry == 'include.php') continue;
+
+			$myclass = ($this->filename == $entry) ? 'label label-info' : '';
+			$this->treehtml .= '<li><i class="icon-share-alt"></i> <a href="includes.php?show='.
 					$entry.'" class="'.$myclass.'">'.$entry.'</a></li>';
 			}
 		}
