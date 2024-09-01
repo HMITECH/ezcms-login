@@ -55,14 +55,14 @@ class ezProfile extends ezCMS {
 		// Prepare SQL to fetch user's record from database
 		$id = $this->usr['id'];
 		$stmt = $this->prepare("SELECT `id` FROM `users` WHERE `id` = $id AND (`passwd` = SHA2( ? , 512 ) or `passwd` = ?) LIMIT 1");
-		$stmt->execute( array($curpass, $curpass) );
+		$stmt->execute( [$curpass, $curpass] );
 
 		// Check if User Record is present and returned from the database
 		if ($stmt->rowCount()) {
 		
 			// update the password  here
 			$stmt = $this->prepare("UPDATE `users` SET `passwd` = SHA2( ? , 512 ) WHERE `id` = $id ");
-			if ($stmt->execute( array($newpass) ) ) {
+			if ($stmt->execute( [$newpass] ) ) {
 				// Database update done
 				$this->setMsgHTML('success','New Password Saved!',
 					'You have successfully changed your password.');

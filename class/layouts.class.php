@@ -19,7 +19,7 @@ class ezLayouts extends ezCMS {
 	public $content = '';
 	public $treehtml = '';
 	// Stores Pages usage Details
-	public $usage = array('log' => '', 'cnt' => 0);
+	public $usage = ['log' => '', 'cnt' => 0];
 	
 	// Consturct the class
 	public function __construct () {
@@ -236,10 +236,10 @@ class ezLayouts extends ezCMS {
 			}
 	
 			// Create a revision
-			$data = array (	'content' => $original, 
-							'fullpath' => $filename,
-							'revmsg' => $_POST['revmsg'],
-							'createdby' => $this->usr['id']);
+			$data = ['content' => $original, 
+					'fullpath' => $filename,
+					'revmsg' => $_POST['revmsg'],
+					'createdby' => $this->usr['id']];
 			if ( !$this->add('git_files', $data) ) {
 				if ($ajax) $this->sendAjaxMsg('revfailed');
 				header("Location: ?flg=revfailed&show=$show");

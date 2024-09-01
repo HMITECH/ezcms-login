@@ -63,7 +63,7 @@ class db extends PDO {
 	// get a page from the database
 	private function getPageDatabase($uri) {
 		$stmt = $this->prepare('SELECT * FROM `pages` WHERE `url` = ? ORDER BY `id` DESC LIMIT 1');
-		$stmt->execute( array($uri) );
+		$stmt->execute( [$uri] );
 		// Check if page is found in database.
 		if ($stmt->rowCount()) {
 			$page = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -88,7 +88,7 @@ class db extends PDO {
 		Header("HTTP/1.0 404 Not Found");
 		// check in redirects table
 		$stmt = $this->prepare('SELECT `id`, `desurl` FROM `redirects` WHERE `srcurl` = ? AND `enabled`=1 ORDER BY `id` DESC LIMIT 1');
-		$stmt->execute( array($uri) );
+		$stmt->execute( [$uri] );
 		// Check if page is found in database.
 		if ($stmt->rowCount()) {
 			// Redirect is found in Database
@@ -103,7 +103,7 @@ class db extends PDO {
 			$add404 = $this->prepare("INSERT INTO `log404` (`url`,`refer`,`ip`,`useragent`) VALUES (?,?,?,?)");
 			$refer = '';
 			if (isset($_SERVER['HTTP_REFERER']))  $refer = $_SERVER['HTTP_REFERER'];
-			$add404->execute( array($uri, $refer, $_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT']));
+			$add404->execute( [$uri, $refer, $_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT']]);
 		}
 		if ($this->useRedis) {
 			$redKey = $this->useRedis."-404page";

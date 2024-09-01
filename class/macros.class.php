@@ -225,10 +225,10 @@ class ezMacros extends ezCMS {
 			}
 	
 			// Create a revision
-			$data = array (	'content' => $original, 
-							'fullpath' => "macros/$filename",
-							'revmsg' => $_POST['revmsg'],
-							'createdby' => $this->usr['id']);
+			$data = ['content' => $original, 
+					'fullpath' => "macros/$filename",
+					'revmsg' => $_POST['revmsg'],
+					'createdby' => $this->usr['id']];
 			if ( !$this->add('git_files', $data) ) {
 				header("Location: ?flg=revfailed&show=$filename");
 				exit;
