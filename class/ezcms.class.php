@@ -19,7 +19,7 @@ class ezCMS extends db {
 	public $usr; 		// Logged in user record
 
 	// Stores Revision Details
-	public $revs = array('log' => '', 'opt' => '', 'cnt' => 1, 'jsn' => array());
+	public $revs = ['log' => '', 'opt' => '', 'cnt' => 1, 'jsn' => array()];
 	
 	// Consturct the class
 	public function __construct ( $loginRequired = true ) {
@@ -56,14 +56,15 @@ class ezCMS extends db {
 		// Check if user is savng BG Color
 		if (isset($_GET['cmsBgColor'])) 
 			if (isset($this->usr['id']))
-				 die( $this->edit( 'users', $this->usr['id'], array('cmscolor' => $_GET['cmsBgColor']) ) );
+				 die( $this->edit( 'users', $this->usr['id'], 
+				 	['cmscolor' => $_GET['cmsBgColor']] ) );
 			else die('usr not set');
 		
 		// Change Code Mirror Theme
 		if (isset($_GET['theme'])) $this->chgEditorTheme();
 		
 		// init revision vars
-		$this->revs = array('log' => '', 'opt' => '', 'cnt' => 1, 'jsn' => array());
+		$this->revs = ['log' => '', 'opt' => '', 'cnt' => 1, 'jsn' => array()];
 		
 		// Check if Message Flag is set
 		if (isset($_GET["flg"])) $this->flg = $_GET["flg"];
@@ -118,7 +119,7 @@ class ezCMS extends db {
 	// Delete from Database table
 	protected function delete($t, $id) {
 		$stmt = $this->prepare("DELETE FROM $t where id = ?");
-		if ($stmt->execute(array($id))) {
+		if ($stmt->execute([$id])) {
 			$this->query("OPTIMIZE TABLE $t");
 			return true;
 		}
@@ -129,7 +130,7 @@ class ezCMS extends db {
 	protected function chkTableForVal($table, $chkFld, $retFld, $val) {
 		$r = new stdClass();	
 		$stmt = $this->prepare("SELECT `$retFld` FROM `$table` WHERE `$chkFld` = ? LIMIT 1");
-		if ($stmt->execute(array($val))) {
+		if ($stmt->execute([$val])) {
 			if ($stmt->rowCount()) {
 				$row = $stmt->fetch();
 				return $row[$retFld];

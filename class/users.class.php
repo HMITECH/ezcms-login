@@ -62,10 +62,11 @@ class ezUsers extends ezCMS {
 
 		} else {
 			// Set empty default values for new user
-			$this->thisUser = array( 'username' => '', 'email' => '@',
+			$this->thisUser = ['username' => '', 'email' => '@',
 				'active' => '1', 'editpage' => '1', 'delpage' => '',
 				'edituser' => '', 'deluser' => '', 'editsettings' => '1',
-				'editcont' => '', 'editlayout' => '', 'editcss' => '1', 'editjs' => '1');
+				'editcont' => '', 'editlayout' => '', 
+				'editcss' => '1', 'editjs' => '1'];
 			$this->barBtns = '<input type="submit" name="Submit" class="btn btn-primary" value="Add New">';
 		}
 		
@@ -208,16 +209,16 @@ class ezUsers extends ezCMS {
 		}
 		
 		// array to hold the data
-		$data = array();
+		$data = [];
 		
 		// get the required post varables 
-		$this->fetchPOSTData(array('username','passwd','email'), $data);
+		$this->fetchPOSTData(['username','passwd','email'], $data);
 		if (!$data['passwd']) unset($data['passwd']);
 		else $data['passwd'] = hash('sha512',$data['passwd']); // encrypt the password
 			
 		// get the required post checkboxes 
-		$this->fetchPOSTCheck( array('active','editpage','delpage','edituser','deluser',
-			'editsettings','editcont','editlayout','editcss','editjs'), $data);
+		$this->fetchPOSTCheck( ['active','editpage','delpage','edituser','deluser',
+			'editsettings','editcont','editlayout','editcss','editjs'], $data);
 			
 		// Common Validtions 
 		if (strlen(trim($data['username'])) < 2) die('User Name must min 2 chars!');

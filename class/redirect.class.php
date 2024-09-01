@@ -43,11 +43,11 @@ class ezRedirect extends ezCMS {
 		if (strlen($desurl)<1) die('Destination URL must be at least 1 chars.');
 		if (substr($srcurl,0,1)<>'/') die('Source URL must begin with /');
 		$stmtCHK = $this->prepare("SELECT `id` FROM `redirects` WHERE `srcurl` = ? ");
-		$stmtCHK->execute(array($srcurl));
+		$stmtCHK->execute([$srcurl]);
 		if ($stmtCHK->rowCount()>0) die('This URL is already redirected.');
 		// Add here 
 		$stmt = $this->prepare("INSERT INTO `redirects` (`srcurl`,`desurl`,`createdby`) VALUES (?,?,?)");
-		if ($stmt->execute(array($srcurl, $desurl, $this->usr['id'])))
+		if ($stmt->execute([$srcurl, $desurl, $this->usr['id']]))
 			die('0');
 		die('Failed to add redirect!');
 	}
@@ -55,7 +55,7 @@ class ezRedirect extends ezCMS {
 	private function del404Log() {
 		if (isset($_POST['url'])) $url = trim($_POST['url']); else die('Delete ID not set.');
 		$stmt = $this->prepare("DELETE FROM `log404` WHERE `url` = ? ");
-		if ($stmt->execute(array($url))) die('0');
+		if ($stmt->execute([$url])) die('0');
 		die('Failed to del 404 log.');
 	}	
 	

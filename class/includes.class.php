@@ -19,7 +19,7 @@ class ezIncludes extends ezCMS {
 	public $content = '';
 	public $treehtml = '';
 	// Stores Layout usage Details
-	public $usage = array('log' => '', 'cnt' => 0);
+	public $usage = ['log' => '', 'cnt' => 0];
 	
 	// Consturct the class
 	public function __construct () {
@@ -246,10 +246,10 @@ class ezIncludes extends ezCMS {
 			}
 	
 			// Create a revision
-			$data = array (	'content' => $original, 
-							'fullpath' => "includes/$filename",
-							'revmsg' => $_POST['revmsg'],
-							'createdby' => $this->usr['id']);
+			$data = ['content' => $original, 
+					'fullpath' => "includes/$filename",
+					'revmsg' => $_POST['revmsg'],
+					'createdby' => $this->usr['id']];
 			if ( !$this->add('git_files', $data) ) {
 				header("Location: ?flg=revfailed&show=$filename");
 				exit;

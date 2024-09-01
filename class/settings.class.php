@@ -100,11 +100,11 @@ class ezSettings extends ezCMS {
 				<a href="?purgeRev='.$entry['id'].'" class="conf-del">Purge</a>	
 				</td></tr>';
 				
-			$this->revs['jsn'][$entry['id']] = array( 
+			$this->revs['jsn'][$entry['id']] = [
 				'header' =>  $entry['headercontent'] , 
 				'side1' =>  $entry['sidecontent'] ,
 				'side2' =>  $entry['sidercontent'] ,
-				'footer' =>  $entry['footercontent'] );
+				'footer' =>  $entry['footercontent'] ];
 
 			$this->revs['cnt']++;
 		}
@@ -124,14 +124,14 @@ class ezSettings extends ezCMS {
 		}
 		
 		// array to hold the data
-		$data = array();
+		$data = [];
 		
 		// get the required post varables 
-		$this->fetchPOSTData(array(
+		$this->fetchPOSTData([
 			'headercontent',
 			'sidecontent', 
 			'sidercontent', 
-			'footercontent'), $data);
+			'footercontent'], $data);
 		$data['createdby'] = $_SESSION['EZUSERID'];
 		
 		// Test if nothing has changed 
@@ -146,7 +146,7 @@ class ezSettings extends ezCMS {
 		// Save to database
 		if ( $this->add('site',$data) ) {
 			// Save the rev message to the last records
-			$this->edit('site', $this->site['id'], array('revmsg' => $_POST['revmsg']));
+			$this->edit('site', $this->site['id'], ['revmsg' => $_POST['revmsg']]);
 			if ($this->useRedis) $this->redis->del($this->useRedis."-site");
 			header("Location: ?flg=saved");
 			exit;

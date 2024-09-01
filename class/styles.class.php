@@ -221,10 +221,10 @@ class ezStyles extends ezCMS {
 			}
 	
 			// Create a revision
-			$data = array (	'content' => $original, 
-							'fullpath' => $filename, 
-							'revmsg' => $_POST['revmsg'],
-							'createdby' => $this->usr['id']);
+			$data = ['content' => $original, 
+					'fullpath' => $filename, 
+					'revmsg' => $_POST['revmsg'],
+					'createdby' => $this->usr['id']];
 			if ( !$this->add('git_files', $data) ) {
 				if ($ajax) $this->sendAjaxMsg('revfailed');
 				header("Location: ?flg=revfailed$show");

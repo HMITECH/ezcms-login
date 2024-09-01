@@ -141,7 +141,7 @@ class ezFind extends ezCMS {
 		foreach (glob($path.$type) as $entry) {
 			$content = file_get_contents($entry);
 			if (strpos($content, $_POST['find']) !== false)
-				array_push($results, array('name' => substr($entry, $pathLen , strlen($entry)-$pathLen), 'inroot' => 0 ));
+				array_push($results, ['name' => substr($entry, $pathLen , strlen($entry)-$pathLen), 'inroot' => 0 ]);
 		}
 		return $results;
 	}

@@ -22,7 +22,7 @@ class ezPages extends ezCMS {
 	public $addNewBtn;
 	public $page;
 	public $btns;
-	private $childIDS = array(); // id of seclect page + its children.
+	private $childIDS = []; // id of seclect page + its children.
 	
 	// Consturct the class
 	public function __construct () {
@@ -100,7 +100,7 @@ class ezPages extends ezCMS {
 		$place = 1;
 		$stmt = $this->prepare("UPDATE `pages` SET `place` = ? WHERE `id` = ?");
 		foreach (explode(',',$_GET['redorderids']) as $id) {
-			if (!$stmt->execute(array($place,$id))) die('Reorder SQL Failed!');
+			if (!$stmt->execute([$place,$id])) die('Reorder SQL Failed!');
 			$place++;
 		}
 		die('0');
@@ -304,7 +304,7 @@ class ezPages extends ezCMS {
 		$treeSQL = $this->prepare(
 			"SELECT `id`, `title`, `pagename`, `url`, `published`, `description`, `hidechildpages`
 			FROM  `pages` WHERE `parentid` = ? order by place");
-		$treeSQL->execute( array($parentid) );
+		$treeSQL->execute( [$parentid] );
 
 		if ($treeSQL->rowCount()) {
 
@@ -404,19 +404,17 @@ class ezPages extends ezCMS {
 		}
 		
 		// array to hold the data
-		$data = array();
+		$data = [];
 		
 		// get the required post varables 
-		$txtFlds = array('pagename', 'title', 'keywords', 'description', 'maincontent', 'headercontent',
-			 'sidecontent', 'sidercontent', 'sidercontent', 
-			 'footercontent','head', 'notes', 'layout',
-			 'priority','img' );
+		$txtFlds = ['pagename', 'title', 'keywords', 'description', 'maincontent', 'headercontent','sidecontent', 'sidercontent', 'sidercontent', 
+			'footercontent','head', 'notes', 'layout', 'priority','img'];
 		if ( ($this->id != 1) && ($this->id != 2) )
 			array_push($txtFlds, 'parentid', 'url');
 		$this->fetchPOSTData($txtFlds, $data);
 
 		// get the required post checkboxes 
-		$cksFlds = array('published','useheader','useside','usesider','usefooter','nositemap','hidechildpages');
+		$cksFlds = ['published','useheader','useside','usesider','usefooter','nositemap','hidechildpages'];
 		$this->fetchPOSTCheck($cksFlds, $data);
 
 		// Validate here ...
