@@ -612,10 +612,8 @@ if ($ftp) {
 
 $n_files = count($files);
 
-//php sorting
+// Initialize variables
 $sorted = array();
-//$current_folder=array();
-//$prev_folder=array();
 $current_files_number = 0;
 $current_folders_number = 0;
 
@@ -642,8 +640,6 @@ foreach ($files as $k => $file) {
             'extension' => fix_strtolower($file_ext)
         );
     } else {
-
-
         if ($file != "." && $file != "..") {
             if (is_dir($config['current_path'] . $rfm_subfolder . $subdir . $file)) {
                 $date = filemtime($config['current_path'] . $rfm_subfolder . $subdir . $file);
@@ -688,58 +684,56 @@ foreach ($files as $k => $file) {
     }
 }
 
-function filenameSort($x, $y)
-{
+// Comparison functions
+function filenameSort($x, $y) {
     global $descending;
 
     if ($x['is_dir'] !== $y['is_dir']) {
-        return $y['is_dir'];
-    } else {
-        return ($descending)
-            ? $x['file_lcase'] < $y['file_lcase']
-            : $x['file_lcase'] >= $y['file_lcase'];
+        return $y['is_dir'] - $x['is_dir'];
     }
+
+    return $descending
+        ? strcmp($y['file_lcase'], $x['file_lcase'])
+        : strcmp($x['file_lcase'], $y['file_lcase']);
 }
 
-function dateSort($x, $y)
-{
+function dateSort($x, $y) {
     global $descending;
 
     if ($x['is_dir'] !== $y['is_dir']) {
-        return $y['is_dir'];
-    } else {
-        return ($descending)
-            ? $x['date'] < $y['date']
-            : $x['date'] >= $y['date'];
+        return $y['is_dir'] - $x['is_dir'];
     }
+
+    return $descending
+        ? $y['date'] <=> $x['date']
+        : $x['date'] <=> $y['date'];
 }
 
-function sizeSort($x, $y)
-{
+function sizeSort($x, $y) {
     global $descending;
 
     if ($x['is_dir'] !== $y['is_dir']) {
-        return $y['is_dir'];
-    } else {
-        return ($descending)
-            ? $x['size'] < $y['size']
-            : $x['size'] >= $y['size'];
+        return $y['is_dir'] - $x['is_dir'];
     }
+
+    return $descending
+        ? $y['size'] <=> $x['size']
+        : $x['size'] <=> $y['size'];
 }
 
-function extensionSort($x, $y)
-{
+function extensionSort($x, $y) {
     global $descending;
 
     if ($x['is_dir'] !== $y['is_dir']) {
-        return $y['is_dir'];
-    } else {
-        return ($descending)
-            ? $x['extension'] < $y['extension']
-            : $x['extension'] >= $y['extension'];
+        return $y['is_dir'] - $x['is_dir'];
     }
+
+    return $descending
+        ? strcmp($y['extension'], $x['extension'])
+        : strcmp($x['extension'], $y['extension']);
 }
 
+// Sorting logic
 switch ($sort_by) {
     case 'date':
         usort($sorted, 'dateSort');
@@ -755,10 +749,12 @@ switch ($sort_by) {
         break;
 }
 
+// Add parent folder link if in a subdirectory
 if ($subdir != "") {
     $sorted = array_merge(array(array('file' => '..')), $sorted);
 }
 
+// Assign sorted array back to $files
 $files = $sorted;
 ?>
 <!-- header div start -->
