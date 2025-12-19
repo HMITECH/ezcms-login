@@ -43,6 +43,7 @@ class UploadHandler
     const IMAGETYPE_PNG = 3;
 
     protected $image_objects = array();
+    public $response = array();
 
     public function __construct($options = null, $initialize = true, $error_messages = null) {
         $this->response = array();
@@ -486,21 +487,27 @@ class UploadHandler
             1
         );
     }
-
+    
     protected function get_unique_filename($file_path, $name, $size, $type, $error,
             $index, $content_range) {
         while(is_dir($this->get_upload_path($name))) {
             $name = $this->upcount_name($name);
         }
-        // Keep an existing filename if this is part of a chunked upload:
-        $uploaded_bytes = $this->fix_integer_overflow((int)$content_range[1]);
+        // Keep an existing filename if this is part of a chunked upload:  
+        if(isset($content_range[1])){
+             $uploaded_bytes = $this->fix_integer_overflow((int)$content_range[1]);
+        }
+
         while (is_file($this->get_upload_path($name))) {
+            if(isset($uploaded_bytes)){
             if ($uploaded_bytes === $this->get_file_size(
                     $this->get_upload_path($name))) {
                 break;
             }
+            }
             $name = $this->upcount_name($name);
         }
+
         return $name;
     }
 
@@ -1109,10 +1116,9 @@ class UploadHandler
                 $failed_versions[] = $version ? $version : 'original';
             }
         }
-        if (count($failed_versions)) {
-            $file->error = $this->get_error_message('image_resize')
-                    .' ('.implode($failed_versions, ', ').')';
-        }
+        if (count($failed_versions)) { 
+            $file->error = $this->get_error_message('image_resize') .' 
+            ('.implode(' ', $failed_versions).')'; }
         // Free memory:
         $this->destroy_image_object($file_path);
     }
@@ -1426,10 +1432,19 @@ class UploadHandler
         $name = $file_name ? $file_name : $upload['name'][0];
         $res = $this->generate_response($response, $print_response);
         if(is_file($this->get_upload_path($name))){
-            $uploaded_bytes = $this->fix_integer_overflow((int)$content_range[1]);
+            if(isset($content_range[1])){
+             $uploaded_bytes = $this->fix_integer_overflow((int)$content_range[1]);
+            }
+            else{
+             $uploaded_bytes = 0;
+            }
             $totalSize = $this->get_file_size($this->get_upload_path($name));
+        
+        
             if ($totalSize - $uploaded_bytes - $this->options['readfile_chunk_size'] < 0) {
-                $this->onUploadEnd($res);
+        
+                   $this->onUploadEnd($res);
+        
             }else{
                 $this->head();
                 $this->body(json_encode($res));
@@ -1587,9 +1602,17 @@ class UploadHandler
         }
         return $this->generate_response($response, $print_response);
     }
-
+    
     protected function basename($filepath, $suffix = null) {
-        $splited = preg_split('/\//', rtrim ($filepath, '/ '));
-        return substr(basename('X'.$splited[count($splited)-1], $suffix), 1);
+        $splited = preg_split('/\//', rtrim($filepath, '/ '));
+        $base = 'X' . $splited[count($splited) - 1];
+    
+        // Check if $suffix is null before passing to basename()
+        if ($suffix === null) {
+            return substr(basename($base), 1);
+        }
+
+        return substr(basename($base, $suffix), 1);
     }
+
 }
