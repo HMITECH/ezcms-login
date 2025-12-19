@@ -101,7 +101,7 @@ class ezLayouts extends ezCMS {
 	        $name = substr($filename, 7);             // admin.header.php
 
 	        // Split only on first dot
-	        $parts = explode('-', $name, 2);
+	        $parts = explode('.', $name, 2);
 	        $group = $parts[0];
 
 	        $groups[$group][] = $name;
