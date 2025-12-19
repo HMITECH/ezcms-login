@@ -124,7 +124,11 @@ class ezLayouts extends ezCMS {
 	            foreach ($files as $file) {
 
 	                // Strip group prefix for display
-	                $display = substr($file, strlen($group) + 1); // header.php
+	                if (substr_count($file, '.') > 1) {
+						$display = substr($file, strlen($group) + 1);
+					} else {
+						$display = $file;
+					}
 	                $full = 'layout.'.$file;
 
 	                $myclass = ($this->filename === $full) ? 'label label-info' : '';
@@ -153,7 +157,6 @@ class ezLayouts extends ezCMS {
 	    $this->treehtml .= '</ul>';
 	}
 
-	
 	// Function to fetch the revisions
 	private function getRevisions() {
 	

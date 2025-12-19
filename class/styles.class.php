@@ -157,8 +157,13 @@ class ezStyles extends ezCMS {
 	            foreach ($files as $file) {
 
 	                // Strip prefix for display
-	                $display = substr($file, strlen($group) + 1); // base.css
-	                $myclass = ($this->filename == $file) ? 'label label-info' : '';
+	                if (substr_count($file, '.') > 1) {
+						$display = substr($file, strlen($group) + 1);
+					} else {
+						$display = $file;
+					}
+	                $myclass = (basename($this->filename) == $file) ? 
+	                	'label label-info' : '';
 
 	                $this->treehtml .= '<li>';
 	                $this->treehtml .= '<i class="icon-tint"></i> ';
@@ -171,8 +176,8 @@ class ezStyles extends ezCMS {
 	        } else {
 	            // Single CSS file → normal entry
 	            $file = $files[0];
-	            $myclass = ($this->filename == $file) ? 'label label-info' : '';
-
+	            $myclass = (basename($this->filename) == $file) ? 
+	                	'label label-info' : '';
 	            $this->treehtml .= '<li>';
 	            $this->treehtml .= '<i class="icon-tint"></i> ';
 	            $this->treehtml .= '<a href="styles.php?show='.$file.'" class="'.$myclass.'">'.$file.'</a>';
