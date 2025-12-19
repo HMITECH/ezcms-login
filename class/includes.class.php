@@ -99,29 +99,31 @@ class ezIncludes extends ezCMS {
 	// Function to Build Treeview HTML
 	private function buildTree() {
 
-	    $files = [];
-	    
+	    $groups = [];
+
 	    // Scan files
 	    foreach (glob("../includes/*.php") as $entry) {
 
 	        $entry = basename($entry);
 	        if ($entry == 'include.php') continue;
 
-	        // Split filename by dot
+	        // Split filename by first dot
 	        $parts = explode('.', $entry, 2);
 
-	        // Group key (before first dot)
+	        // Group key is first part
 	        $group = $parts[0];
 
-	        // Store
-	        $files[$group][] = $entry;
+	        // Store in group
+	        $groups[$group][] = $entry;
 	    }
+
+	    ksort($groups);
 
 	    $this->treehtml = '<ul>';
 
-	    foreach ($files as $group => $groupFiles) {
+	    foreach ($groups as $group => $groupFiles) {
 
-	        // If more than one file shares the prefix → make folder
+	        // Folder only if more than one file shares prefix
 	        if (count($groupFiles) > 1) {
 
 	            $this->treehtml .= '<li>';
@@ -129,11 +131,21 @@ class ezIncludes extends ezCMS {
 	            $this->treehtml .= '<a href="#">'.$group.'</a>';
 	            $this->treehtml .= '<ul>';
 
+	            sort($groupFiles);
 	            foreach ($groupFiles as $file) {
-	                $myclass = ($this->filename == $file) ? 'label label-info' : '';
+
+	                // Display: strip prefix only if more than one dot
+	                if (substr_count($file, '.') > 1) {
+	                    $display = substr($file, strlen($group) + 1);
+	                } else {
+	                    $display = $file;
+	                }
+
+	                $myclass = (basename($this->filename) === $file) ? 'label label-info' : '';
+
 	                $this->treehtml .= '<li>';
 	                $this->treehtml .= '<i class="icon-file"></i> ';
-	                $this->treehtml .= '<a href="includes.php?show='.$file.'" class="'.$myclass.'">'.$file.'</a>';
+	                $this->treehtml .= '<a href="includes.php?show='.$file.'" class="'.$myclass.'">'.$display.'</a>';
 	                $this->treehtml .= '</li>';
 	            }
 
@@ -142,11 +154,12 @@ class ezIncludes extends ezCMS {
 	        } else {
 	            // Single file → show normally
 	            $file = $groupFiles[0];
-	            $myclass = ($this->filename == $file) ? 'label label-info' : '';
+	            $display = $file;
+	            $myclass = (basename($this->filename) === $file) ? 'label label-info' : '';
 
 	            $this->treehtml .= '<li>';
 	            $this->treehtml .= '<i class="icon-share-alt"></i> ';
-	            $this->treehtml .= '<a href="includes.php?show='.$file.'" class="'.$myclass.'">'.$file.'</a>';
+	            $this->treehtml .= '<a href="includes.php?show='.$file.'" class="'.$myclass.'">'.$display.'</a>';
 	            $this->treehtml .= '</li>';
 	        }
 	    }
@@ -154,7 +167,6 @@ class ezIncludes extends ezCMS {
 	    $this->treehtml .= '</ul>';
 	}
 
-	
 	// Function to fetch the revisions
 	private function getRevisions() {
 	

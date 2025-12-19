@@ -158,8 +158,13 @@ class ezScripts extends ezCMS {
 	            sort($files);
 	            foreach ($files as $file) {
 
-	                $display = substr($file, strlen($group) + 1); // strip prefix
-	                $myclass = ($this->filename == $file) ? 'label label-info' : '';
+					if (substr_count($file, '.') > 1) {
+						$display = substr($file, strlen($group) + 1);
+					} else {
+						$display = $file;
+					}
+	                $myclass = (basename($this->filename) == $file) ? 
+	                	'label label-info' : '';
 
 	                $this->treehtml .= '<li>';
 	                $this->treehtml .= '<i class="icon-indent-left"></i> ';
@@ -172,8 +177,8 @@ class ezScripts extends ezCMS {
 	        } else {
 	            // Single file → show normally
 	            $file = $files[0];
-	            $myclass = ($this->filename == $file) ? 'label label-info' : '';
-
+	            $myclass = (basename($this->filename) == $file) ? 
+	            	'label label-info' : '';
 	            $this->treehtml .= '<li>';
 	            $this->treehtml .= '<i class="icon-indent-left"></i> ';
 	            $this->treehtml .= '<a href="scripts.php?show='.$file.'" class="'.$myclass.'">'.$file.'</a>';
@@ -184,7 +189,6 @@ class ezScripts extends ezCMS {
 	    $this->treehtml .= '</ul>';
 	}
 
-	
 	// Function to Delete the Javascript file
 	private function deleteFile() {
 
