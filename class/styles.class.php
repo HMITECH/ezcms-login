@@ -124,16 +124,63 @@ class ezStyles extends ezCMS {
 			$this->revs['log'] = '<tr><td colspan="4">There are no revisions.</td></tr>';	
 	}
 	
-	// Function to Build Treeview HTML
+	// Function to Build Treeview HTML (CSS grouped by first dot)
 	private function buildTree() {
-		$this->treehtml = '<ul>';
-		foreach (glob("../site-assets/css/*.css") as $entry) {
-			$myclass = ($this->filename == $entry) ? 'label label-info' : '';
-			$entry = substr($entry, 19, strlen($entry)-19);
-			$this->treehtml .= '<li><i class="icon-tint"></i> <a href="styles.php?show='.
-				$entry.'" class="'.$myclass.'">'.$entry.'</a></li>';
-		}
-		$this->treehtml .= '</ul>';		
+
+	    $groups = [];
+
+	    foreach (glob("../site-assets/css/*.css") as $entry) {
+
+	        $filename = basename($entry);   // app.base.css
+
+	        // Split only on first dot
+	        $parts = explode('.', $filename, 2);
+	        $group = $parts[0];
+
+	        $groups[$group][] = $filename;
+	    }
+
+	    ksort($groups);
+	    $this->treehtml = '<ul>';
+
+	    foreach ($groups as $group => $files) {
+
+	        // Folder only if more than one file
+	        if (count($files) > 1) {
+
+	            $this->treehtml .= '<li>';
+	            $this->treehtml .= '<i class="icon-folder-open"></i> ';
+	            $this->treehtml .= '<a href="#">'.$group.'</a>';
+	            $this->treehtml .= '<ul>';
+
+	            sort($files);
+	            foreach ($files as $file) {
+
+	                // Strip prefix for display
+	                $display = substr($file, strlen($group) + 1); // base.css
+	                $myclass = ($this->filename == $file) ? 'label label-info' : '';
+
+	                $this->treehtml .= '<li>';
+	                $this->treehtml .= '<i class="icon-tint"></i> ';
+	                $this->treehtml .= '<a href="styles.php?show='.$file.'" class="'.$myclass.'">'.$display.'</a>';
+	                $this->treehtml .= '</li>';
+	            }
+
+	            $this->treehtml .= '</ul></li>';
+
+	        } else {
+	            // Single CSS file → normal entry
+	            $file = $files[0];
+	            $myclass = ($this->filename == $file) ? 'label label-info' : '';
+
+	            $this->treehtml .= '<li>';
+	            $this->treehtml .= '<i class="icon-tint"></i> ';
+	            $this->treehtml .= '<a href="styles.php?show='.$file.'" class="'.$myclass.'">'.$file.'</a>';
+	            $this->treehtml .= '</li>';
+	        }
+	    }
+
+	    $this->treehtml .= '</ul>';
 	}
 	
 	// Function to Delete the JavasStylesheet file

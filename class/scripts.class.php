@@ -125,18 +125,65 @@ class ezScripts extends ezCMS {
 			$this->revs['log'] = '<tr><td colspan="4">There are no revisions.</td></tr>';	
 	}
 	
-	// Function to Build Treeview HTML
+	// Function to Build Treeview HTML (JS grouped by first dot)
 	private function buildTree() {
-		$this->treehtml = '<ul>';
-		foreach (glob("../site-assets/js/*.js") as $entry) {
-			$myclass = ($this->filename == $entry) ? 'label label-info' : '';
-			$entry = substr($entry, 18, strlen($entry)-18);
-			$this->treehtml .= '<li><i class="icon-indent-left"></i> <a href="scripts.php?show='.
-				$entry.'" class="'.$myclass.'">'.$entry.'</a></li>';
 
-		}
-		$this->treehtml .= '</ul>';		
+	    $groups = [];
+
+	    foreach (glob("../site-assets/js/*.js") as $entry) {
+
+	        $filename = basename($entry);
+
+	        // Split only on first dot
+	        $parts = explode('.', $filename, 2);
+	        $group = $parts[0];
+
+	        $groups[$group][] = $filename;
+	    }
+
+	    ksort($groups);
+
+	    $this->treehtml = '<ul>';
+
+	    foreach ($groups as $group => $files) {
+
+	        // Group folder only if more than one file
+	        if (count($files) > 1) {
+
+	            $this->treehtml .= '<li>';
+	            $this->treehtml .= '<i class="icon-folder-open"></i> ';
+	            $this->treehtml .= '<a href="#">'.$group.'</a>';
+	            $this->treehtml .= '<ul>';
+
+	            sort($files);
+	            foreach ($files as $file) {
+
+	                $display = substr($file, strlen($group) + 1); // strip prefix
+	                $myclass = ($this->filename == $file) ? 'label label-info' : '';
+
+	                $this->treehtml .= '<li>';
+	                $this->treehtml .= '<i class="icon-indent-left"></i> ';
+	                $this->treehtml .= '<a href="scripts.php?show='.$file.'" class="'.$myclass.'">'.$display.'</a>';
+	                $this->treehtml .= '</li>';
+	            }
+
+	            $this->treehtml .= '</ul></li>';
+
+	        } else {
+	            // Single file → show normally
+	            $file = $files[0];
+	            $myclass = ($this->filename == $file) ? 'label label-info' : '';
+
+	            $this->treehtml .= '<li>';
+	            $this->treehtml .= '<i class="icon-indent-left"></i> ';
+	            $this->treehtml .= '<a href="scripts.php?show='.$file.'" class="'.$myclass.'">'.$file.'</a>';
+	            $this->treehtml .= '</li>';
+	        }
+	    }
+
+	    $this->treehtml .= '</ul>';
 	}
+
 	
 	// Function to Delete the Javascript file
 	private function deleteFile() {

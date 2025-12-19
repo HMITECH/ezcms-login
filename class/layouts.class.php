@@ -89,17 +89,70 @@ class ezLayouts extends ezCMS {
 		exit;
 	}
 	
-	// Function to Build Treeview HTML
+	// Function to Build Treeview HTML (Layouts grouped by first dot)
 	private function buildTree() {
-		$this->treehtml = '<ul>';
-		foreach (glob("../layout.*.php") as $entry) {
-			$entry = substr($entry, 10, strlen($entry)-10);
-			$myclass = ($this->filename == 'layout.'.$entry) ? 'label label-info' : '';
-			$this->treehtml .= '<li><i class="icon-list-alt"></i> <a href="layouts.php?show='.
-				$entry.'" class="'.$myclass.'">'.$entry.'</a></li>';
-		}
-		$this->treehtml .= '</ul>';
+
+	    $groups = [];
+
+	    foreach (glob("../layout.*.php") as $entry) {
+
+	        // Remove path + "layout."
+	        $filename = basename($entry);            // layout.admin.header.php
+	        $name = substr($filename, 7);             // admin.header.php
+
+	        // Split only on first dot
+	        $parts = explode('-', $name, 2);
+	        $group = $parts[0];
+
+	        $groups[$group][] = $name;
+	    }
+
+	    ksort($groups);
+	    $this->treehtml = '<ul>';
+
+	    foreach ($groups as $group => $files) {
+
+	        // Create folder only if more than one file
+	        if (count($files) > 1) {
+
+	            $this->treehtml .= '<li>';
+	            $this->treehtml .= '<i class="icon-folder-open"></i> ';
+	            $this->treehtml .= '<a href="#">'.$group.'</a>';
+	            $this->treehtml .= '<ul>';
+
+	            sort($files);
+	            foreach ($files as $file) {
+
+	                // Strip group prefix for display
+	                $display = substr($file, strlen($group) + 1); // header.php
+	                $full = 'layout.'.$file;
+
+	                $myclass = ($this->filename === $full) ? 'label label-info' : '';
+
+	                $this->treehtml .= '<li>';
+	                $this->treehtml .= '<i class="icon-list-alt"></i> ';
+	                $this->treehtml .= '<a href="layouts.php?show='.$file.'" class="'.$myclass.'">'.$display.'</a>';
+	                $this->treehtml .= '</li>';
+	            }
+
+	            $this->treehtml .= '</ul></li>';
+
+	        } else {
+	            // Single layout → normal entry
+	            $file = $files[0];
+	            $full = 'layout.'.$file;
+	            $myclass = ($this->filename === $full) ? 'label label-info' : '';
+
+	            $this->treehtml .= '<li>';
+	            $this->treehtml .= '<i class="icon-list-alt"></i> ';
+	            $this->treehtml .= '<a href="layouts.php?show='.$file.'" class="'.$myclass.'">'.$file.'</a>';
+	            $this->treehtml .= '</li>';
+	        }
+	    }
+
+	    $this->treehtml .= '</ul>';
 	}
+
 	
 	// Function to fetch the revisions
 	private function getRevisions() {
