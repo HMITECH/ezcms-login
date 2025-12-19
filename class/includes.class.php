@@ -98,18 +98,62 @@ class ezIncludes extends ezCMS {
 	
 	// Function to Build Treeview HTML
 	private function buildTree() {
-		$this->treehtml = '<ul>';
-		foreach (glob("../includes/*.php") as $entry) {
-			
-			$entry = basename($entry);
-			if ($entry != 'include.php') {
-				$myclass = ($this->filename == $entry) ? 'label label-info' : '';
-				$this->treehtml .= '<li><i class="icon-share-alt"></i> <a href="includes.php?show='.
-					$entry.'" class="'.$myclass.'">'.$entry.'</a></li>';
-			}
-		}
-		$this->treehtml .= '</ul>';
+
+	    $files = [];
+	    
+	    // Scan files
+	    foreach (glob("../includes/*.php") as $entry) {
+
+	        $entry = basename($entry);
+	        if ($entry == 'include.php') continue;
+
+	        // Split filename by dot
+	        $parts = explode('.', $entry, 2);
+
+	        // Group key (before first dot)
+	        $group = $parts[0];
+
+	        // Store
+	        $files[$group][] = $entry;
+	    }
+
+	    $this->treehtml = '<ul>';
+
+	    foreach ($files as $group => $groupFiles) {
+
+	        // If more than one file shares the prefix → make folder
+	        if (count($groupFiles) > 1) {
+
+	            $this->treehtml .= '<li>';
+	            $this->treehtml .= '<i class="icon-folder-open"></i> ';
+	            $this->treehtml .= '<a href="#">'.$group.'</a>';
+	            $this->treehtml .= '<ul>';
+
+	            foreach ($groupFiles as $file) {
+	                $myclass = ($this->filename == $file) ? 'label label-info' : '';
+	                $this->treehtml .= '<li>';
+	                $this->treehtml .= '<i class="icon-file"></i> ';
+	                $this->treehtml .= '<a href="includes.php?show='.$file.'" class="'.$myclass.'">'.$file.'</a>';
+	                $this->treehtml .= '</li>';
+	            }
+
+	            $this->treehtml .= '</ul></li>';
+
+	        } else {
+	            // Single file → show normally
+	            $file = $groupFiles[0];
+	            $myclass = ($this->filename == $file) ? 'label label-info' : '';
+
+	            $this->treehtml .= '<li>';
+	            $this->treehtml .= '<i class="icon-share-alt"></i> ';
+	            $this->treehtml .= '<a href="includes.php?show='.$file.'" class="'.$myclass.'">'.$file.'</a>';
+	            $this->treehtml .= '</li>';
+	        }
+	    }
+
+	    $this->treehtml .= '</ul>';
 	}
+
 	
 	// Function to fetch the revisions
 	private function getRevisions() {
