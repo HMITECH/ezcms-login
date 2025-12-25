@@ -7,6 +7,10 @@
  *
  */
 
+// Uncomment the line below if you want to log to file.
+// Location site-assets/logs/macro/
+// $this->logFile = 'broken-images.csv';
+
 // Find all the images in the html
 $imgs = $html->find('img');
 $count = count($imgs);

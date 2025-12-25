@@ -12,6 +12,10 @@
  *
  */
 
+// Uncomment the line below if you want to log to file.
+// Location site-assets/logs/macro/
+// $this->logFile = 'add-height-width-images.csv';
+
 // Find all the images in the html
 $imgs = $html->find('img');
 $count = count($imgs);

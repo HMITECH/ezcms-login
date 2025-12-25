@@ -16,6 +16,10 @@
  *
  */
 
+// Uncomment the line below if you want to log to file.
+// Location site-assets/logs/macro/
+// $this->logFile = 'dummy-macro.csv';
+
 $this->log( 'Default messages appear in Grey background'    ,'notice'   );
 $this->log( 'Success messages appear in Green background'   ,'success'  );
 $this->log( 'Warning messages appear in Orange background'  ,'warning'  );
