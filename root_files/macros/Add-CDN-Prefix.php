@@ -9,6 +9,10 @@
  *
  */
 
+// Uncomment the line below if you want to log to file.
+// Location site-assets/logs/macro/
+// $this->logFile = 'add-cdn-prefix.csv';
+
 // Change this depending on the CDN you are using
 const CDNURL="/cdn-cgi/image/quality=75,f=auto";
 

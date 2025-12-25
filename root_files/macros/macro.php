@@ -31,6 +31,13 @@
 	$this->log( 'Important messages appear in Red background'   ,'important');
 	$this->log( 'Info messages appear in Blue background'       ,'info'     );
 	$this->log( 'Inverse messages appear in Black background '  ,'inverse'  );
+
+	Logging to File:
+	$this->logFile = 'your-log-file.csv';
+	Add the above line to log macro execution to file.
+	Location site-assets/logs/macro/your-log-file.csv
+	Use the File Manager to download.
+
  *
  * The macros provided are just examples.
  */

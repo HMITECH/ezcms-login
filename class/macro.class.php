@@ -15,6 +15,8 @@ class ezMacro extends ezCMS {
 
 	public $macrolist = '';
 
+	private $logFile = '';
+
 	// Consturct the class
 	public function __construct () {
 		// call parent constuctor
@@ -83,7 +85,68 @@ class ezMacro extends ezCMS {
 			$this->redis->del($redKey);
 		}
 
+		// save log to file
+		if ($this->logFile) $this->saveLog($data, $page);
 		die(json_encode(['success'=>true, 'log'=>$this->mlog]));
+	}
+
+	private function saveLog($data, $page) {
+
+	    if (!$this->logFile || empty($this->mlog)) return;
+
+	    $logDir = "../site-assets/logs/macro/";
+	    $file   = $logDir . basename($this->logFile);
+
+	    if (!is_dir($logDir)) {
+	        mkdir($logDir, 0755, true);
+	    }
+
+	    // Prepare values
+	    $pageId   = $data['id'];
+	    $pageUrl  = $page['url'] ?? '';
+	    $macro    = basename($data['macro']);
+	    $user     = $this->usr['username'] ?? 'system';
+	    $time     = date('Y-m-d H:i:s');
+
+	    // Combine all messages into one field (newline separated)
+	    $messages = [];
+	    foreach ($this->mlog as $entry) {
+	        $messages[] = $entry['msg'];
+	    }
+	    $msg = implode("\n", $messages);
+
+	    // CSV header (only if file does not exist)
+	    if (!file_exists($file)) {
+	        $header = [
+	            'Page ID',
+	            'Page URL',
+	            'MSG',
+	            'Macro',
+	            'User',
+	            'Timestamp'
+	        ];
+	        file_put_contents(
+	            $file,
+	            '"' . implode('","', $header) . '"' . "\n",
+	            FILE_APPEND
+	        );
+	    }
+
+	    // Data row
+	    $row = [
+	        $pageId,
+	        $pageUrl,
+	        $msg,
+	        $macro,
+	        $user,
+	        $time
+	    ];
+
+	    file_put_contents(
+	        $file,
+	        '"' . implode('","', array_map('addslashes', $row)) . '"' . "\n",
+	        FILE_APPEND
+	    );
 	}
 
 	private function doMacro($content, $macro) {
