@@ -37,6 +37,7 @@ $cms = new ezScripts();
 		</div>
 		<div class="span9 white-boxed">
 		  <form id="frm" action="scripts.php" method="post" enctype="multipart/form-data">
+		<?php echo $cms->csrfField(); ?>
 			<div class="navbar">
 				<div class="navbar-inner">
 					<img src="img/ajax-loader.gif" id="tbloading">

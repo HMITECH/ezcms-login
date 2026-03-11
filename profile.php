@@ -36,6 +36,7 @@ $cms = new ezProfile();
 				<?php echo $cms->msg; ?>
 
 				<form id="frmPass" action="" method="post" enctype="multipart/form-data">
+				<?php echo $cms->csrfField(); ?>
 
 					<label class="control-label" for="inputTitle">Current Password</label>
 					<input type="text" id="txtcpass" name="txtcpass"

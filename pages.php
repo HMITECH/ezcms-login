@@ -37,6 +37,7 @@ $cms = new ezPages();
 			<div class="span9 white-boxed">
 
 				<form id="frmPage" action="" method="post" enctype="multipart/form-data">
+				<?php echo $cms->csrfField(); ?>
 				<div class="navbar">
 					<div class="navbar-inner">
 						<a href="#" id="toggleEditSize" class="btn"><i class="icon-chevron-left"></i></a>

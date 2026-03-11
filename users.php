@@ -28,6 +28,7 @@ $cms = new ezUsers();
 		<div class="span3 white-boxed"><?php echo $cms->treehtml; ?></div>
 		<div class="span9 white-boxed">
 			<form id="frmUser" action="" method="post" enctype="multipart/form-data" class="form-horizontal" autocomplete="off">
+			<?php echo $cms->csrfField(); ?>
 				<div class="navbar"><div class="navbar-inner"><?php echo $cms->barBtns; ?></div></div>
 
 				<?php echo $cms->msg; ?>
