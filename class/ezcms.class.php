@@ -34,11 +34,14 @@ class ezCMS extends db {
 		if (!isset($_SESSION['LOGGEDIN'])) $_SESSION['LOGGEDIN'] = false;
 		
 		// Redirect the user if NOT logged in
-		if ((!$_SESSION['LOGGEDIN']) && ($loginRequired) ) { 
+		if ((!$_SESSION['LOGGEDIN']) && ($loginRequired) ) {
 			$_SESSION['AFTERLOGINPAGE'] = $_SERVER['REQUEST_URI'];
-			header("Location: index.php?flg=expired"); 
-			exit; 
+			header("Location: index.php?flg=expired");
+			exit;
 		}
+
+		$this->csrfToken(); // ensure token exists in session
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') $this->verifyCsrf();
 		
 		// Fetch the Logged in users details if login is required
 		if ($loginRequired) { 
@@ -98,8 +101,7 @@ class ezCMS extends db {
 			implode("`,`", array_keys($data))."`) VALUES (".
 			implode(',', array_fill(0, count($data), '?')).")");
 		if ($stmt->execute(array_values($data))) {
-			$newid = $this->lastInsertId();			
-			$this->query("OPTIMIZE TABLE $table");
+			$newid = $this->lastInsertId();
 			return $newid;
 		} 
 		return false;
@@ -110,17 +112,15 @@ class ezCMS extends db {
 		$stmt = $this->prepare("UPDATE $table SET ".$this->arrayToPDOstr($data)." WHERE id = ? ");
 		$data[] = $id;
 		if ($stmt->execute(array_values($data))) {
-			$this->query("OPTIMIZE TABLE $table");
 			return true;
-		} 
+		}
 		return false;
 	}
-	
+
 	// Delete from Database table
 	protected function delete($t, $id) {
 		$stmt = $this->prepare("DELETE FROM $t where id = ?");
 		if ($stmt->execute([$id])) {
-			$this->query("OPTIMIZE TABLE $t");
 			return true;
 		}
 		return false;
@@ -177,6 +177,24 @@ class ezCMS extends db {
 		$this->flg = $flg;
 		$this->getStdFlgMessage();
 		die($this->msg);
+	}
+
+	public function csrfToken() {
+		if (!isset($_SESSION['CSRF_TOKEN']))
+			$_SESSION['CSRF_TOKEN'] = bin2hex(random_bytes(32));
+		return $_SESSION['CSRF_TOKEN'];
+	}
+
+	public function csrfField() {
+		return '<input type="hidden" name="csrf_token" value="'.$this->csrfToken().'">';
+	}
+
+	private function verifyCsrf() {
+		if (!isset($_POST['csrf_token']) || !isset($_SESSION['CSRF_TOKEN']) ||
+			!hash_equals($_SESSION['CSRF_TOKEN'], $_POST['csrf_token'])) {
+			header('HTTP/1.1 403 Forbidden');
+			die('Invalid CSRF token.');
+		}
 	}
 
 	// Function to Set the Display Message

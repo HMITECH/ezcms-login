@@ -27,6 +27,7 @@ $cms = new ezController();
 
 		<div id="editBlock" class="white-boxed">
 		  <form id="frmHome" action="controllers.php" method="post" enctype="multipart/form-data">
+		<?php echo $cms->csrfField(); ?>
 			<div class="navbar">
 				<div class="navbar-inner">
 					<input type="submit" name="Submit" value="Save Changes" class="btn btn-primary ">

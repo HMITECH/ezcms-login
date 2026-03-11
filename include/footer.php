@@ -91,4 +91,18 @@ else {
 		$('body').css('background-color',localStorage.getItem("cmsBgColor"));
 	});
 }
+var _csrfToken = '<?php echo $_SESSION["CSRF_TOKEN"] ?? ""; ?>';
+$.ajaxSetup({
+	beforeSend: function(xhr, settings) {
+		if (settings.type !== 'POST') return;
+		var tok = 'csrf_token=' + encodeURIComponent(_csrfToken);
+		if (typeof settings.data === 'string') {
+			if (settings.data.indexOf('csrf_token') === -1)
+				settings.data += (settings.data ? '&' : '') + tok;
+		} else {
+			if (!settings.data) settings.data = {};
+			if (!settings.data.csrf_token) settings.data.csrf_token = _csrfToken;
+		}
+	}
+});
 })(jQuery);</script>

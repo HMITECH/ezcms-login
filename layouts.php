@@ -35,6 +35,7 @@ $cms = new ezLayouts();
 			</div>
 			<div class="span9 white-boxed">
 				<form id="frmlayout" action="layouts.php" method="post" enctype="multipart/form-data">
+				<?php echo $cms->csrfField(); ?>
 					<div class="navbar">
 						<div class="navbar-inner">
 							<img src="img/ajax-loader.gif" id="tbloading">
