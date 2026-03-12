@@ -127,3 +127,81 @@ $("#collaspeBTN").click( function () {
 	buildDiffUI();
 	return false;
 });
+
+// ---------------------------------------------------------------------------
+// initCMToolbar(editor, toolbar)
+// Wires up a .cm-toolbar element to a CodeMirror instance.
+// Safe to call multiple times on the same page for different editor instances.
+// ---------------------------------------------------------------------------
+function initCMToolbar(editor, toolbar) {
+	var $tb = $(toolbar);
+	var fontSizeKey = 'ezCMFontSize';
+
+	function setFontSize(size) {
+		$(editor.getWrapperElement()).css('font-size', size + 'px');
+		editor.refresh();
+		$tb.find('.cm-size-label').text(size + 'px');
+		localStorage.setItem(fontSizeKey, size);
+	}
+
+	// Restore saved font size on load
+	var saved = localStorage.getItem(fontSizeKey);
+	if (saved) setFontSize(parseInt(saved, 10));
+
+	$tb.find('.cm-fontsize-menu a').on('click', function () {
+		setFontSize(parseInt($(this).data('size'), 10));
+		return false;
+	});
+
+	$tb.find('.cm-btn-find').on('click',    function () { editor.execCommand('findPersistent'); });
+	$tb.find('.cm-btn-replace').on('click', function () { editor.execCommand('replace'); });
+	$tb.find('.cm-btn-goto').on('click',    function () { editor.execCommand('jumpToLine'); });
+
+	// Fold all blocks at brace-depth >= minDepth, deepest first.
+	// Level 1 = 1 level visible (fold depth >= 1), Level 2 = 2 visible, etc.
+	// Fold All = minDepth 0 (collapse everything).
+	function foldToLevel(minDepth) {
+		editor.operation(function () {
+			for (var i = editor.firstLine(); i <= editor.lastLine(); i++)
+				editor.foldCode({line: i, ch: 0}, null, "unfold");
+
+			var maxD = 0, d = 0;
+			for (var i = editor.firstLine(); i <= editor.lastLine(); i++) {
+				var line = editor.getLine(i) || '';
+				for (var c = 0; c < line.length; c++) {
+					if      (line[c] === '{') { d++; if (d > maxD) maxD = d; }
+					else if (line[c] === '}' && d > 0) d--;
+				}
+			}
+
+			for (var target = maxD - 1; target >= minDepth; target--) {
+				var depth = 0;
+				for (var i = editor.firstLine(); i <= editor.lastLine(); i++) {
+					var line = editor.getLine(i) || '';
+					for (var c = 0; c < line.length; c++) {
+						if (line[c] === '{') {
+							if (depth === target)
+								editor.foldCode({line: i, ch: c + 1}, null, "fold");
+							depth++;
+						} else if (line[c] === '}' && depth > 0) {
+							depth--;
+						}
+					}
+				}
+			}
+		});
+	}
+
+	$tb.find('.cm-fold-menu a').on('click', function () {
+		var val = $(this).data('fold');
+		if (val === 'none') {
+			editor.operation(function () {
+				for (var i = editor.firstLine(); i <= editor.lastLine(); i++)
+					editor.foldCode({line: i, ch: 0}, null, "unfold");
+			});
+		} else {
+			foldToLevel(parseInt(val, 10));
+		}
+		return false;
+	});
+}
