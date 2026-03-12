@@ -46,7 +46,7 @@ class ezFind extends ezCMS {
 
 			// find item ... if not found ... error
 			$stmt = $this->prepare("SELECT `id`, `url` FROM `pages` WHERE `$block` LIKE CONCAT ('%', ?, '%') AND `id` = ?" );
-			$stmt->execute(array($_POST['find'], $id));
+			$stmt->execute([$_POST['find'], $id]);
 			if (!$stmt->rowCount()) 
 				die(json_encode(['success'=>false, 'msg'=>'Find text not found!']));
 
@@ -58,7 +58,7 @@ class ezFind extends ezCMS {
 			
 			// do replace
 			$stmt = $this->prepare("UPDATE `pages` SET `$block` = REPLACE (`$block`, ?, ?) WHERE id = ?" );
-			if (!$stmt->execute(array($_POST['find'], $_POST['replace'], $id))) $r->success = false;
+			if (!$stmt->execute([$_POST['find'], $_POST['replace'], $id])) $r->success = false;
 
 			// exipre the redis cache here for the page
 			if ($this->useRedis) {
@@ -99,10 +99,12 @@ class ezFind extends ezCMS {
 			}
 
 			// Create a revision
-			$data = array (	'content' => $content, 
-							'fullpath' =>  $fullpath,
-							'revmsg' => 'Find and Replace',
-							'createdby' => $this->usr['id']);
+			$data = [
+				'content'   => $content,
+				'fullpath'  => $fullpath,
+				'revmsg'    => 'Find and Replace',
+				'createdby' => $this->usr['id'],
+			];
 			if ( !$this->add('git_files', $data) ) {
 				$r->success = false;
 				$r->msg = "Failed to create Revision!";
@@ -130,11 +132,11 @@ class ezFind extends ezCMS {
 	}
 
 	private function findFiles ($mainFile, $path, $type) {	
-		$results = array();
+		$results = [];
 		if (file_exists("../$mainFile")) {
-			$content = file_get_contents("../$mainFile"); 
+			$content = file_get_contents("../$mainFile");
 			if (strpos($content, $_POST['find']) !== false)
-				array_push($results, array('name' => $mainFile, 'inroot' => 1));			
+				$results[] = ['name' => $mainFile, 'inroot' => 1];			
 		}
 
 		$pathLen = strlen($path);
