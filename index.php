@@ -52,30 +52,31 @@ switch ($cms->flg) {
 </head><body>
 
 <div id="wrap">
-	<div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner">
-	  <a class="brand" href="/">ezCMS : <?php echo $_SERVER['HTTP_HOST']; ?></a>
-	  <div class="pull-right" style="color: #FFFFFF;margin: 10px 10px 2px 2px;">Your IP <strong>
-		<?php echo $_SERVER['REMOTE_ADDR']; ?></strong> is Logged</div>
-	  <div class="clearfix"></div>
-	</div></div>
+	<nav class="navbar navbar-dark bg-dark fixed-top">
+	  <div class="container-fluid">
+	  <a class="navbar-brand" href="/">ezCMS : <?php echo $_SERVER['HTTP_HOST']; ?></a>
+	  <span class="navbar-text ms-auto" style="color: #ccc;">Your IP <strong>
+		<?php echo $_SERVER['REMOTE_ADDR']; ?></strong> is Logged</span>
+	  </div>
+	</nav>
 	<div class="container">
 		<form id="frm-login" class="form-signin" method="post" action="scripts/login.php">
 			<h3 class="form-signin-heading"><img src="../site-assets/hmi-logo.png" ><br>Please sign in</h3>
 			<?php echo $cms->msg; ?>
-			<input type="text" id="txtemail" name="userid" data-toggle="tooltip"
-				class="input-block-level tooltipme2" data-placement="top"
+			<input type="text" id="txtemail" name="userid" data-bs-toggle="tooltip"
+				class="form-control tooltipme2" data-bs-placement="top"
 				title="Email address"
 				value="<?php echo $userid; ?>"
 				placeholder="Email address">
-			<input type="password" id="txtpass" name="passwd" data-toggle="tooltip"
-				class="input-block-level tooltipme2" data-placement="top"
+			<input type="password" id="txtpass" name="passwd" data-bs-toggle="tooltip"
+				class="form-control tooltipme2" data-bs-placement="top"
 				title="Enter your password here." placeholder="Password">
-			<button class="btn btn-large btn-inverse" type="submit">Sign in</button>
+			<button class="btn btn-lg btn-dark" type="submit">Sign in</button>
 			<p class="pull-right">
 				<a id="lnk-restpass" href="#" class="tooltipme2"
-					data-toggle="tooltip" data-placement="top" style="display:none;"
+					data-bs-toggle="tooltip" data-bs-placement="top" style="display:none;"
 					title="Password Lost, recover your password here.">Lost your password?</a><br>
-				<a href="../" class="tooltipme2" data-toggle="tooltip" data-placement="top"
+				<a href="../" class="tooltipme2" data-bs-toggle="tooltip" data-bs-placement="top"
 					title="Are you lost? Go back to the main site.">&lt;&lt; Back to Site</a>
 			</p>
 			<p class="clearfix"></p>

@@ -23,23 +23,23 @@ $cms = new ezMacro();
 <div id="wrap">
 	<?php include('include/nav.php'); ?>
 	<div class="container">
-	  <div id="editBlock" class="row-fluid">
-		<div class="span3">
+	  <div id="editBlock" class="row">
+		<div class="col-md-3">
 		  <div class="white-boxed"><form id="frmfind"  method="post" action="#">
-			<div class="navbar"><div class="navbar-inner">
-				<input type="submit" name="find" class="btn btn-primary pull-left" value="Find Pages to execute Macro">
-			</div></div>
-			<div class="control-group">
-				<label class="control-label">Page URL</label>
+			<div class="toolbar-bar">
+				<input type="submit" name="find" class="btn btn-primary" value="Find Pages to execute Macro">
+			</div>
+			<div class="mb-3">
+				<label class="form-label">Page URL</label>
 				<div class="controls">
-					<input name="findurl" id="findurl" type="text" class="input-block-level"
+					<input name="findurl" id="findurl" type="text" class="form-control"
 						 placeholder="enter page url to find pages" required></input>
 				</div>
 			</div>
-			<div class="control-group">
-				<label class="control-label">Find Pages by:</label>
+			<div class="mb-3">
+				<label class="form-label">Find Pages by:</label>
 				<div class="controls">
-					<select name="findby" class="input-block-level">
+					<select name="findby" class="form-control">
 						<option value="exact">Exact URL Match</option>
 						<option value="begins">URL Begins With</option>
 						<option value="ends">URL Ends With</option>
@@ -48,24 +48,24 @@ $cms = new ezMacro();
 					</select>
 				</div>
 			</div>
-			<div class="control-group">
+			<div class="mb-3">
 				<label class="checkbox">
 					<input name="incunpub" type="checkbox" value="checkbox">
 					Include unpublised pages</label>
 			</div>
-			<div class="control-group">
+			<div class="mb-3">
 				<label class="checkbox">
 					<input id="incsidebar" type="checkbox" value="checkbox">
 					Include Aside 1 (sidebarcontent)</label>
 			</div>
-			<div class="control-group">
+			<div class="mb-3">
 				<label class="checkbox">
 					<input id="incsiderbar" type="checkbox" value="checkbox">
 					Include Aside 2 (siderbarcontent)</label>
 			</div>
 		  </form></div><br>
 		</div>
-		<div class="span9 white-boxed">
+		<div class="col-md-9 white-boxed">
 			<div id="exenavbar" class="navbar"><div class="navbar-inner">
 				<button id="toggleEditSize" class="btn pull-left"><i class="icon-chevron-left"></i></button>
 				<ul class="nav pull-left">

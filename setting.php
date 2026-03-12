@@ -26,11 +26,11 @@ $cms = new ezSettings();
 	<div class="container">
 
 		<div id="diffBlock" class="white-boxed">
-			<div class="navbar"><div class="navbar-inner">
+			<div class="toolbar-bar">
 				<a id="backEditBTN" href="#" class="btn btn-inverted btn-info">Back to Main Editor</a>
 				<a id="waysDiffBTN" href="#" class="btn btn-inverted btn-warning">Three Way DIFF</a>
 				<a id="collaspeBTN" href="#" class="btn btn-inverted btn-warning">Collaspe Unchanged</a>
-			</div></div>
+			</div>
 			<table id="diffviewerControld" width="100%" border="0">
 			  <tr><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
 				</td><td><select disabled><option selected>Your Current Edit</option></select>
@@ -44,14 +44,12 @@ $cms = new ezSettings();
 		</div>
 
 		<div id="editBlock" class="white-boxed" >
-		  <form id="frmSettings" action="setting.php" method="post" enctype="multipart/form-data" class="form-horizontal">
+		  <form id="frmSettings" action="setting.php" method="post" enctype="multipart/form-data" class="">
 		<?php echo $cms->csrfField(); ?>
-			<div class="navbar">
-				<div class="navbar-inner">
+			<div class="toolbar-bar">
 					<input type="submit" name="Submit" value="Save Changes" class="btn btn-primary">
 					<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup><?php echo $cms->revs['cnt']; ?></sup></a>
 					<a id="showdiff" href="#" class="btn btn-inverted btn-danger">Review DIFF</a>
-				</div>
 			</div>
 			<?php echo $cms->msg; ?>
 			<div id="revBlock">
@@ -59,19 +57,19 @@ $cms = new ezSettings();
 				<tr><th>#</th><th>User Name</th><th>Message</th><th>Date &amp; Time</th><th>Action</th></tr>
 			  </thead><tbody><?php echo $cms->revs['log']; ?></tbody></table>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="txtGitMsg">Revision Message</label>
+			<div class="mb-3">
+				<label class="form-label" for="txtGitMsg">Revision Message</label>
 				<div class="controls">
 					<input type="text" id="txtGitMsg" name="revmsg"
 						placeholder="Enter a description for this revision"
 						title="Enter a message to describe this revision."
-						data-toggle="tooltip"
+						data-bs-toggle="tooltip"
 						value=""
-						data-placement="top" minlength="2"
-						class="input-block-level tooltipme2">
+						data-bs-placement="top" minlength="2"
+						class="form-control tooltipme2">
 				</div>
 			</div>
-			<div class="tabbable tabs-top">
+			<div>
 			<ul class="nav nav-tabs" id="myTab">
 			  <li class="active"><a href="#d-header">Header</a></li>
 			  <li><a href="#d-sidebar">Aside 1</a></li>
@@ -80,7 +78,7 @@ $cms = new ezSettings();
 			</ul>
 
 			<div class="tab-content">
-				<div class="tab-pane active" id="d-header">
+				<div class="tab-pane fade show active" id="d-header">
 					<textarea name="headercontent" id="txtHeader"><?php echo $cms->site['headercontent']; ?></textarea>
 				</div>
 				<div class="tab-pane" id="d-sidebar">
@@ -96,7 +94,7 @@ $cms = new ezSettings();
 			</div>
 		  </form>
 		</div>
-		<textarea name="txtTemps" id="txtTemps" class="input-block-level"></textarea>
+		<textarea name="txtTemps" id="txtTemps" class="form-control"></textarea>
 
 	</div>
 	<br><br>

@@ -24,12 +24,12 @@ $cms = new ezUsers();
 <div id="wrap">
 	<?php include('include/nav.php'); ?>
 	<div class="container">
-	  <div class="row-fluid">
-		<div class="span3 white-boxed"><?php echo $cms->treehtml; ?></div>
-		<div class="span9 white-boxed">
-			<form id="frmUser" action="" method="post" enctype="multipart/form-data" class="form-horizontal" autocomplete="off">
+	  <div class="row">
+		<div class="col-md-3 white-boxed"><?php echo $cms->treehtml; ?></div>
+		<div class="col-md-9 white-boxed">
+			<form id="frmUser" action="" method="post" enctype="multipart/form-data" class="" autocomplete="off">
 			<?php echo $cms->csrfField(); ?>
-				<div class="navbar"><div class="navbar-inner"><?php echo $cms->barBtns; ?></div></div>
+				<div class="toolbar-bar"><?php echo $cms->barBtns; ?></div>
 
 				<?php echo $cms->msg; ?>
 
@@ -40,36 +40,36 @@ $cms = new ezUsers();
 				</div>
 
 				<div class="row">
-					<div class="span4">
+					<div class="col-md-4">
 						<label for="inputName">User Name</label>
-						<input type="text" name="username" id="username" data-toggle="tooltip"
+						<input type="text" name="username" id="username" data-bs-toggle="tooltip"
 							placeholder="Enter the full name" autocomplete="off"
 							title="Enter the full name of the user here."
 							value="<?php echo $cms->thisUser['username']; ?>"
-							data-placement="top" minlength="2" class="input-block-level tooltipme2" required>
+							data-bs-placement="top" minlength="2" class="form-control tooltipme2" required>
 					</div>
-					<div class="span4">
+					<div class="col-md-4">
 						<label for="inputEmail">Email Address</label>
-						<input type="email" name="email" id="email" data-toggle="tooltip"
+						<input type="email" name="email" id="email" data-bs-toggle="tooltip"
 							placeholder="Enter the full email address"
 							title="Enter the full email address of the user here."
 							value="<?php echo $cms->thisUser['email']; ?>"  autocomplete="off"
-							data-placement="top" class="input-block-level tooltipme2" required>
+							data-bs-placement="top" class="form-control tooltipme2" required>
 					</div>
-					<div class="span4">
+					<div class="col-md-4">
 						<label for="txtpsswd">Password</label>
-						<input type="password" name="passwd" id="passwd" data-toggle="tooltip"
+						<input type="password" name="passwd" id="passwd" data-bs-toggle="tooltip"
 							placeholder="<?php echo ($cms->id=='new') ? 'Enter the password' : 'Leave blank to keep unchanged' ?>"
 							title="<?php echo ($cms->id=='new') ? 'Enter the password here' : 'Enter a new password or leave blank to keep unchanged' ?>"
-							data-placement="top" minlength="8"  autocomplete="off"
-							class="input-block-level tooltipme2" <?php  if ($cms->id=='new') echo 'required'; ?>>
+							data-bs-placement="top" minlength="8"  autocomplete="off"
+							class="form-control tooltipme2" <?php  if ($cms->id=='new') echo 'required'; ?>>
 					</div>
 				</div>
 
 				<h4 class="well">USER PERMISSIONS</h4>
 
 				<div class="row">
-					<div class="span4">
+					<div class="col-md-4">
 						<label class="checkbox">
 							<input name="active" type="checkbox" value="checkbox"
 								<?php echo $cms->thisUser['activeCheck']; ?>>
@@ -83,7 +83,7 @@ $cms = new ezUsers();
 								<?php echo $cms->thisUser['delpageCheck']; ?>>
 							Delete Pages</label><?php echo $cms->thisUser['delpageMsg']; ?><hr>
 					</div>
-					<div class="span4">
+					<div class="col-md-4">
 						<label class="checkbox">
 							<input name="edituser" type="checkbox" value="checkbox"
 								<?php echo $cms->thisUser['edituserCheck']; ?>>
@@ -101,7 +101,7 @@ $cms = new ezUsers();
 								<?php echo $cms->thisUser['editcontCheck']; ?>>
 							Manage Router</label><?php echo $cms->thisUser['editcontMsg']; ?><hr>
 					</div>
-					<div class="span4">
+					<div class="col-md-4">
 						<label class="checkbox">
 							<input name="editlayout" type="checkbox" value="checkbox"
 								<?php echo $cms->thisUser['editlayoutCheck']; ?>>

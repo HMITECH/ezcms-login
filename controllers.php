@@ -28,12 +28,10 @@ $cms = new ezController();
 		<div id="editBlock" class="white-boxed">
 		  <form id="frmHome" action="controllers.php" method="post" enctype="multipart/form-data">
 		<?php echo $cms->csrfField(); ?>
-			<div class="navbar">
-				<div class="navbar-inner">
+			<div class="toolbar-bar">
 					<input type="submit" name="Submit" value="Save Changes" class="btn btn-primary ">
 					<a id="showrevs" href="#" class="btn btn-secondary">Revision Log <sup><?php echo $cms->revs['cnt']; ?></sup></a>
 					<a id="showdiff" href="#" class="btn btn-inverted btn-danger">Review DIFF</a>
-				</div>
 			</div>
 			<?php echo $cms->msg; ?>
 			<div id="revBlock">
@@ -41,24 +39,23 @@ $cms = new ezController();
 				<tr><th>#</th><th>User Name</th><th>Message</th><th>Date &amp; Time</th><th>Action</th></tr>
 			  </thead><tbody><?php echo $cms->revs['log']; ?></tbody></table>
 			</div>
-			<div class="control-group">
-				<label class="control-label" for="txtGitMsg">Revision Message</label>
+			<div class="mb-3">
+				<label class="form-label" for="txtGitMsg">Revision Message</label>
 				<div class="controls">
 					<input type="text" id="txtGitMsg" name="revmsg"
 						placeholder="Enter a description for this revision"
 						title="Enter a message to describe this revision."
-						data-toggle="tooltip"
+						data-bs-toggle="tooltip"
 						value=""
-						data-placement="top" minlength="2"
-						class="input-block-level tooltipme2">
-				</div>
+						data-bs-placement="top" minlength="2"
+						class="form-control tooltipme2">
 			</div>
 			<div id="cm-toolbar">
-					<button type="button" class="btn btn-mini cm-btn-find"><i class="icon-search"></i> Find</button>
-					<button type="button" class="btn btn-mini cm-btn-replace"><i class="icon-retweet"></i> Replace</button>
-					<button type="button" class="btn btn-mini cm-btn-goto"><i class="icon-step-forward"></i> Go to Line</button>
+					<button type="button" class="btn btn-mini cm-btn-find"><i class="bi bi-search"></i> Find</button>
+					<button type="button" class="btn btn-mini cm-btn-replace"><i class="bi bi-arrow-repeat"></i> Replace</button>
+					<button type="button" class="btn btn-mini cm-btn-goto"><i class="bi bi-skip-forward"></i> Go to Line</button>
 					<div class="btn-group">
-						<button type="button" class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-font"></i> <span class="cm-size-label">Font Size</span> <span class="caret"></span></button>
+						<button type="button" class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown"><i class="bi bi-fonts"></i> <span class="cm-size-label">Font Size</span> <span class="caret"></span></button>
 						<ul class="dropdown-menu cm-fontsize-menu">
 							<li><a href="#" data-size="11">11px</a></li>
 							<li><a href="#" data-size="12">12px</a></li>
@@ -70,7 +67,7 @@ $cms = new ezController();
 						</ul>
 					</div>
 					<div class="btn-group">
-						<button type="button" class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-resize-small"></i> Fold <span class="caret"></span></button>
+						<button type="button" class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown"><i class="bi bi-arrows-angle-contract"></i> Fold <span class="caret"></span></button>
 						<ul class="dropdown-menu cm-fold-menu">
 							<li><a href="#" data-fold="0">Fold All</a></li>
 							<li class="divider"></li>
@@ -82,18 +79,18 @@ $cms = new ezController();
 							<li><a href="#" data-fold="none">Unfold All</a></li>
 						</ul>
 					</div>
-					<a href="#cm-shortcuts-modal" data-toggle="modal" class="btn btn-mini"><i class="icon-question-sign"></i> Shortcuts</a>
+					<a href="#cm-shortcuts-modal" data-bs-toggle="modal" class="btn btn-sm"><i class="bi bi-question-circle"></i> Shortcuts</a>
 				</div>
-		<textarea name="txtContents" id="txtContents" class="input-block-level"><?php echo $cms->content; ?></textarea>
+		<textarea name="txtContents" id="txtContents" class="form-control"><?php echo $cms->content; ?></textarea>
 		  </form>
 		</div>
 
 		<div id="diffBlock" class="white-boxed">
-			<div class="navbar"><div class="navbar-inner">
+			<div class="toolbar-bar">
 				<a id="backEditBTN" href="#" class="btn btn-inverted btn-info">Back to Main Editor</a>
 				<a id="waysDiffBTN" href="#" class="btn btn-inverted btn-warning">Three Way (3)</a>
 				<a id="collaspeBTN" href="#" class="btn btn-inverted btn-warning">Collaspe Unchanged</a>
-			</div></div>
+			</div>
 			<table id="diffviewerControld" width="100%" border="0">
 			  <tr><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
 				</td><td><select disabled><option selected>Your Current Edit</option></select>
@@ -102,20 +99,20 @@ $cms = new ezController();
 			</table>
 			<div id="diffviewer"></div>
 		</div>
-		<textarea name="txtTemps" id="txtTemps" class="input-block-level"></textarea>
+		<textarea name="txtTemps" id="txtTemps" class="form-control"></textarea>
 
 	</div>
 	<br><br>
 </div><!-- /wrap  -->
 
 <!-- CodeMirror Keyboard Shortcuts Modal -->
-<div id="cm-shortcuts-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="cm-shortcuts-label" aria-hidden="true">
+<div id="cm-shortcuts-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cm-shortcuts-label" aria-hidden="true">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
 		<h3 id="cm-shortcuts-label">Keyboard Shortcuts</h3>
 	</div>
 	<div class="modal-body">
-		<table class="table table-condensed table-striped">
+		<table class="table table-sm table-striped">
 			<thead><tr><th style="width:210px">Key</th><th>Action</th></tr></thead>
 			<tbody>
 				<tr><td colspan="2"><strong>Search &amp; Navigation</strong></td></tr>
@@ -145,7 +142,7 @@ $cms = new ezController();
 		</table>
 	</div>
 	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal">Close</button>
+		<button class="btn" data-bs-dismiss="modal">Close</button>
 	</div>
 </div>
 

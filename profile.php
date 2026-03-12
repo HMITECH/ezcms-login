@@ -25,11 +25,11 @@ $cms = new ezProfile();
 	<?php include('include/nav.php'); ?>
 	<div class="container">
 		<div class="container-fluid">
-		  <div class="row-fluid">
+		  <div class="row">
 
-			<div class="span4"></div>
+			<div class="col-md-4"></div>
 
-			<div class="span4 white-boxed">
+			<div class="col-md-4 white-boxed">
 
 				<blockquote><p>Change your password</p><small>Remember to change your password often.</small></blockquote>
 
@@ -38,32 +38,32 @@ $cms = new ezProfile();
 				<form id="frmPass" action="" method="post" enctype="multipart/form-data">
 				<?php echo $cms->csrfField(); ?>
 
-					<label class="control-label" for="inputTitle">Current Password</label>
+					<label class="form-label" for="inputTitle">Current Password</label>
 					<input type="text" id="txtcpass" name="txtcpass"
 						placeholder="Existing password"
 						title="Enter your existing password here"
-						data-toggle="tooltip" data-placement="top"
-						class="input-block-level tooltipme2">
+						data-bs-toggle="tooltip" data-bs-placement="top"
+						class="form-control tooltipme2">
 
-					<label class="control-label" for="inputTitle">New Password</label>
+					<label class="form-label" for="inputTitle">New Password</label>
 					<input type="text" id="txtnpass" name="txtnpass"
 						placeholder="New password"
 						title="Enter the new password here"
-						data-toggle="tooltip" data-placement="top"
-						class="input-block-level tooltipme2">
+						data-bs-toggle="tooltip" data-bs-placement="top"
+						class="form-control tooltipme2">
 
-					<label class="control-label" for="inputTitle">Repeat New Password</label>
+					<label class="form-label" for="inputTitle">Repeat New Password</label>
 					<input type="text" id="txtrpass" name="txtrpass"
 						placeholder="Repeat new password"
 						title="Repeat the new password here"
-						data-toggle="tooltip" data-placement="top"
-						class="input-block-level tooltipme2">
+						data-bs-toggle="tooltip" data-bs-placement="top"
+						class="form-control tooltipme2">
 
 					<input type="submit" name="Submit" class="btn btn-primary" value="Change password">
 
 				</form>
 			</div>
-			<div class="span4"></div>
+			<div class="col-md-4"></div>
 		  </div>
 		</div>
 	</div>

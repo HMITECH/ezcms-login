@@ -29,21 +29,19 @@ $cms = new ezPages();
 <div id="wrap">
 	<?php include('include/nav.php'); ?>
 	<div class="container">
-		<div id="editBlock" class="row-fluid">
-			<div class="span3 white-boxed">
-				<p><input type="text" id="txtsearch" class="input-block-level" placeholder="Search here ..."></p>
+		<div id="editBlock" class="row">
+			<div class="col-md-3 white-boxed">
+				<p><input type="text" id="txtsearch" class="form-control" placeholder="Search here ..."></p>
 				<?php echo $cms->treehtml; ?>
 			</div>
-			<div class="span9 white-boxed">
+			<div class="col-md-9 white-boxed">
 
 				<form id="frmPage" action="" method="post" enctype="multipart/form-data">
 				<?php echo $cms->csrfField(); ?>
-				<div class="navbar">
-					<div class="navbar-inner">
-						<a href="#" id="toggleEditSize" class="btn"><i class="icon-chevron-left"></i></a>
+				<div class="toolbar-bar">
+						<a href="#" id="toggleEditSize" class="btn btn-sm btn-secondary"><i class="bi bi-chevron-left"></i></a>
 						<?php echo $cms->btns ?>
-					</div><!-- /navbar-inner  -->
-				</div>
+					</div>
 
 				<?php echo $cms->msg; ?>
 
@@ -53,7 +51,7 @@ $cms = new ezPages();
 				  </thead><tbody><?php echo $cms->revs['log']; ?></tbody></table>
 				</div>
 
-			    <div class="tabbable tabs-top">
+			    <div>
 				<ul class="nav nav-tabs" id="myTab">
 				  <li class="active"><a href="#d-main">Main</a></li>
 				  <li><a href="#d-content">Content</a></li>
@@ -67,20 +65,20 @@ $cms = new ezPages();
 
 				<div class="tab-content">
 
-				  <div class="tab-pane active" id="d-main">
+				  <div class="tab-pane fade show active" id="d-main">
 
 						<div class="row">
-							<div class="span6">
-							  <div class="control-group <?php if ( ($cms->id == 1) || ($cms->id == 2) ) echo 'muted';?>">
-								<label class="control-label" for="txtURL">Page URL (Empty to Auto Generate)</label>
+							<div class="col-md-6">
+							  <div class="mb-3 <?php if ( ($cms->id == 1) || ($cms->id == 2) ) echo 'muted';?>">
+								<label class="form-label" for="txtURL">Page URL (Empty to Auto Generate)</label>
 								<div class="controls">
 									<input type="text" id="txtURL" name="url"
 										placeholder="Enter the URL of the page"
 										title="Enter the URL of the page here. Empty to auto generate."
-										data-toggle="tooltip" <?php if ( ($cms->id == 1) || ($cms->id == 2) ) echo 'readonly';?>
+										data-bs-toggle="tooltip" <?php if ( ($cms->id == 1) || ($cms->id == 2) ) echo 'readonly';?>
 										value="<?php echo $cms->page['url']; ?>"
-										data-placement="top" minlength="2"
-										class="input-block-level tooltipme2"><br>
+										data-bs-placement="top" minlength="2"
+										class="form-control tooltipme2"><br>
 										<label class="checkbox" <?php if ($cms->id < 3) echo 'style="display:none"';?>>
 										  <input id="ckpublished" name="published" type="checkbox"
 										  	<?php echo $cms->page['publishedCheck']; ?>>Published on site
@@ -94,17 +92,17 @@ $cms = new ezPages();
 								</div>
 							  </div>
 							</div>
-							<div class="span6">
-							  <div class="control-group <?php if ($cms->id == 'new') echo 'muted';?>">
-								<label class="control-label" for="txtGitMsg">Revision Message (Optional)</label>
+							<div class="col-md-6">
+							  <div class="mb-3 <?php if ($cms->id == 'new') echo 'muted';?>">
+								<label class="form-label" for="txtGitMsg">Revision Message (Optional)</label>
 								<div class="controls">
 									<input type="text" id="txtGitMsg" name="revmsg"
 										placeholder="Enter a description for this revision"
 										title="Enter a message to describe this revision."
-										data-toggle="tooltip"
+										data-bs-toggle="tooltip"
 										value="" <?php if ($cms->id == 'new') echo 'readonly';?>
-										data-placement="top" minlength="2"
-										class="input-block-level tooltipme2"><br>
+										data-bs-placement="top" minlength="2"
+										class="form-control tooltipme2"><br>
 									<?php echo $cms->page['publishedMsg']; ?>
 									<label class="checkbox checkRight" <?php if ($cms->id < 3) echo 'style="display:none"';?>>
 									  <input id="cknositemap" name="nositemap" type="checkbox"
@@ -117,111 +115,111 @@ $cms = new ezPages();
 						</div>
 
 						<div class="row">
-							<div class="span6">
-							  <div class="control-group">
-								<label class="control-label" for="txtTitle">Title Tag</label>
+							<div class="col-md-6">
+							  <div class="mb-3">
+								<label class="form-label" for="txtTitle">Title Tag</label>
 								<div class="controls">
 									<input type="text" id="txtTitle" name="title"
 										placeholder="Enter the title of the page"
 										title="Enter the full title of the page here."
-										data-toggle="tooltip"
+										data-bs-toggle="tooltip"
 										value="<?php echo $cms->page['title']; ?>"
-										data-placement="top" minlength="2"
-										class="input-block-level tooltipme2 countme2" required>
+										data-bs-placement="top" minlength="2"
+										class="form-control tooltipme2 countme2" required>
 								</div>
 							  </div>
 							</div>
-							<div class="span6">
-							  <div class="control-group">
-								<label class="control-label" for="txtName">Name</label>
+							<div class="col-md-6">
+							  <div class="mb-3">
+								<label class="form-label" for="txtName">Name</label>
 								<div class="controls">
 									<input type="text" id="txtName" name="pagename"
 										placeholder="Enter the name of the page"
 										title="Enter the full name of the page here."
-										data-toggle="tooltip"
+										data-bs-toggle="tooltip"
 										value="<?php echo $cms->page['pagename']; ?>"
-										data-placement="top" minlength="2"
-										class="input-block-level tooltipme2 countme2" required>
+										data-bs-placement="top" minlength="2"
+										class="form-control tooltipme2 countme2" required>
 								</div>
 							  </div>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="span6">
-							  <div class="control-group">
-								<label class="control-label">Parent Page</label>
+							<div class="col-md-6">
+							  <div class="mb-3">
+								<label class="form-label">Parent Page</label>
 								<div class="controls"><?php echo $cms->ddOptions; ?></div>
 							  </div>
 							</div>
-							<div class="span6">
-							  <div class="control-group">
-								<label class="control-label">Layout</label>
+							<div class="col-md-6">
+							  <div class="mb-3">
+								<label class="form-label">Layout</label>
 								<div class="controls"><select id="sllayouts" name="layout"
 									title="Choose a Layout to render the content of this Page."
-									class="input-block-level tooltipme2">
+									class="form-control tooltipme2">
 										<?php echo $cms->slOptions; ?></select></div>
 							  </div>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="span6">
-							  <div class="control-group">
-								<label class="control-label" for="txtTitle">Search Priority</label>
+							<div class="col-md-6">
+							  <div class="mb-3">
+								<label class="form-label" for="txtTitle">Search Priority</label>
 								<div class="controls">
 									<input type="number" id="txtsprio" 
 										name="priority" min="0" max="999"
 										placeholder="Search priority 0 - 999"
 										title="Seach Priority of the page"
-										data-toggle="tooltip"
+										data-bs-toggle="tooltip"
 										value="<?php echo $cms->page['priority']; ?>"
-										data-placement="top"
-										class="input-block-level tooltipme2" 
+										data-bs-placement="top"
+										class="form-control tooltipme2" 
 										required>
 								</div>
 							  </div>
 							</div>
-							<div class="span6">
-							  <div class="control-group">
-								<label class="control-label" for="txtName">Featured Image</label>
+							<div class="col-md-6">
+							  <div class="mb-3">
+								<label class="form-label" for="txtName">Featured Image</label>
 								<div class="controls">
 									<input type="text" id="txtimg" name="img"
 										placeholder="Featured image of the page"
 										title="Enter the full path of the image here."
-										data-toggle="tooltip"
+										data-bs-toggle="tooltip"
 										value="<?php echo $cms->page['img']; ?>"
-										data-placement="top" minlength="2"
-										class="input-block-level tooltipme2">
+										data-bs-placement="top" minlength="2"
+										class="form-control tooltipme2">
 								</div>
 							  </div>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="span6">
-							  <div class="control-group">
-								<label class="control-label">Meta Description</label>
+							<div class="col-md-6">
+							  <div class="mb-3">
+								<label class="form-label">Meta Description</label>
 								<div class="controls">
 									<textarea name="description" rows="5" id="txtDesc"
 										placeholder="Enter the description of the page"
 										title="Enter the description of the page here, this is VERY IMPORTANT for SEO. Do not duplicate on all pages"
-										data-toggle="tooltip"
-										data-placement="top"
-										class="input-block-level tooltipme2 countme2"><?php echo $cms->page['description']; ?></textarea>
+										data-bs-toggle="tooltip"
+										data-bs-placement="top"
+										class="form-control tooltipme2 countme2"><?php echo $cms->page['description']; ?></textarea>
 								</div>
 							  </div>
 							</div>
-							<div class="span6">
-							  <div class="control-group">
-								<label class="control-label">Meta Keywords</label>
+							<div class="col-md-6">
+							  <div class="mb-3">
+								<label class="form-label">Meta Keywords</label>
 								<div class="controls">
 									<textarea name="keywords" rows="5" id="txtKeywords"
 										placeholder="Enter the Keywords of the page"
 										title="Enter list keywords of the page here, not so important now but use it anyways. Do not stuff keywords"
-										data-toggle="tooltip"
-										data-placement="top"
-										class="input-block-level tooltipme2 countme2"><?php echo $cms->page['keywords']; ?></textarea>
+										data-bs-toggle="tooltip"
+										data-bs-placement="top"
+										class="form-control tooltipme2 countme2"><?php echo $cms->page['keywords']; ?></textarea>
 								</div>
 							  </div>
 							</div>
@@ -235,40 +233,40 @@ $cms = new ezPages();
 
 				  <div class="tab-pane" id="d-header">
 					<div class="row">
-						<div class="span4"><label class="checkbox">
+						<div class="col-md-4"><label class="checkbox">
 							<input id="ckuseheader" name="useheader" type="checkbox" value="checkbox"
 								<?php echo $cms->page['useheaderCheck']; ?>>Enable custom HEADER</label></div>
-						<div class="span8 text-right"><?php echo $cms->page['useheaderMsg']; ?></div>
+						<div class="col-md-8 text-end"><?php echo $cms->page['useheaderMsg']; ?></div>
 					</div>
 					<textarea id="txtHeader" name="headercontent"><?php echo $cms->page['headercontent']; ?></textarea>
 				  </div><!-- /d-header  -->
 
 				  <div class="tab-pane" id="d-sidebar">
 					<div class="row">
-						<div class="span4"><label class="checkbox">
+						<div class="col-md-4"><label class="checkbox">
 							<input id="ckuseside" name="useside" type="checkbox" value="checkbox"
 								<?php echo $cms->page['usesideCheck']; ?>>Enable custom ASIDE 1</label></div>
-						<div class="span8 text-right"><?php echo $cms->page['usesideMsg']; ?></div>
+						<div class="col-md-8 text-end"><?php echo $cms->page['usesideMsg']; ?></div>
 					</div>
 					<textarea id="txtSide" name="sidecontent"><?php echo $cms->page['sidecontent']; ?></textarea>
 				  </div><!-- /d-sidebar  -->
 
 				  <div class="tab-pane" id="d-siderbar">
 					<div class="row">
-						<div class="span4"><label class="checkbox">
+						<div class="col-md-4"><label class="checkbox">
 							<input id="ckusesider" name="usesider" type="checkbox" value="checkbox"
 								<?php echo $cms->page['usesiderCheck']; ?>>Enable custom ASIDE 2</label></div>
-						<div class="span8 text-right"><?php echo $cms->page['usesiderMsg']; ?></div>
+						<div class="col-md-8 text-end"><?php echo $cms->page['usesiderMsg']; ?></div>
 					</div>
 				  	<textarea id="txtrSide" name="sidercontent"><?php echo $cms->page['sidercontent']; ?></textarea>
 				  </div><!-- /d-siderbar  -->
 
 				  <div class="tab-pane" id="d-footers">
 					<div class="row">
-						<div class="span4"><label class="checkbox">
+						<div class="col-md-4"><label class="checkbox">
 							<input id="ckusefooter" name="usefooter" type="checkbox" value="checkbox"
 								<?php echo $cms->page['usefooterCheck']; ?>>Enable custom FOOTER</label></div>
-						<div class="span8 text-right"><?php echo $cms->page['usefooterMsg']; ?></div>
+						<div class="col-md-8 text-end"><?php echo $cms->page['usefooterMsg']; ?></div>
 					</div>
 					<textarea id="txtFooter" name="footercontent"><?php echo $cms->page['footercontent']; ?></textarea>
 				  </div><!-- /d-footer  -->
@@ -295,18 +293,18 @@ $cms = new ezPages();
 		</div><!-- /editBlock row-fluid  -->
 
 		<div id="diffBlock" class="white-boxed">
-			<div class="navbar"><div class="navbar-inner">
+			<div class="toolbar-bar">
 				<a id="backEditBTN" href="#" class="btn btn-inverted btn-info">Back to Main Editor</a>
 				<a id="waysDiffBTN" href="#" class="btn btn-inverted btn-warning">Three Way (3)</a>
 				<a id="collaspeBTN" href="#" class="btn btn-inverted btn-warning">Collaspe Unchanged</a>
-			</div></div>
+			</div>
 			<table id="diffviewerControld" width="100%" border="0">
 			  <tr><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
 				</td><td><select disabled><option selected>Your Current Edit</option></select>
 				</td><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
 			  </td></tr>
 			</table>
-			<div class="tabbable tabs-top">
+			<div>
 				<ul class="nav nav-tabs" id="revTab" data-open="content">
 				  <li class="active"><a href="#" data-block="content">Content</a></li>
 				  <li><a href="#" data-block="header">Header</a></li>
@@ -319,7 +317,7 @@ $cms = new ezPages();
 				<div id="diffviewer"></div>
 			</div><!-- /tabbable  -->
 		</div><!-- /diffBlock  -->
-		<textarea name="txtTemps" id="txtTemps" class="input-block-level"></textarea>
+		<textarea name="txtTemps" id="txtTemps" class="form-control"></textarea>
 
 	</div><!-- /container  -->
 	<br><br>
@@ -431,7 +429,7 @@ $cms = new ezPages();
 		var thisLabel = $(this).closest('.control-group').find('.control-label');
 
 		$(thisLabel).html( $(thisLabel).text()+
-		  	' <span class="countDisplay"><span class="label label-info">'+$(that).val().length+' chars(s)</span></span>');
+		  	' <span class="countDisplay"><span class="badge bg-info">'+$(that).val().length+' chars(s)</span></span>');
 
 		// attach event on change
 		$(this).on('keyup blur paste', function(e) {
@@ -439,17 +437,17 @@ $cms = new ezPages();
 			  case 'keyup':
 				// Skip navigational key presses
 				if ($.inArray(e.which, navKeys) < 0) {
-					$(thisLabel).find('span.label').text( $(that).val().length+' chars(s)' );
+					$(thisLabel).find('span.badge').text( $(that).val().length+' chars(s)' );
 				}
 				break;
 			  case 'paste':
 				// Wait a few miliseconds if a paste event
 				setTimeout(function () {
-					$(thisLabel).find('span.label').text( $(that).val().length+' chars(s)' );
+					$(thisLabel).find('span.badge').text( $(that).val().length+' chars(s)' );
 				}, (e.type === 'paste' ? 5 : 0));
 				break;
 			  default:
-				$(thisLabel).find('span.label').text( $(that).val().length+' chars(s)' );
+				$(thisLabel).find('span.badge').text( $(that).val().length+' chars(s)' );
 				break;
 			}
 		});

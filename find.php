@@ -29,84 +29,84 @@ $cms = new ezFind();
 <div id="wrap">
 	<?php include('include/nav.php'); ?>
 	<div class="container">
-	  <div id="editBlock" class="row-fluid">
-		<div class="span3">
+	  <div id="editBlock" class="row">
+		<div class="col-md-3">
 		  <div class="white-boxed"><form id="frmfind"  method="post" action="#">
-			<div class="navbar"><div class="navbar-inner">
-				<input type="submit" name="find" class="btn btn-primary pull-left" value="Find All">
-				<ul class="nav pull-right">
+			<div class="toolbar-bar">
+				<input type="submit" name="find" class="btn btn-primary" value="Find All">
+				<ul class="nav">
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-flag"></i>
+						<a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"><i class="bi bi-flag"></i>
 							WHERE <b class="caret"></b></a>
 						<ul id="findinDD" class="dropdown-menu">
-							<li class="active"><a data-loc="page" href="#"><i class="icon-file"></i> Pages</a></li>
+							<li class="active"><a data-loc="page" href="#"><i class="bi bi-file-earmark"></i> Pages</a></li>
 							<li class="divider"></li>
-							<li><a data-loc="php" href="#"><i class="icon-list-alt"></i> PHP Layouts</a></li>
-							<li><a data-loc="css" href="#"><i class="icon-pencil"></i> CSS Stylesheets</a></li>
-							<li><a data-loc="js" href="#"><i class="icon-align-left"></i> JS Javascripts</a></li>
-							<li><a data-loc="inc" href="#"><i class="icon-share-alt"></i> PHP Includes</a></li>
+							<li><a data-loc="php" href="#"><i class="bi bi-file-text"></i> PHP Layouts</a></li>
+							<li><a data-loc="css" href="#"><i class="bi bi-pencil"></i> CSS Stylesheets</a></li>
+							<li><a data-loc="js" href="#"><i class="bi bi-file-code"></i> JS Javascripts</a></li>
+							<li><a data-loc="inc" href="#"><i class="bi bi-share"></i> PHP Includes</a></li>
 						</ul>
 					</li>
 				</ul>
-			</div></div>
-			<div class="control-group">
-				<label class="control-label">FIND TEXT</label>
+			</div>
+			<div class="mb-3">
+				<label class="form-label">FIND TEXT</label>
 				<div class="controls">
 					<textarea name="find" id="txtfind" rows="5"
 						placeholder="Enter the text or code to find"
-						class="input-block-level" required minlength="3"></textarea></div>
-				<div class="control-group">
-					<label class="control-label">REPLACE WITH</label>
+						class="form-control" required minlength="3"></textarea></div>
+				<div class="mb-3">
+					<label class="form-label">REPLACE WITH</label>
 					<div class="controls">
 						<textarea name="replace" id="txtreplace" rows="5"
 							placeholder="Enter the text or code to replace"
-							class="input-block-level"></textarea></div>
+							class="form-control"></textarea></div>
 				</div>
 			</div>
 			<input type="hidden" name="findinTxt" id="findinTxt" />
 		  </form></div><br>
 		</div>
-		<div class="span9 white-boxed">
-			<div id="exenavbar" class="navbar"><div class="navbar-inner">
-				<button id="toggleEditSize" class="btn pull-left"><i class="icon-chevron-left"></i></button>
+		<div class="col-md-9 white-boxed">
+			<div id="exenavbar" class="toolbar-bar">
+				<button id="toggleEditSize" class="btn float-start"><i class="bi bi-chevron-left"></i></button>
 				<a class="brand" onclick="return false" href=""><small id="findinlbl"></small></a>
-				<button id="replace" class="btn btn-success pull-right hide">
+				<button id="replace" class="btn btn-success float-end d-none">
 					Replace Checked</button>
-			</div></div>
-			<div id="progressbox" class="alert alert-block alert-info text-center hide">
+			</div>
+			<div id="progressbox" class="alert alert-info text-center hide">
 				<h4>REPLACE is running for Page 
 					<span class="runrow"></span> of <span class="totrow"></span></h4>
 				<i>Processing pagename pageurl here</i>
-				<div class="progress progress-striped active">
-					<div class="bar"></div>
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped progress-bar-animated"></div>
 				</div>
 				<button id="stopexe" class="btn btn-danger" type="button">
 					Stop Replace Execution</button>
 			</div>
-			<ul id="pager" class="pager hide">
-				<li class="previous">
-					<a href="#" class="first"><i class="icon-fast-backward"></i>
+			<ul id="pager" class="pagination hide">
+				<li class="page-item">
+					<a href="#" class="page-link first"><i class="bi bi-skip-start-fill"></i>
 						First Page</a>
 				</li>
-				<li class="previous">
-					<a href="#" class="prev"><i class="icon-step-backward"></i> 
+				<li class="page-item">
+					<a href="#" class="page-link prev"><i class="bi bi-skip-backward"></i>
 						Previous Page</a>
 				</li>
-				<li class="pagesbox"><span>Page 
-					<input type="number" value="1" min="1" id="currpage" 
-						class="span3"> of 
-					<input type="number" value="1325" id="numbpages" 
-						class="span3" disabled>
-					<button id="checkfull" class="btn btn-small" 
+				<li class="page-item pagesbox"><span>Page
+					<input type="number" value="1" min="1" id="currpage"
+						class="col-md-3"> of
+					<input type="number" value="1325" id="numbpages"
+						class="col-md-3" disabled>
+					<button id="checkfull" class="btn btn-sm"
 						type="button">CHECK ALL</button>
 				</span></li>
-				<li class="next">
-					<a href="#" class="last">Last Page 
-						<i class="icon-fast-forward"></i></a>
-				</li>				
-				<li class="next">
-					<a href="#" class="next">Next Page 
-						<i class="icon-step-forward"></i></a>
+				<li class="page-item">
+					<a href="#" class="page-link last">Last Page
+						<i class="bi bi-skip-end-fill"></i></a>
+				</li>
+				<li class="page-item">
+					<a href="#" class="page-link next">Next Page
+						<i class="bi bi-skip-forward"></i></a>
 				</li>
 			</ul>
 			<table id="resultsTable" class="table table-striped"><thead>
