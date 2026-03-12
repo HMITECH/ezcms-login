@@ -22,29 +22,29 @@ $cms = new ezLayouts();
 	<link rel="stylesheet" href="codemirror/addon/search/matchesonscrollbar.css">
 	<style>
 	#cm-toolbar {
-		background: #2d2d2d;
+		background: #f5f5f5;
 		padding: 4px 6px;
-		border: 1px solid #111;
+		border: 1px solid #ccc;
 		border-bottom: 0;
 		margin-top: 10px;
 	}
 	#cm-toolbar .btn {
 		margin: 1px 2px;
-		background: #444;
-		color: #ddd;
-		border-color: #222;
+		background: #fff;
+		color: #333;
+		border-color: #ccc;
 		font-size: 11px;
 		padding: 3px 8px;
 		text-shadow: none;
-		background-image: linear-gradient(to bottom, #555, #3a3a3a);
+		background-image: linear-gradient(to bottom, #fff, #e8e8e8);
 		box-shadow: none;
 	}
 	#cm-toolbar .btn:hover,
 	#cm-toolbar .btn:focus {
-		background: #555;
+		background: #e0e0e0;
 		background-image: none;
-		color: #fff;
-		border-color: #888;
+		color: #000;
+		border-color: #aaa;
 		box-shadow: none;
 	}
 	#cm-toolbar .btn-group { margin: 1px 2px; }
@@ -146,6 +146,19 @@ $cms = new ezLayouts();
 							<li><a href="#" data-size="16">16px</a></li>
 							<li><a href="#" data-size="18">18px</a></li>
 							<li><a href="#" data-size="20">20px</a></li>
+						</ul>
+					</div>
+					<div class="btn-group">
+						<button type="button" class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-resize-small"></i> Fold <span class="caret"></span></button>
+						<ul class="dropdown-menu" id="cm-fold-menu">
+							<li><a href="#" data-fold="0">Fold All</a></li>
+							<li class="divider"></li>
+							<li><a href="#" data-fold="1">Level 1 – 1 level visible</a></li>
+							<li><a href="#" data-fold="2">Level 2 – 2 levels visible</a></li>
+							<li><a href="#" data-fold="3">Level 3 – 3 levels visible</a></li>
+							<li><a href="#" data-fold="4">Level 4 – 4 levels visible</a></li>
+							<li class="divider"></li>
+							<li><a href="#" data-fold="none">Unfold All</a></li>
 						</ul>
 					</div>
 					<a href="#cm-shortcuts-modal" data-toggle="modal" class="btn btn-mini"><i class="icon-question-sign"></i> Shortcuts</a>
@@ -310,6 +323,59 @@ $cms = new ezLayouts();
 	$('#cm-find').click(function () { myCode.execCommand('findPersistent'); });
 	$('#cm-replace').click(function () { myCode.execCommand('replace'); });
 	$('#cm-goto').click(function () { myCode.execCommand('jumpToLine'); });
+
+	// Fold all blocks at brace-depth >= minDepth.
+	// "Level 1" (minDepth=1) leaves outermost blocks open but collapses their contents.
+	// "Level 2" (minDepth=2) leaves two levels visible, etc.
+	// "Fold All" uses minDepth=0 to collapse everything.
+	// Always folds deepest-first so outer folds don't hide inner ones before they are created.
+	function foldToLevel(minDepth) {
+		myCode.operation(function () {
+			// Start fully unfolded
+			for (var i = myCode.firstLine(); i <= myCode.lastLine(); i++)
+				myCode.foldCode({line: i, ch: 0}, null, "unfold");
+
+			// Scan file to find the maximum brace depth
+			var maxD = 0, d = 0;
+			for (var i = myCode.firstLine(); i <= myCode.lastLine(); i++) {
+				var line = myCode.getLine(i) || '';
+				for (var c = 0; c < line.length; c++) {
+					if (line[c] === '{') { d++; if (d > maxD) maxD = d; }
+					else if (line[c] === '}' && d > 0) d--;
+				}
+			}
+
+			// Fold from deepest down to minDepth (deepest first)
+			for (var target = maxD - 1; target >= minDepth; target--) {
+				var depth = 0;
+				for (var i = myCode.firstLine(); i <= myCode.lastLine(); i++) {
+					var line = myCode.getLine(i) || '';
+					for (var c = 0; c < line.length; c++) {
+						if (line[c] === '{') {
+							if (depth === target)
+								myCode.foldCode({line: i, ch: c + 1}, null, "fold");
+							depth++;
+						} else if (line[c] === '}' && depth > 0) {
+							depth--;
+						}
+					}
+				}
+			}
+		});
+	}
+
+	$('#cm-fold-menu a').click(function () {
+		var val = $(this).data('fold');
+		if (val === 'none') {
+			myCode.operation(function () {
+				for (var i = myCode.firstLine(); i <= myCode.lastLine(); i++)
+					myCode.foldCode({line: i, ch: 0}, null, "unfold");
+			});
+		} else {
+			foldToLevel(parseInt(val, 10));
+		}
+		return false;
+	});
 }());
 </script>
 </body></html>
