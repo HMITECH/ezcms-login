@@ -1,0 +1,90 @@
+# -------------------------------------------------------------------
+#
+# * Code written by mo.ahmed@hmi-tech.net
+#
+# * HMI Technologies
+#
+# * Module: Nginx sample config for ezCMS
+#
+# * Usage: Copy/adapt this into your nginx server block.
+#          Replace the placeholder values marked with <...>.
+#
+# -------------------------------------------------------------------
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name <your-domain.com>;
+
+    # Document root — points to the root_files directory
+    root <path-to-ezcms>/root_files;
+    index index.php;
+
+    # -------------------------------------------------------------------
+    # Security: block direct browser access to includes/ folder
+    # Equivalent to root_files/includes/.htaccess  (<Limit GET POST PUT DELETE> deny from all)
+    # -------------------------------------------------------------------
+    location ^~ /includes/ {
+        deny all;
+        return 403;
+    }
+
+    # -------------------------------------------------------------------
+    # Security: block direct browser access to macros/ folder
+    # Equivalent to root_files/macros/.htaccess  (<Limit GET POST PUT DELETE> deny from all)
+    # -------------------------------------------------------------------
+    location ^~ /macros/ {
+        deny all;
+        return 403;
+    }
+
+    # -------------------------------------------------------------------
+    # Security: block all access to filemanager/config/
+    # Equivalent to filemanager/config/.htaccess  (Deny from all)
+    # Note: adjust the path if filemanager/ lives inside root_files/,
+    #       otherwise add an alias or a separate location block.
+    # -------------------------------------------------------------------
+    location ^~ /filemanager/config/ {
+        deny all;
+        return 403;
+    }
+
+    # -------------------------------------------------------------------
+    # Front controller — rewrite everything to index.php
+    # Equivalent to root_files/.htaccess  (mod_rewrite → index.php)
+    # Real files and directories are served directly; everything else
+    # is passed to index.php.
+    # -------------------------------------------------------------------
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # -------------------------------------------------------------------
+    # PHP-FPM — pass .php requests to PHP
+    # Adjust the fastcgi_pass socket/address to match your setup.
+    # -------------------------------------------------------------------
+    location ~ \.php$ {
+        # Prevent executing uploaded files as PHP
+        try_files $uri =404;
+
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;   # adjust PHP version
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # -------------------------------------------------------------------
+    # Optional hardening: deny access to hidden files (e.g. .htaccess)
+    # -------------------------------------------------------------------
+    location ~ /\. {
+        deny all;
+        return 403;
+    }
+
+    # -------------------------------------------------------------------
+    # Logging
+    # -------------------------------------------------------------------
+    access_log /var/log/nginx/<your-domain>-access.log;
+    error_log  /var/log/nginx/<your-domain>-error.log;
+}
