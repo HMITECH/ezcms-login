@@ -30,7 +30,7 @@ a,button { outline:none; }
 }
 textarea { height: 300px;  width: 100%; box-sizing: border-box; }
 #txtDesc, #txtKeywords { height:auto;}
-#wrap .container { padding-top:30px; margin: 0 auto; width:98%; }
+#wrap .container { padding-top:60px; margin: 0 auto; width:98%; }
 .countDisplay {float: right;}
 .checkRight { float: right; }
 .row { width: 100%; margin: 0;}
@@ -109,7 +109,7 @@ a.label.label-info { font-size: 1em; border-radius: 0;padding: 3px 6px; }
 .label, .badge {white-space:normal;}
 .CodeMirror {height:500px; }
 /* Ensure toolbar dropdowns appear above the CodeMirror editor */
-.navbar { position: relative; z-index: 1001; }
+#frmlayout .navbar { position: relative; z-index: 1001; }
 div.white-boxed {
 	background: rgba(255, 255, 255, 0.95);
 	border: 1px solid #000;
