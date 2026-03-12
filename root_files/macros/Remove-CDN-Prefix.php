@@ -1,52 +1,71 @@
 <?php
 /*
- * This macro will remove the Cloudflare CDN url prefix to the image src.
- * 
- * You can change the CDNURL constant to use another CDN
+ * ============================================================
+ * Remove CDN Prefix from Image Sources
+ * ============================================================
  *
- * Example:	<img src="/cdn-cgi/image/quality=75,f=auto/site-assets/images/logo.jpg">
- * Becomes:	<img src="/site-assets/images/logo.jpg">
+ * PURPOSE
+ * -------
+ * Strips the CDN URL prefix from image src attributes,
+ * reverting them back to direct local paths.
  *
+ * This is the companion/undo macro for Add-CDN-Prefix.
+ * Use it if you need to switch CDN providers, roll back the
+ * CDN change, or migrate the site.
+ *
+ * Change $cdnUrl below to match what was used when the CDN
+ * prefix was originally added.
+ *
+ * EXAMPLE
+ * -------
+ * Before: <img src="/cdn-cgi/image/quality=75,f=auto/site-assets/images/logo.jpg">
+ * After:  <img src="/site-assets/images/logo.jpg">
+ *
+ * ============================================================
  */
 
-// Uncomment the line below if you want to log to file.
-// Location site-assets/logs/macro/
+// Optional: uncomment to also write results to a CSV file.
+// The file will be saved to site-assets/logs/macro/
 // $this->logFile = 'remove-cdn-prefix.csv';
 
-// Change this depending on the CDN you are using
-const CDNURL="/cdn-cgi/image/quality=75,f=auto";
+// Must match the prefix that was added by Add-CDN-Prefix
+$cdnUrl = '/cdn-cgi/image/quality=75,f=auto';
 
-// Find all the images in the html
-$imgs = $html->find('img');
+// Find all image tags in the content block
+$imgs  = $html->find('img');
 $count = count($imgs);
 
 if ($count) {
-	$this->log("Found $count Images",'info');
-	$i = 0;
 
-	foreach($imgs as $img) {
-		$file = substr($img->src,1);
-		$parts = explode('/', $file);
-		// check image is from CDN before update.
-		if ($parts[0]=='cdn-cgi') {
-			$og = explode('site-assets',$img->src,2)[1];
-			if ($og) {
-				$i++;
-				// Change the image src to include the CDN
-				$img->src = '/site-assets'.$og;
-			} else {
-				$this->log("Could not find local path for CDN image ".$img->src,'error');
-			}
-		}
-	}
-	// Log the messages
-	if ($i) {
-		$this->log("$i Images were updated",'success');
-	} else {
-		$this->log('No Images need to be changed','inverse');
-	} 
+    $this->log("Found $count image(s)", 'info');
+    $updated = 0;
+
+    foreach ($imgs as $img) {
+
+        // Only process images that actually have the CDN prefix
+        if (strpos($img->src, $cdnUrl) === 0) {
+
+            // Strip the CDN prefix to recover the original local path
+            $localPath = substr($img->src, strlen($cdnUrl));
+
+            // Sanity check — the remainder should be a /site-assets path
+            if (strpos($localPath, '/site-assets') === 0) {
+                $img->src = $localPath;
+                $updated++;
+            } else {
+                $this->log("Could not recover local path for: " . $img->src, 'warning');
+            }
+        }
+    }
+
+    // Summary
+    if ($updated) {
+        $this->log("$updated image(s) had CDN prefix removed", 'success');
+    } else {
+        $this->log('No CDN-prefixed images found', 'inverse');
+    }
+
 } else {
-	$this->log('No Images were found in the HTML','inverse');
+    $this->log('No images found in this content block', 'inverse');
 }
-
 ?>
