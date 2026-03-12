@@ -1,30 +1,30 @@
 <?php
 /*
- * This macro is a dummy macro to show how to log messages
- * It does not do anything to the content and can be used understand how macros works.
- * 
- * Messages logged during the execution of the Macro are displayed as show:
+ * ============================================================
+ * Dummy Logging Demo
+ * ============================================================
  *
-	Default		GREY		<span class="label">Default</span>
-	Success		GREEN		<span class="label label-success">Success</span>
-	Warning		ORANGE		<span class="label label-warning">Warning</span>
-	Important	RED			<span class="label label-important">Important</span>
-	Info		BLUE		<span class="label label-info">Info</span>
-	Inverse		BLACK		<span class="label label-inverse">Inverse</span>
+ * PURPOSE
+ * -------
+ * This macro does NOT modify any page content.
+ * It simply logs one message in each label style so you can
+ * see what the output looks like in the Execute screen.
  *
- * Run this Macro on a page to see the logged messages
+ * Run this on any page to verify that the macro engine is
+ * working and to understand the available log label types
+ * before writing your own macros.
  *
+ * ============================================================
  */
 
-// Uncomment the line below if you want to log to file.
-// Location site-assets/logs/macro/
+// Optional: uncomment to also write log output to a CSV file.
+// The file will be saved to site-assets/logs/macro/
 // $this->logFile = 'dummy-macro.csv';
 
-$this->log( 'Default messages appear in Grey background'    ,'notice'   );
-$this->log( 'Success messages appear in Green background'   ,'success'  );
-$this->log( 'Warning messages appear in Orange background'  ,'warning'  );
-$this->log( 'Important messages appear in Red background'   ,'important');
-$this->log( 'Info messages appear in Blue background'       ,'info'     );
-$this->log( 'Inverse messages appear in Black background '  ,'inverse'  );
-
+$this->log( 'Default  — appears with a Grey background',   'notice'    );
+$this->log( 'Success  — appears with a Green background',  'success'   );
+$this->log( 'Warning  — appears with an Orange background','warning'   );
+$this->log( 'Important — appears with a Red background',   'important' );
+$this->log( 'Info     — appears with a Blue background',   'info'      );
+$this->log( 'Inverse  — appears with a Black background',  'inverse'   );
 ?>

@@ -1,46 +1,68 @@
 <?php
 /*
- * This macro will add the Cloudflare CDN url prefix to the image src.
- * 
- * You can change the CDNURL constant to use another CDN
+ * ============================================================
+ * Add CDN Prefix to Image Sources
+ * ============================================================
  *
- * Example:	<img src="/site-assets/images/logo.jpg">
- * Becomes:	<img src="/cdn-cgi/image/quality=75,f=auto/site-assets/images/logo.jpg">
+ * PURPOSE
+ * -------
+ * Prepends a CDN URL prefix to the src attribute of local
+ * images so they are served through your CDN instead of
+ * directly from the web server.
  *
+ * The default prefix is configured for Cloudflare's Image
+ * Resizing feature, which also converts images to WebP/AVIF
+ * automatically for supported browsers.
+ *
+ * Change $cdnUrl below to match whichever CDN you are using.
+ *
+ * EXAMPLE
+ * -------
+ * Before: <img src="/site-assets/images/logo.jpg">
+ * After:  <img src="/cdn-cgi/image/quality=75,f=auto/site-assets/images/logo.jpg">
+ *
+ * REVERTING
+ * ---------
+ * Use the Remove-CDN-Prefix macro to undo this change.
+ * A revision is always saved before any changes are made.
+ *
+ * ============================================================
  */
 
-// Uncomment the line below if you want to log to file.
-// Location site-assets/logs/macro/
+// Optional: uncomment to also write results to a CSV file.
+// The file will be saved to site-assets/logs/macro/
 // $this->logFile = 'add-cdn-prefix.csv';
 
-// Change this depending on the CDN you are using
-const CDNURL="/cdn-cgi/image/quality=75,f=auto";
+// Change this to match your CDN's image URL prefix
+// Cloudflare Image Resizing default:
+$cdnUrl = '/cdn-cgi/image/quality=75,f=auto';
 
-// Find all the images in the html
-$imgs = $html->find('img');
+// Find all image tags in the content block
+$imgs  = $html->find('img');
 $count = count($imgs);
 
 if ($count) {
-	$this->log("Found $count Images",'info');
-	$i = 0;
-	foreach($imgs as $img) {
-		$file = substr($img->src,1);
-		$parts = explode('/', $file);
-		// check image is local before update.
-		if ($parts[0]=='site-assets') {
-			$i++;
-			// Change the image src to include the CDN
-			$img->src = CDNURL.$img->src;
-		}	
-	}
-	// Log the messages
-	if ($i) {
-		$this->log("$i Images were updated",'success');
-	} else {
-		$this->log('No Images need to be changed','inverse');
-	}
-} else {
-	$this->log('No Images were found in the HTML','inverse');
-}
 
+    $this->log("Found $count image(s)", 'info');
+    $updated = 0;
+
+    foreach ($imgs as $img) {
+
+        // Only process local images stored in site-assets
+        if (strpos($img->src, '/site-assets') === 0) {
+            $img->src = $cdnUrl . $img->src;
+            $updated++;
+        }
+    }
+
+    // Summary
+    if ($updated) {
+        $this->log("$updated image(s) updated with CDN prefix", 'success');
+    } else {
+        $this->log('No local images found to update', 'inverse');
+    }
+
+} else {
+    $this->log('No images found in this content block', 'inverse');
+}
 ?>
