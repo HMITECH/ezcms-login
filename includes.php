@@ -90,7 +90,38 @@ $cms = new ezIncludes();
 					style="cursor: pointer;" onClick="this.select();"  type="text" title="Include this in your layouts"
 					value="&lt;?php include ( &quot;includes/<?php echo $cms->filename; ?>&quot; ); ?&gt;" readonly/>
 
-					<textarea name="txtContents" id="txtContents" class="input-block-level"><?php echo $cms->content; ?></textarea>
+					<div id="cm-toolbar">
+					<button type="button" class="btn btn-mini cm-btn-find"><i class="icon-search"></i> Find</button>
+					<button type="button" class="btn btn-mini cm-btn-replace"><i class="icon-retweet"></i> Replace</button>
+					<button type="button" class="btn btn-mini cm-btn-goto"><i class="icon-step-forward"></i> Go to Line</button>
+					<div class="btn-group">
+						<button type="button" class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-font"></i> <span class="cm-size-label">Font Size</span> <span class="caret"></span></button>
+						<ul class="dropdown-menu cm-fontsize-menu">
+							<li><a href="#" data-size="11">11px</a></li>
+							<li><a href="#" data-size="12">12px</a></li>
+							<li><a href="#" data-size="13">13px</a></li>
+							<li><a href="#" data-size="14">14px</a></li>
+							<li><a href="#" data-size="16">16px</a></li>
+							<li><a href="#" data-size="18">18px</a></li>
+							<li><a href="#" data-size="20">20px</a></li>
+						</ul>
+					</div>
+					<div class="btn-group">
+						<button type="button" class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-resize-small"></i> Fold <span class="caret"></span></button>
+						<ul class="dropdown-menu cm-fold-menu">
+							<li><a href="#" data-fold="0">Fold All</a></li>
+							<li class="divider"></li>
+							<li><a href="#" data-fold="1">Level 1 – 1 level visible</a></li>
+							<li><a href="#" data-fold="2">Level 2 – 2 levels visible</a></li>
+							<li><a href="#" data-fold="3">Level 3 – 3 levels visible</a></li>
+							<li><a href="#" data-fold="4">Level 4 – 4 levels visible</a></li>
+							<li class="divider"></li>
+							<li><a href="#" data-fold="none">Unfold All</a></li>
+						</ul>
+					</div>
+					<a href="#cm-shortcuts-modal" data-toggle="modal" class="btn btn-mini"><i class="icon-question-sign"></i> Shortcuts</a>
+				</div>
+				<textarea name="txtContents" id="txtContents" class="input-block-level"><?php echo $cms->content; ?></textarea>
 				</form>
 			</div>
 		  </div>
@@ -114,6 +145,47 @@ $cms = new ezIncludes();
 	</div>
 	<br><br>
 </div><!-- /wrap  -->
+
+<!-- CodeMirror Keyboard Shortcuts Modal -->
+<div id="cm-shortcuts-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="cm-shortcuts-label" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3 id="cm-shortcuts-label">Keyboard Shortcuts</h3>
+	</div>
+	<div class="modal-body">
+		<table class="table table-condensed table-striped">
+			<thead><tr><th style="width:210px">Key</th><th>Action</th></tr></thead>
+			<tbody>
+				<tr><td colspan="2"><strong>Search &amp; Navigation</strong></td></tr>
+				<tr><td><kbd>Ctrl+F</kbd></td><td>Find</td></tr>
+				<tr><td><kbd>Ctrl+G</kbd></td><td>Find Next</td></tr>
+				<tr><td><kbd>Shift+Ctrl+G</kbd></td><td>Find Previous</td></tr>
+				<tr><td><kbd>Ctrl+H</kbd></td><td>Replace</td></tr>
+				<tr><td><kbd>Shift+Ctrl+H</kbd></td><td>Replace All</td></tr>
+				<tr><td><kbd>Alt+G</kbd></td><td>Jump to Line</td></tr>
+				<tr><td><kbd>Ctrl+Home</kbd></td><td>Go to Start</td></tr>
+				<tr><td><kbd>Ctrl+End</kbd></td><td>Go to End</td></tr>
+				<tr><td colspan="2"><strong>Editing</strong></td></tr>
+				<tr><td><kbd>Ctrl+Z</kbd></td><td>Undo</td></tr>
+				<tr><td><kbd>Ctrl+Y</kbd></td><td>Redo</td></tr>
+				<tr><td><kbd>Ctrl+A</kbd></td><td>Select All</td></tr>
+				<tr><td><kbd>Ctrl+D</kbd></td><td>Delete Line</td></tr>
+				<tr><td><kbd>Alt+Up</kbd></td><td>Move Line Up</td></tr>
+				<tr><td><kbd>Alt+Down</kbd></td><td>Move Line Down</td></tr>
+				<tr><td><kbd>Ctrl+/</kbd></td><td>Toggle Comment</td></tr>
+				<tr><td><kbd>Tab</kbd></td><td>Indent</td></tr>
+				<tr><td><kbd>Shift+Tab</kbd></td><td>Dedent</td></tr>
+				<tr><td><kbd>Ctrl+]</kbd></td><td>Indent More</td></tr>
+				<tr><td><kbd>Ctrl+[</kbd></td><td>Indent Less</td></tr>
+				<tr><td colspan="2"><strong>Code Folding</strong></td></tr>
+				<tr><td><kbd>Ctrl+Q</kbd></td><td>Fold / Unfold Block</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal">Close</button>
+	</div>
+</div>
 
 <?php include('include/footer.php'); ?>
 <script>
@@ -155,6 +227,12 @@ $cms = new ezIncludes();
 <script src="codemirror/addon/fold/comment-fold.js"></script>
 <script src="codemirror/addon/merge/diff_match_patch.js"></script>
 <script src="codemirror/addon/merge/merge.js"></script>
+<script src="codemirror/addon/dialog/dialog.js"></script>
+<script src="codemirror/addon/search/searchcursor.js"></script>
+<script src="codemirror/addon/search/search.js"></script>
+<script src="codemirror/addon/scroll/annotatescrollbar.js"></script>
+<script src="codemirror/addon/search/matchesonscrollbar.js"></script>
+<script src="codemirror/addon/search/jump-to-line.js"></script>
 <script src="codemirror/mode/css/css.js"></script>
 <script src="codemirror/mode/clike/clike.js"></script>
 <script src="codemirror/mode/php/php.js"></script>
@@ -164,4 +242,5 @@ $cms = new ezIncludes();
 		cmMode = 'application/x-httpd-php';
 </script>
 <script src="js/gitFileCode.js"></script>
+<script>initCMToolbar(myCode, '#cm-toolbar');</script>
 </body></html>
