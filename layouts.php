@@ -18,6 +18,50 @@ $cms = new ezLayouts();
 
 	<title>PHP Layouts : ezCMS Admin</title>
 	<?php include('include/head.php'); ?>
+	<link rel="stylesheet" href="codemirror/addon/dialog/dialog.css">
+	<link rel="stylesheet" href="codemirror/addon/search/matchesonscrollbar.css">
+	<style>
+	#cm-toolbar {
+		background: #2d2d2d;
+		padding: 4px 6px;
+		border: 1px solid #111;
+		border-bottom: 0;
+		margin-top: 10px;
+	}
+	#cm-toolbar .btn {
+		margin: 1px 2px;
+		background: #444;
+		color: #ddd;
+		border-color: #222;
+		font-size: 11px;
+		padding: 3px 8px;
+		text-shadow: none;
+		background-image: linear-gradient(to bottom, #555, #3a3a3a);
+		box-shadow: none;
+	}
+	#cm-toolbar .btn:hover,
+	#cm-toolbar .btn:focus {
+		background: #555;
+		background-image: none;
+		color: #fff;
+		border-color: #888;
+		box-shadow: none;
+	}
+	#cm-toolbar .btn-group { margin: 1px 2px; }
+	#cm-toolbar .dropdown-menu { min-width: 110px; }
+	#cm-shortcuts-modal .modal-body { max-height: 440px; overflow-y: auto; }
+	#cm-shortcuts-modal kbd {
+		display: inline-block;
+		padding: 1px 6px;
+		font-size: 11px;
+		font-family: monospace;
+		background: #f5f5f5;
+		border: 1px solid #ccc;
+		border-radius: 3px;
+		box-shadow: 0 1px 0 rgba(0,0,0,.2);
+		white-space: nowrap;
+	}
+	</style>
 
 </head><body>
 
@@ -88,7 +132,25 @@ $cms = new ezLayouts();
 								class="input-block-level tooltipme2">
 						</div>
 					</div>
-					<textarea name="txtContents" id="txtContents" class="input-block-level"><?php echo $cms->content; ?></textarea>
+					<div id="cm-toolbar">
+					<button type="button" class="btn btn-mini" id="cm-find"><i class="icon-search"></i> Find</button>
+					<button type="button" class="btn btn-mini" id="cm-replace"><i class="icon-retweet"></i> Replace</button>
+					<button type="button" class="btn btn-mini" id="cm-goto"><i class="icon-step-forward"></i> Go to Line</button>
+					<div class="btn-group">
+						<button type="button" class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-font"></i> <span id="cm-size-label">Font Size</span> <span class="caret"></span></button>
+						<ul class="dropdown-menu" id="cm-fontsize-menu">
+							<li><a href="#" data-size="11">11px</a></li>
+							<li><a href="#" data-size="12">12px</a></li>
+							<li><a href="#" data-size="13">13px</a></li>
+							<li><a href="#" data-size="14">14px</a></li>
+							<li><a href="#" data-size="16">16px</a></li>
+							<li><a href="#" data-size="18">18px</a></li>
+							<li><a href="#" data-size="20">20px</a></li>
+						</ul>
+					</div>
+					<a href="#cm-shortcuts-modal" data-toggle="modal" class="btn btn-mini"><i class="icon-question-sign"></i> Shortcuts</a>
+				</div>
+				<textarea name="txtContents" id="txtContents" class="input-block-level"><?php echo $cms->content; ?></textarea>
 				</form>
 			</div>
 		  </div>
@@ -112,6 +174,47 @@ $cms = new ezLayouts();
 	</div>
 	<br><br>
 </div><!-- /wrap  -->
+
+<!-- CodeMirror Keyboard Shortcuts Modal -->
+<div id="cm-shortcuts-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="cm-shortcuts-label" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3 id="cm-shortcuts-label">Keyboard Shortcuts</h3>
+	</div>
+	<div class="modal-body">
+		<table class="table table-condensed table-striped">
+			<thead><tr><th style="width:210px">Key</th><th>Action</th></tr></thead>
+			<tbody>
+				<tr><td colspan="2"><strong>Search &amp; Navigation</strong></td></tr>
+				<tr><td><kbd>Ctrl+F</kbd></td><td>Find</td></tr>
+				<tr><td><kbd>Ctrl+G</kbd></td><td>Find Next</td></tr>
+				<tr><td><kbd>Shift+Ctrl+G</kbd></td><td>Find Previous</td></tr>
+				<tr><td><kbd>Ctrl+H</kbd></td><td>Replace</td></tr>
+				<tr><td><kbd>Shift+Ctrl+H</kbd></td><td>Replace All</td></tr>
+				<tr><td><kbd>Alt+G</kbd></td><td>Jump to Line</td></tr>
+				<tr><td><kbd>Ctrl+Home</kbd></td><td>Go to Start</td></tr>
+				<tr><td><kbd>Ctrl+End</kbd></td><td>Go to End</td></tr>
+				<tr><td colspan="2"><strong>Editing</strong></td></tr>
+				<tr><td><kbd>Ctrl+Z</kbd></td><td>Undo</td></tr>
+				<tr><td><kbd>Ctrl+Y</kbd></td><td>Redo</td></tr>
+				<tr><td><kbd>Ctrl+A</kbd></td><td>Select All</td></tr>
+				<tr><td><kbd>Ctrl+D</kbd></td><td>Delete Line</td></tr>
+				<tr><td><kbd>Alt+Up</kbd></td><td>Move Line Up</td></tr>
+				<tr><td><kbd>Alt+Down</kbd></td><td>Move Line Down</td></tr>
+				<tr><td><kbd>Ctrl+/</kbd></td><td>Toggle Comment</td></tr>
+				<tr><td><kbd>Tab</kbd></td><td>Indent</td></tr>
+				<tr><td><kbd>Shift+Tab</kbd></td><td>Dedent</td></tr>
+				<tr><td><kbd>Ctrl+]</kbd></td><td>Indent More</td></tr>
+				<tr><td><kbd>Ctrl+[</kbd></td><td>Indent Less</td></tr>
+				<tr><td colspan="2"><strong>Code Folding</strong></td></tr>
+				<tr><td><kbd>Ctrl+Q</kbd></td><td>Fold / Unfold Block</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal">Close</button>
+	</div>
+</div>
 
 <?php include('include/footer.php'); ?>
 <script>
@@ -155,6 +258,12 @@ $cms = new ezLayouts();
 <script src="codemirror/addon/fold/comment-fold.js"></script>
 <script src="codemirror/addon/merge/diff_match_patch.js"></script>
 <script src="codemirror/addon/merge/merge.js"></script>
+<script src="codemirror/addon/dialog/dialog.js"></script>
+<script src="codemirror/addon/search/searchcursor.js"></script>
+<script src="codemirror/addon/search/search.js"></script>
+<script src="codemirror/addon/scroll/annotatescrollbar.js"></script>
+<script src="codemirror/addon/search/matchesonscrollbar.js"></script>
+<script src="codemirror/addon/search/jump-to-line.js"></script>
 <script src="codemirror/mode/css/css.js"></script>
 <script src="codemirror/mode/clike/clike.js"></script>
 <script src="codemirror/mode/php/php.js"></script>
@@ -178,4 +287,29 @@ $cms = new ezLayouts();
 	});
 </script>
 <script src="js/gitFileCode.js"></script>
+<script>
+(function () {
+	var fontSizeKey = 'ezCMFontSize';
+
+	function setFontSize(size) {
+		$('.CodeMirror').css('font-size', size + 'px');
+		myCode.refresh();
+		$('#cm-size-label').text(size + 'px');
+		localStorage.setItem(fontSizeKey, size);
+	}
+
+	// Restore saved font size on load
+	var saved = localStorage.getItem(fontSizeKey);
+	if (saved) setFontSize(parseInt(saved, 10));
+
+	$('#cm-fontsize-menu a').click(function () {
+		setFontSize(parseInt($(this).data('size'), 10));
+		return false;
+	});
+
+	$('#cm-find').click(function () { myCode.execCommand('findPersistent'); });
+	$('#cm-replace').click(function () { myCode.execCommand('replace'); });
+	$('#cm-goto').click(function () { myCode.execCommand('jumpToLine'); });
+}());
+</script>
 </body></html>
