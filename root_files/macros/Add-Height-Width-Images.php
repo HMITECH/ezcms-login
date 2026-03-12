@@ -62,7 +62,7 @@ if ($count) {
             $size = @getimagesize($src);
 
             if ($size) {
-                list($width, $height) = $size;
+                [$width, $height] = $size;
                 $updated++;
                 // Only set the attribute if it is not already present
                 if (!$img->width)  $img->width  = $width  . 'px';
