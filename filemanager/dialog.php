@@ -332,7 +332,7 @@ $get_params = http_build_query($get_params);
         </style>
         <![endif]-->
 
-        <script src="js/jquery-1.12.4.min.js"></script>
+        <script src="js/jquery-3.7.1.min.js"></script>
         <script src="js/jquery-ui.min.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/jquery.jplayer.min.js"></script>

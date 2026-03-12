@@ -25,4 +25,5 @@
 <?php } ?>
 <link rel="stylesheet" href="codemirror/addon/hint/show-hint.css">
 <link href="css/custom.css" rel="stylesheet">
-<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/jquery-3.7.1.min.js"></script>
+<script src="js/jquery-migrate-3.5.0.min.js"></script>
