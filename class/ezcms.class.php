@@ -19,7 +19,7 @@ class ezCMS extends db {
 	public $usr; 		// Logged in user record
 
 	// Stores Revision Details
-	public $revs = ['log' => '', 'opt' => '', 'cnt' => 1, 'jsn' => array()];
+	public $revs = ['log' => '', 'opt' => '', 'cnt' => 1, 'jsn' => []];
 	
 	// Consturct the class
 	public function __construct ( $loginRequired = true ) {
@@ -67,7 +67,7 @@ class ezCMS extends db {
 		if (isset($_GET['theme'])) $this->chgEditorTheme();
 		
 		// init revision vars
-		$this->revs = ['log' => '', 'opt' => '', 'cnt' => 1, 'jsn' => array()];
+		$this->revs = ['log' => '', 'opt' => '', 'cnt' => 1, 'jsn' => []];
 		
 		// Check if Message Flag is set
 		if (isset($_GET["flg"])) $this->flg = $_GET["flg"];
@@ -167,7 +167,7 @@ class ezCMS extends db {
 
 	// Converts a php array into a PDO string (INTERNAL)
 	private function arrayToPDOstr($a) { 
-		$t = array();
+		$t = [];
 		foreach (array_keys($a) as $n) $t[] = "`$n` = ?"; 
 		return implode(', ', $t); 
 	}
