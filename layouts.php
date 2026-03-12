@@ -18,50 +18,6 @@ $cms = new ezLayouts();
 
 	<title>PHP Layouts : ezCMS Admin</title>
 	<?php include('include/head.php'); ?>
-	<link rel="stylesheet" href="codemirror/addon/dialog/dialog.css">
-	<link rel="stylesheet" href="codemirror/addon/search/matchesonscrollbar.css">
-	<style>
-	#cm-toolbar {
-		background: #f5f5f5;
-		padding: 4px 6px;
-		border: 1px solid #ccc;
-		border-bottom: 0;
-		margin-top: 10px;
-	}
-	#cm-toolbar .btn {
-		margin: 1px 2px;
-		background: #fff;
-		color: #333;
-		border-color: #ccc;
-		font-size: 11px;
-		padding: 3px 8px;
-		text-shadow: none;
-		background-image: linear-gradient(to bottom, #fff, #e8e8e8);
-		box-shadow: none;
-	}
-	#cm-toolbar .btn:hover,
-	#cm-toolbar .btn:focus {
-		background: #e0e0e0;
-		background-image: none;
-		color: #000;
-		border-color: #aaa;
-		box-shadow: none;
-	}
-	#cm-toolbar .btn-group { margin: 1px 2px; }
-	#cm-toolbar .dropdown-menu { min-width: 110px; }
-	#cm-shortcuts-modal .modal-body { max-height: 440px; overflow-y: auto; }
-	#cm-shortcuts-modal kbd {
-		display: inline-block;
-		padding: 1px 6px;
-		font-size: 11px;
-		font-family: monospace;
-		background: #f5f5f5;
-		border: 1px solid #ccc;
-		border-radius: 3px;
-		box-shadow: 0 1px 0 rgba(0,0,0,.2);
-		white-space: nowrap;
-	}
-	</style>
 
 </head><body>
 
@@ -133,12 +89,12 @@ $cms = new ezLayouts();
 						</div>
 					</div>
 					<div id="cm-toolbar">
-					<button type="button" class="btn btn-mini" id="cm-find"><i class="icon-search"></i> Find</button>
-					<button type="button" class="btn btn-mini" id="cm-replace"><i class="icon-retweet"></i> Replace</button>
-					<button type="button" class="btn btn-mini" id="cm-goto"><i class="icon-step-forward"></i> Go to Line</button>
+					<button type="button" class="btn btn-mini cm-btn-find"><i class="icon-search"></i> Find</button>
+					<button type="button" class="btn btn-mini cm-btn-replace"><i class="icon-retweet"></i> Replace</button>
+					<button type="button" class="btn btn-mini cm-btn-goto"><i class="icon-step-forward"></i> Go to Line</button>
 					<div class="btn-group">
-						<button type="button" class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-font"></i> <span id="cm-size-label">Font Size</span> <span class="caret"></span></button>
-						<ul class="dropdown-menu" id="cm-fontsize-menu">
+						<button type="button" class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-font"></i> <span class="cm-size-label">Font Size</span> <span class="caret"></span></button>
+						<ul class="dropdown-menu cm-fontsize-menu">
 							<li><a href="#" data-size="11">11px</a></li>
 							<li><a href="#" data-size="12">12px</a></li>
 							<li><a href="#" data-size="13">13px</a></li>
@@ -150,7 +106,7 @@ $cms = new ezLayouts();
 					</div>
 					<div class="btn-group">
 						<button type="button" class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-resize-small"></i> Fold <span class="caret"></span></button>
-						<ul class="dropdown-menu" id="cm-fold-menu">
+						<ul class="dropdown-menu cm-fold-menu">
 							<li><a href="#" data-fold="0">Fold All</a></li>
 							<li class="divider"></li>
 							<li><a href="#" data-fold="1">Level 1 – 1 level visible</a></li>
@@ -300,82 +256,5 @@ $cms = new ezLayouts();
 	});
 </script>
 <script src="js/gitFileCode.js"></script>
-<script>
-(function () {
-	var fontSizeKey = 'ezCMFontSize';
-
-	function setFontSize(size) {
-		$('.CodeMirror').css('font-size', size + 'px');
-		myCode.refresh();
-		$('#cm-size-label').text(size + 'px');
-		localStorage.setItem(fontSizeKey, size);
-	}
-
-	// Restore saved font size on load
-	var saved = localStorage.getItem(fontSizeKey);
-	if (saved) setFontSize(parseInt(saved, 10));
-
-	$('#cm-fontsize-menu a').click(function () {
-		setFontSize(parseInt($(this).data('size'), 10));
-		return false;
-	});
-
-	$('#cm-find').click(function () { myCode.execCommand('findPersistent'); });
-	$('#cm-replace').click(function () { myCode.execCommand('replace'); });
-	$('#cm-goto').click(function () { myCode.execCommand('jumpToLine'); });
-
-	// Fold all blocks at brace-depth >= minDepth.
-	// "Level 1" (minDepth=1) leaves outermost blocks open but collapses their contents.
-	// "Level 2" (minDepth=2) leaves two levels visible, etc.
-	// "Fold All" uses minDepth=0 to collapse everything.
-	// Always folds deepest-first so outer folds don't hide inner ones before they are created.
-	function foldToLevel(minDepth) {
-		myCode.operation(function () {
-			// Start fully unfolded
-			for (var i = myCode.firstLine(); i <= myCode.lastLine(); i++)
-				myCode.foldCode({line: i, ch: 0}, null, "unfold");
-
-			// Scan file to find the maximum brace depth
-			var maxD = 0, d = 0;
-			for (var i = myCode.firstLine(); i <= myCode.lastLine(); i++) {
-				var line = myCode.getLine(i) || '';
-				for (var c = 0; c < line.length; c++) {
-					if (line[c] === '{') { d++; if (d > maxD) maxD = d; }
-					else if (line[c] === '}' && d > 0) d--;
-				}
-			}
-
-			// Fold from deepest down to minDepth (deepest first)
-			for (var target = maxD - 1; target >= minDepth; target--) {
-				var depth = 0;
-				for (var i = myCode.firstLine(); i <= myCode.lastLine(); i++) {
-					var line = myCode.getLine(i) || '';
-					for (var c = 0; c < line.length; c++) {
-						if (line[c] === '{') {
-							if (depth === target)
-								myCode.foldCode({line: i, ch: c + 1}, null, "fold");
-							depth++;
-						} else if (line[c] === '}' && depth > 0) {
-							depth--;
-						}
-					}
-				}
-			}
-		});
-	}
-
-	$('#cm-fold-menu a').click(function () {
-		var val = $(this).data('fold');
-		if (val === 'none') {
-			myCode.operation(function () {
-				for (var i = myCode.firstLine(); i <= myCode.lastLine(); i++)
-					myCode.foldCode({line: i, ch: 0}, null, "unfold");
-			});
-		} else {
-			foldToLevel(parseInt(val, 10));
-		}
-		return false;
-	});
-}());
-</script>
+<script>initCMToolbar(myCode, '#cm-toolbar');</script>
 </body></html>
