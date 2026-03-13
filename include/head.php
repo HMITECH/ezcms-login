@@ -24,6 +24,7 @@
 	<link rel="stylesheet" href="codemirror/theme/<?php echo $_SESSION["CMTHEME"]; ?>.css">
 <?php } ?>
 <link rel="stylesheet" href="codemirror/addon/hint/show-hint.css">
+<link rel="stylesheet" href="codemirror/addon/dialog/dialog.css">
 <link href="css/custom.css" rel="stylesheet">
 <script src="js/jquery-3.7.1.min.js"></script>
 <script src="js/jquery-migrate-3.5.0.min.js"></script>
