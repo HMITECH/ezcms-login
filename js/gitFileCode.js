@@ -153,9 +153,9 @@ function initCMToolbar(editor, toolbar) {
 		return false;
 	});
 
-	$tb.find('.cm-btn-find').on('click',    function () { editor.execCommand('findPersistent'); });
-	$tb.find('.cm-btn-replace').on('click', function () { editor.execCommand('replace'); });
-	$tb.find('.cm-btn-goto').on('click',    function () { editor.execCommand('jumpToLine'); });
+	$tb.find('.cm-btn-find').on('click',    function () { editor.execCommand('findPersistent'); return false; });
+	$tb.find('.cm-btn-replace').on('click', function () { editor.execCommand('replace');         return false; });
+	$tb.find('.cm-btn-goto').on('click',    function () { editor.execCommand('jumpToLine');       return false; });
 
 	// Fold all blocks at brace-depth >= minDepth, deepest first.
 	// Level 1 = 1 level visible (fold depth >= 1), Level 2 = 2 visible, etc.
