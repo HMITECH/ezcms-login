@@ -191,7 +191,7 @@ div.white-boxed {
 	box-shadow: 0 1px 0 rgba(0,0,0,.2);
 	white-space: nowrap;
 }
-/* AI Panel Sidebar */
+/* Synapse Sidebar */
 #ai-sidebar {
 	position: fixed;
 	top: 40px;

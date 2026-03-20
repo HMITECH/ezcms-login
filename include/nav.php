@@ -79,10 +79,10 @@
 		  </li>
 		  <?php $isLayoutsPage = (basename($_SERVER['PHP_SELF']) === 'layouts.php'); ?>
 		  <li>
-			  <a href="#" id="btn-ai-sidebar" title="Toggle ez AI Panel"
+			  <a href="#" id="btn-ai-sidebar" title="Toggle Synapse"
 				 class="<?php echo !$isLayoutsPage ? 'disabled' : ''; ?>"
 				 <?php echo !$isLayoutsPage ? 'tabindex="-1"' : ''; ?>>
-				 <i class="icon-comment"></i> ez AI
+				 <i class="icon-comment"></i> Synapse
 			  </a>
 		  </li>
 		</ul>

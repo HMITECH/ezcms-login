@@ -147,11 +147,11 @@ $cms = new ezLayouts();
 <div id="ai-sidebar">
 	<div class="ai-sidebar-header">
 		<span class="ai-sidebar-close" id="ai-sidebar-close"><i class="icon-remove"></i></span>
-		<i class="icon-comment"></i> ez AI
+		<i class="icon-comment"></i> Synapse
 	</div>
 	<div class="ai-sidebar-section">
 		<h5><i class="icon-info-sign"></i> Coming Soon</h5>
-		<p>An AI agent will be available here to assist you while editing layouts.</p>
+		<p>Synapse will be available here to assist you while editing layouts.</p>
 	</div>
 	<div class="ai-sidebar-section">
 		<h5><i class="icon-lightbulb"></i> Planned Features</h5>
