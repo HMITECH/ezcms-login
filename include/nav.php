@@ -77,7 +77,7 @@
 				</div>
 			  </div>
 		  </li>
-		  <?php $isLayoutsPage = (basename($_SERVER['PHP_SELF']) === 'layouts.php'); ?>
+		  <?php $isLayoutsPage = in_array(basename($_SERVER['PHP_SELF']), ['layouts.php','includes.php','styles.php','scripts.php','pages.php','macros.php']); ?>
 		  <li>
 			  <a href="#" id="btn-ai-sidebar" title="Toggle Synapse"
 				 class="<?php echo !$isLayoutsPage ? 'disabled' : ''; ?>"
