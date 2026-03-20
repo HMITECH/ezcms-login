@@ -148,38 +148,13 @@ $cms = new ezIncludes();
 
 <?php include('include/cm_shortcuts_modal.php'); ?>
 
-<div id="ai-sidebar">
-	<div class="ai-sidebar-header">
-		<span class="ai-sidebar-close" id="ai-sidebar-close"><i class="icon-remove"></i></span>
-		<i class="icon-comment"></i> Synapse
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-info-sign"></i> Coming Soon</h5>
-		<p>Synapse will be available here to assist you while editing includes.</p>
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-lightbulb"></i> Planned Features</h5>
-		<p>Ask questions about your include code, get suggestions, and auto-complete snippets.</p>
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-cog"></i> Include Tools</h5>
-		<p>Context-aware tools for the include file currently open in the editor will appear here.</p>
-	</div>
-</div>
+<?php include('include/synapse_sidebar.php'); ?>
 
 <?php include('include/footer.php'); ?>
 <script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar li:eq(0)").addClass('active');
 	$("#top-bar li:eq(0) ul li:eq(6)").addClass('active');
-	// AI Sidebar toggle
-	$('#btn-ai-sidebar').click(function () {
-		$('#ai-sidebar').toggleClass('open');
-		return false;
-	});
-	$('#ai-sidebar-close').click(function () {
-		$('#ai-sidebar').removeClass('open');
-	});
 	$('#btnsaveas').click( function () {
 		var saveasfile = $('#txtSaveAs').val().trim();
 		if (saveasfile.length < 1) {
@@ -231,4 +206,5 @@ $cms = new ezIncludes();
 </script>
 <script src="js/gitFileCode.js"></script>
 <script>initCMToolbar(myCode, '#cm-toolbar');</script>
+<script src="js/synapse.js"></script>
 </body></html>

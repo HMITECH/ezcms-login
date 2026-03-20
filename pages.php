@@ -399,35 +399,10 @@ $cms = new ezPages();
 
 })(jQuery);</script>
 
-<div id="ai-sidebar">
-	<div class="ai-sidebar-header">
-		<span class="ai-sidebar-close" id="ai-sidebar-close"><i class="icon-remove"></i></span>
-		<i class="icon-comment"></i> Synapse
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-info-sign"></i> Coming Soon</h5>
-		<p>Synapse will be available here to assist you while editing pages.</p>
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-lightbulb"></i> Planned Features</h5>
-		<p>Get suggestions for page content, metadata, and SEO improvements.</p>
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-cog"></i> Page Tools</h5>
-		<p>Context-aware tools for the page currently open in the editor will appear here.</p>
-	</div>
-</div>
+<?php include('include/synapse_sidebar.php'); ?>
 
 <?php include('include/footer.php'); ?>
 <script>
-	// AI Sidebar toggle
-	$('#btn-ai-sidebar').click(function () {
-		$('#ai-sidebar').toggleClass('open');
-		return false;
-	});
-	$('#ai-sidebar-close').click(function () {
-		$('#ai-sidebar').removeClass('open');
-	});
 
 	$('#left-tree.treeview li a').click( function() {
 		$(this).attr('href', $(this).attr('href')+window.location.hash);
@@ -788,4 +763,5 @@ $cms = new ezPages();
 	$("#top-bar > li:eq(1)").addClass('active');
 	if(window.location.hash) $('a[href="'+window.location.hash.replace('#','#d-')+'"]').click();
 </script>
+<script src="js/synapse.js"></script>
 </body></html>

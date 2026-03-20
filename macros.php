@@ -111,37 +111,12 @@ $cms = new ezMacros();
 	<br><br>
 </div><!-- /wrap  -->
 
-<div id="ai-sidebar">
-	<div class="ai-sidebar-header">
-		<span class="ai-sidebar-close" id="ai-sidebar-close"><i class="icon-remove"></i></span>
-		<i class="icon-comment"></i> Synapse
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-info-sign"></i> Coming Soon</h5>
-		<p>Synapse will be available here to assist you while editing macros.</p>
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-lightbulb"></i> Planned Features</h5>
-		<p>Ask questions about your macro code, get suggestions, and auto-complete snippets.</p>
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-cog"></i> Macro Tools</h5>
-		<p>Context-aware tools for the macro currently open in the editor will appear here.</p>
-	</div>
-</div>
+<?php include('include/synapse_sidebar.php'); ?>
 
 <?php include('include/footer.php'); ?>
 <script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar > li:eq(4)").addClass('active');
-	// AI Sidebar toggle
-	$('#btn-ai-sidebar').click(function () {
-		$('#ai-sidebar').toggleClass('open');
-		return false;
-	});
-	$('#ai-sidebar-close').click(function () {
-		$('#ai-sidebar').removeClass('open');
-	});
 	$("#top-bar > li:eq(4) ul li:eq(0)").addClass('active');
 	$('#btnsaveas').click( function () {
 		var saveasfile = $('#txtSaveAs').val().trim();
@@ -182,4 +157,5 @@ $cms = new ezMacros();
 		cmMode = 'application/x-httpd-php';
 </script>
 <script src="js/gitFileCode.js"></script>
+<script src="js/synapse.js"></script>
 </body></html>

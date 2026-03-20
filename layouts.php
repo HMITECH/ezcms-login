@@ -144,24 +144,7 @@ $cms = new ezLayouts();
 	<br><br>
 </div><!-- /wrap  -->
 
-<div id="ai-sidebar">
-	<div class="ai-sidebar-header">
-		<span class="ai-sidebar-close" id="ai-sidebar-close"><i class="icon-remove"></i></span>
-		<i class="icon-comment"></i> Synapse
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-info-sign"></i> Coming Soon</h5>
-		<p>Synapse will be available here to assist you while editing layouts.</p>
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-lightbulb"></i> Planned Features</h5>
-		<p>Ask questions about your layout code, get suggestions, and auto-complete snippets.</p>
-	</div>
-	<div class="ai-sidebar-section">
-		<h5><i class="icon-cog"></i> Layout Tools</h5>
-		<p>Context-aware tools for the layout currently open in the editor will appear here.</p>
-	</div>
-</div>
+<?php include('include/synapse_sidebar.php'); ?>
 
 <?php include('include/cm_shortcuts_modal.php'); ?>
 
@@ -193,14 +176,6 @@ $cms = new ezLayouts();
 	});
 	//$('title').text('<?php echo $cms->filename; ?>');
 	$('title').text( location.search.split('=')[1] );
-	// AI Sidebar toggle
-	$('#btn-ai-sidebar').click(function () {
-		$('#ai-sidebar').toggleClass('open');
-		return false;
-	});
-	$('#ai-sidebar-close').click(function () {
-		$('#ai-sidebar').removeClass('open');
-	});
 </script>
 <script src="codemirror/lib/codemirror.js"></script>
 <script src="codemirror/mode/javascript/javascript.js"></script>
@@ -245,4 +220,5 @@ $cms = new ezLayouts();
 </script>
 <script src="js/gitFileCode.js"></script>
 <script>initCMToolbar(myCode, '#cm-toolbar');</script>
+<script src="js/synapse.js"></script>
 </body></html>

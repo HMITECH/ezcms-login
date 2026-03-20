@@ -203,7 +203,9 @@ div.white-boxed {
 	box-shadow: -4px 0 10px rgba(0,0,0,0.25);
 	transition: right 0.3s ease-in-out;
 	z-index: 1050;
-	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 	padding: 15px;
 }
 #ai-sidebar.open {
@@ -215,6 +217,7 @@ div.white-boxed {
 	border-bottom: 1px solid #ddd;
 	padding-bottom: 8px;
 	margin-bottom: 14px;
+	flex-shrink: 0;
 }
 #ai-sidebar .ai-sidebar-close {
 	float: right;
@@ -224,24 +227,93 @@ div.white-boxed {
 #ai-sidebar .ai-sidebar-close:hover {
 	color: #333;
 }
-#ai-sidebar .ai-sidebar-section {
-	background: #f5f5f5;
+.ai-sidebar-gear {
+	float: right;
+	cursor: pointer;
+	color: #999;
+	margin-right: 8px;
+}
+.ai-sidebar-gear:hover {
+	color: #333;
+}
+#synapse-view-unconfigured,
+#synapse-view-settings {
+	flex: 1;
+	overflow-y: auto;
+}
+#synapse-view-chat {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+#synapse-messages {
+	flex: 1;
+	overflow-y: auto;
 	border: 1px solid #ddd;
 	border-radius: 4px;
-	padding: 10px 12px;
-	margin-bottom: 12px;
-	font-size: 13px;
+	padding: 8px;
+	background: #fafafa;
+	min-height: 0;
 }
-#ai-sidebar .ai-sidebar-section h5 {
-	margin: 0 0 6px;
+.synapse-msg {
+	margin-bottom: 8px;
+	padding: 6px 10px;
+	border-radius: 6px;
 	font-size: 13px;
+	line-height: 1.45;
+	word-wrap: break-word;
+}
+.synapse-msg-assistant {
+	background: #e8f4fd;
+	color: #333;
+}
+.synapse-msg-user {
+	background: #333;
+	color: #fff;
+}
+#synapse-input-area {
+	flex-shrink: 0;
+	border-top: 1px solid #eee;
+	padding-top: 8px;
+}
+#synapse-input {
+	width: 100%;
+	box-sizing: border-box;
+	resize: vertical;
+	font-size: 13px;
+	padding: 5px 7px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	outline: none;
+}
+#synapse-input:focus {
+	border-color: #66afe9;
+}
+#synapse-input-actions,
+#synapse-settings-actions {
+	display: flex;
+	gap: 6px;
+	margin-top: 6px;
+}
+#synapse-settings-form .synapse-field {
+	margin-bottom: 10px;
+}
+#synapse-settings-form .synapse-field label {
+	display: block;
+	font-size: 12px;
 	font-weight: bold;
 	color: #555;
+	margin-bottom: 3px;
 }
-#ai-sidebar .ai-sidebar-section p {
-	margin: 0;
-	color: #666;
-	line-height: 1.5;
+#synapse-settings-form .synapse-field input,
+#synapse-settings-form .synapse-field select {
+	width: 100%;
+	box-sizing: border-box;
+	font-size: 13px;
+	padding: 4px 6px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
 }
 #btn-ai-sidebar.disabled {
 	opacity: 0.45;
