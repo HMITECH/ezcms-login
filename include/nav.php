@@ -77,8 +77,16 @@
 				</div>
 			  </div>
 		  </li>
+		  <?php $isLayoutsPage = (basename($_SERVER['PHP_SELF']) === 'layouts.php'); ?>
+		  <li>
+			  <a href="#" id="btn-ai-sidebar" title="Toggle ez AI Panel"
+				 class="<?php echo !$isLayoutsPage ? 'disabled' : ''; ?>"
+				 <?php echo !$isLayoutsPage ? 'tabindex="-1"' : ''; ?>>
+				 <i class="icon-comment"></i> ez AI
+			  </a>
+		  </li>
 		</ul>
-		
+
 		<ul class="nav pull-right">
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-share"></i> Welcome
