@@ -78,7 +78,8 @@ class ezCMS extends db {
 	
 	// this function will set the formatted html to display
 	public function setMsgHTML ($class, $caption, $subcaption ) {
-		$class = ($class === 'error') ? 'danger' : $class; // BS5 renamed alert-error -> alert-danger
+		// normalise legacy names to Bootstrap 5 contextual classes
+		$class = ['error' => 'danger', 'warn' => 'warning'][$class] ?? $class;
 		$this->msg = '<div class="alert alert-'.$class.' alert-dismissible fade show">
 			<strong>'.$caption.'</strong><br>'.$subcaption.'
 			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
