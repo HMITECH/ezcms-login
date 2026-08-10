@@ -42,6 +42,9 @@
 .countDisplay{float:right;}
 .form-horizontal .control-group{display:flex;flex-wrap:wrap;align-items:center;}
 .form-horizontal .control-label{width:160px;padding-right:12px;text-align:right;margin-bottom:0;}
+/* .controls must fill the rest of the row, else input-block-level inputs
+   collapse to their content width (e.g. the Revision Message on setting.php). */
+.form-horizontal .controls{flex:1 1 auto;min-width:0;}
 
 /* ---- input-prepend / input-append -> BS5 input-group ---- */
 .input-prepend,.input-append{display:flex;align-items:stretch;margin-bottom:.5rem;}
