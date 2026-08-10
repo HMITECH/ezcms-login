@@ -30,7 +30,7 @@ a,button { outline:none; }
 }
 textarea { height: 300px;  width: 100%; box-sizing: border-box; }
 #txtDesc, #txtKeywords { height:auto;}
-#wrap .container { padding-top:60px; margin: 0 auto; width:98%; }
+#wrap .container { padding:60px 0 0; margin: 0 auto; width:98%; max-width:none; }
 .countDisplay {float: right;}
 .checkRight { float: right; }
 .row { width: 100%; margin: 0;}
