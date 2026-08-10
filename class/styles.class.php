@@ -26,8 +26,9 @@ class ezStyles extends ezCMS {
 		// call parent constuctor
 		parent::__construct();
 		
-		// Get the folder fro which site is running
-		$this->siteFolder =  substr(htmlspecialchars($_SERVER["PHP_SELF"]), 0, -17);
+		// Folder this admin panel runs from (e.g. /ezcms-login) — derive it from the
+		// path instead of a hard-coded length, so any folder name works.
+		$this->siteFolder =  htmlspecialchars(rtrim(dirname($_SERVER["PHP_SELF"]), '/'));
 		
 		// Check if file to display is set
 		if (isset($_GET['show'])) $this->filename = $_GET['show'];
