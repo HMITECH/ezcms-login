@@ -18,6 +18,24 @@ $cms = new ezSettings();
 
 	<title>Default Settings : ezCMS Admin</title>
 	<?php include('include/head.php'); ?>
+	<style>
+	/* Block tabs (#myTab) blend into the CodeMirror editor below. The editor's
+	   colours vary by theme, so --cm-bg / --cm-fg are read from the live CM in JS. */
+	.tabbable { --cm-bg:#ffffff; --cm-fg:#333333; }
+	.tabbable > .tab-content { padding-top:0; }             /* no gap under the tabs */
+	#myTab.nav-tabs { border-bottom:0; margin-bottom:0; gap:3px; }
+	#myTab .nav-link {
+		border:1px solid var(--cm-bg);
+		border-radius:5px 5px 0 0;
+		color:#555; background:transparent;
+		padding:6px 16px;
+	}
+	#myTab .nav-link:not(.active):hover { background:rgba(128,128,128,.14); color:#111; border-color:var(--cm-bg); }
+	#myTab .nav-link.active {
+		background:var(--cm-bg); color:var(--cm-fg);
+		border-color:var(--cm-bg);
+	}
+	</style>
 
 </head><body>
 
@@ -387,6 +405,13 @@ $(window).on('load', function () {
 	myCodeFooter = CodeMirror.fromTextArea(document.getElementById("txtFooter"), codeMirrorJSON);
 	myCodeSide1 = CodeMirror.fromTextArea(document.getElementById("txtSide"), codeMirrorJSON);
 	myCodeSide2 = CodeMirror.fromTextArea(document.getElementById("txtrSide"), codeMirrorJSON);
+	// blend the block tabs into the editor by borrowing the active CM theme colours
+	var cm = document.querySelector('.tab-pane.active .CodeMirror') || document.querySelector('.tabbable .CodeMirror');
+	if (cm) {
+		var cs = getComputedStyle(cm), tb = document.querySelector('.tabbable');
+		tb.style.setProperty('--cm-bg', cs.backgroundColor);
+		tb.style.setProperty('--cm-fg', cs.color);
+	}
 });
 
 </script>
