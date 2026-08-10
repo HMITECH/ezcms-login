@@ -81,7 +81,7 @@
 
 	  <ul class="navbar-nav ms-auto">
 		<li class="nav-item dropdown">
-			<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="icon-share"></i> Welcome
+			<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class="bi bi-person-circle"></i> Welcome
 				<?php echo $cms->usr['username']; ?></a>
 			<ul class="dropdown-menu dropdown-menu-end">
 				<li><a class="dropdown-item" href="update.php"><i class="icon-download"></i> Update ezCMS</a></li>

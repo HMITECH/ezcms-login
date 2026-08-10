@@ -100,16 +100,56 @@ a.label.label-info { font-size: 1em; border-radius: 0;padding: 3px 6px; }
 #difBlockFooter:after  {content: "Footer Block" ;}
 #tbloading {display: none;margin-top: 12px;}
 #push,#footer {height: 30px;}
-#footer { 
-	height: 30px; 
-	background: rgba(245, 245, 245, 0.8);
-	text-align:center; 
+#footer {
+	height: 30px;
+	background: #212529;        /* match the header */
+	color: #adb5bd;
+	text-align: center;
+	font-size: 13px;
+	display: flex;
+	align-items: center;        /* vertically centre the row within 30px */
 }
+/* footer wrapper should span like the page content (was BS5's narrower 1320px) */
+#footer .container { width: 98%; max-width: 100%; }
+#footer a { color: #9ec5fe; text-decoration: none; }
+#footer a:hover { color: #fff; text-decoration: underline; }
+#footer strong { color: #e9ecef; }
 .tooltip-inner {font-size:18px;}
 .label, .badge {white-space:normal;}
 .CodeMirror {height:500px; }
 /* Ensure toolbar dropdowns appear above the CodeMirror editor */
 #frmlayout .navbar { position: relative; z-index: 1001; }
+
+/* ===== Admin top navbar (Bootstrap 5) — compact BS2-style header =====
+   Bootstrap 5's default navbar/nav-link padding makes the bar ~56px and taller
+   than the old 40px BS2 bar. Trim it back, keep items vertically centred, and
+   restore the active/hover highlight (per-page JS toggles .active on
+   #top-bar > li, which BS5 no longer styles on its own). */
+nav.navbar.fixed-top { padding-top:0; padding-bottom:0; min-height:44px; }
+nav.navbar .navbar-brand { padding:12px 0; margin-right:1rem; font-size:20px; line-height:20px; }
+nav.navbar .navbar-nav .nav-link { padding:12px 15px; line-height:20px; color:rgba(255,255,255,.85); }
+nav.navbar .navbar-nav .nav-link:hover,
+nav.navbar .navbar-nav .nav-link:focus { background-color:rgba(255,255,255,.10); color:#fff; }
+/* active page: subtle fill + a bright accent underline (cleaner than a dark inset) */
+#top-bar > .nav-item.active > .nav-link,
+#top-bar > li.active > .nav-link {
+	background-color:rgba(255,255,255,.12); color:#fff;
+	box-shadow:inset 0 -3px 0 #4dabf7;
+}
+/* keep the fixed navbar clear of the content */
+nav.navbar.fixed-top { z-index:1030; }
+
+/* CMS dropdown: make the background-colour picker full width, like the theme <select> */
+#divbgcolor input[type="color"] {
+	width:100%; height:34px; padding:2px; cursor:pointer;
+	border:1px solid #ced4da; border-radius:.25rem; background:#fff;
+}
+
+/* Dropdown menu items: BS5's default hover is barely visible — make it clear */
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus { background-color:#0d6efd; color:#fff; }
+.dropdown-menu .dropdown-item:hover i,
+.dropdown-menu .dropdown-item:focus i { color:#fff; }
 div.white-boxed {
 	background: rgba(255, 255, 255, 0.95);
 	border: 1px solid #000;
