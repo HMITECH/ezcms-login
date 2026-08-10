@@ -35,6 +35,10 @@ $cms = new ezSettings();
 		background:var(--cm-bg); color:var(--cm-fg);
 		border-color:var(--cm-bg);
 	}
+	/* Revision-log pager: page numbers on the left, count info on the right */
+	#revPager { display:flex; align-items:center; margin-top:8px; }
+	#revPager .pagination { margin:0; }
+	#revPager .rcount { margin-left:auto; color:#777; font-size:13px; }
 	</style>
 
 </head><body>
@@ -76,6 +80,7 @@ $cms = new ezSettings();
 			  <table class="table table-striped"><thead>
 				<tr><th>#</th><th>User Name</th><th>Message</th><th>Date &amp; Time</th><th>Action</th></tr>
 			  </thead><tbody id="revBody"><tr><td colspan="5" class="text-muted">Loading revisions …</td></tr></tbody></table>
+			  <div id="revPager"></div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="txtGitMsg">Revision Message</label>
@@ -151,12 +156,14 @@ var revJson = {};   // per-revision content cache, filled on demand via AJAX
 // ---- Lazy revision loader: after page load, fetch the total count, the diff
 //      options and the most recent revisions; content is fetched on demand. ----
 var ezRevs = {
-	load: function () {
+	page: 1, pages: 1, count: 0, per: 10,
+	load: function (page) {
 		$('#revBody').html('<tr><td colspan="5" class="text-muted">Loading …</td></tr>');
-		$.getJSON('setting.php?ajaxRevs&page=1', function (d) {
+		$.getJSON('setting.php?ajaxRevs&page=' + (page || 1), function (d) {
 			if (!d || !d.status) return;
+			ezRevs.page = d.page; ezRevs.pages = d.pages; ezRevs.count = d.count;
 			$('#revcount').text(d.count);
-			if (d.opts) {   // populate the diff dropdowns (all revisions)
+			if (d.opts) {   // populate the diff dropdowns (all revisions), once
 				var o = '<option value="0">Current (Last Saved)</option>';
 				d.opts.forEach(function (x) { o += '<option value="' + x.id + '">' + x.label + '</option>'; });
 				$('#revSelL, #revSelR').html(o);
@@ -170,7 +177,30 @@ var ezRevs = {
 					'<a href="?purgeRev=' + r.id + '" class="conf-del">Purge</a></td></tr>';
 			});
 			$('#revBody').html(html);
+			ezRevs.pager(d.rows.length);
 		}).fail(function () { $('#revBody').html('<tr><td colspan="5" class="text-danger">Failed to load revisions.</td></tr>'); });
+	},
+	// page numbers (left) + "Showing x–y of N" (pushed right via CSS margin-left:auto)
+	pager: function (shown) {
+		var p = ezRevs.page, n = ezRevs.pages, per = ezRevs.per, total = ezRevs.count;
+		var start = total ? (p - 1) * per + 1 : 0, end = (p - 1) * per + shown;
+		var h = '';
+		if (n > 1) {
+			var item = function (pg, label, dis, act) {
+				return '<li class="page-item' + (dis ? ' disabled' : '') + (act ? ' active' : '') +
+					'"><a class="page-link" href="#" data-page="' + pg + '">' + label + '</a></li>';
+			};
+			h += '<ul class="pagination pagination-sm">' + item(p - 1, '«', p === 1);
+			var from = Math.max(1, p - 2), to = Math.min(n, p + 2);
+			if (from > 1) h += item(1, '1', false, false);
+			if (from > 2) h += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+			for (var i = from; i <= to; i++) h += item(i, i, false, i === p);
+			if (to < n - 1) h += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+			if (to < n) h += item(n, n, false, false);
+			h += item(p + 1, '»', p === n) + '</ul>';
+		}
+		h += '<span class="rcount">' + (total ? ('Showing ' + start + '–' + end + ' of ' + total) : 'No revisions') + '</span>';
+		$('#revPager').html(h);
 	}
 };
 // fetch a revision's content (cached) then run the callback
@@ -182,7 +212,14 @@ function ensureRev(id, cb) {
 		cb(revJson[id]);
 	}).fail(function () { alert('Could not load revision ' + id); });
 }
-$(function () { ezRevs.load(); });
+$(function () {
+	ezRevs.load(1);
+	$('#revPager').on('click', 'a[data-page]', function (e) {
+		e.preventDefault();
+		var pg = parseInt($(this).data('page'), 10);
+		if (pg >= 1 && pg <= ezRevs.pages) ezRevs.load(pg);
+	});
+});
 
 var myCodeHeader, myCodeSide1, myCodeSide2, myCodeFooter;
 
