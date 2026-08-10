@@ -1,9 +1,8 @@
 # Deploying ezCMS (Nginx + PHP-FPM + MariaDB)
 
-This guide walks through deploying ezCMS behind **Nginx** with **PHP-FPM** and
-**MariaDB/MySQL**. The worked example is the live staging site at
-**https://example.com:5550**, deployed on Ubuntu 24.04. Adapt the
-domain, port, and paths for your own environment.
+This guide deploys ezCMS behind **Nginx** with **PHP-FPM** and **MariaDB/MySQL**
+on a Debian/Ubuntu server. Replace `example.com` and the paths below with your
+own domain and layout.
 
 > ezCMS has no build step — it's runtime PHP. "Deploying" means: lay the files
 > out correctly, create the database, point a web-server vhost at it, and lock
@@ -19,7 +18,7 @@ root (one level *above* the admin panel). The admin code reaches them with
 `../cms.class.php` / `../../cms.class.php`, so this layout is not optional.
 
 ```
-/var/www/ezcms/        <- web root (document root)
+/var/www/ezcms/                    <- web root (document root)
 ├── config.php                     <- DB credentials (from root_files/, edited)
 ├── cms.class.php                  <- shared PDO/Redis layer (from root_files/)
 ├── index.php                      <- front-end router
@@ -36,10 +35,9 @@ root (one level *above* the admin panel). The admin code reaches them with
 ## 2. Prerequisites
 
 ```bash
-# Ubuntu 24.04 example — the staging host already had these:
-nginx -v                 # nginx/1.24.0
-php -v                   # PHP 8.3 (with php-fpm8.3, socket /run/php/php8.3-fpm.sock)
-mysql --version          # MariaDB 10.11
+nginx -v                 # nginx 1.24+
+php -v                   # PHP 8.0+ (with php-fpm; socket /run/php/phpX.Y-fpm.sock)
+mysql --version          # MariaDB 10.x / MySQL 8.x
 ```
 
 Install anything missing with `apt install nginx php-fpm php-mysql mariadb-server`.
@@ -52,32 +50,26 @@ Redis is **optional** and off by default (`useRedis => false`).
 Copy the front-end web-root files, then drop the admin panel in as a subfolder.
 
 ```bash
-SRC=/opt/ezcms/ezcms-login        # this repo
-DEST=/var/www/ezcms           # web root
+SRC=/opt/ezcms/ezcms-login          # where you cloned this repo
+DEST=/var/www/ezcms                 # web root
 
-mkdir -p "$DEST"
-cp -r "$SRC"/root_files/.  "$DEST"/        # front-end + shared config.php/cms.class.php
-cp -r "$SRC"             "$DEST"/ezcms-login
-rm -rf "$DEST"/ezcms-login/.git "$DEST"/ezcms-login/.github
+sudo mkdir -p "$DEST"
+sudo cp -r "$SRC"/root_files/.  "$DEST"/     # front-end + shared config.php/cms.class.php
+sudo cp -r "$SRC"             "$DEST"/ezcms-login
+sudo rm -rf "$DEST"/ezcms-login/.git "$DEST"/ezcms-login/.github
 ```
 
 ### Permissions
 
-PHP-FPM runs as **www-data**. On this host `www-data` is a member of the
-`deploy` group, and `/var/www` is group-readable (`drwxr-x---`), so php-fpm
-can already traverse and read the tree via group membership. The admin editor
-also *writes* files (pages/includes/layouts), so keep directories
-group-writable and `setgid` (new files stay in the `deploy` group):
+PHP-FPM runs as **www-data**; give it ownership of the tree. The admin editor
+writes files (pages/includes/layouts), so it needs write access:
 
 ```bash
-cd "$DEST"
-find . -type d -exec chmod 2775 {} \;     # rwxrwsr-x — group-writable + setgid
-find . -type f -exec chmod 664  {} \;     # rw-rw-r--
-chmod 640 config.php                        # secret: strip world-read
+sudo chown -R www-data:www-data /var/www/ezcms
+sudo find /var/www/ezcms -type d -exec chmod 755 {} \;
+sudo find /var/www/ezcms -type f -exec chmod 644 {} \;
+sudo chmod 640 /var/www/ezcms/config.php     # secret: strip world-read
 ```
-
-> If php-fpm on your host runs as a user with **no** access to `/home`, deploy
-> under `/var/www/` instead, or add an ACL: `setfacl -m u:www-data:rx <path>`.
 
 ---
 
@@ -90,14 +82,14 @@ The schema does **not** create the database — create it first, then import.
 ```bash
 # Create DB + a dedicated user (run as MySQL root; MariaDB uses socket auth)
 sudo mysql <<'SQL'
-CREATE DATABASE IF NOT EXISTS ezcms_staging CHARACTER SET utf8 COLLATE utf8_general_ci;
-CREATE USER IF NOT EXISTS 'ezcms_staging'@'localhost' IDENTIFIED BY 'CHANGE_ME';
-GRANT ALL PRIVILEGES ON ezcms_staging.* TO 'ezcms_staging'@'localhost';
+CREATE DATABASE IF NOT EXISTS ezcms CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE USER IF NOT EXISTS 'ezcms'@'localhost' IDENTIFIED BY 'CHANGE_ME';
+GRANT ALL PRIVILEGES ON ezcms.* TO 'ezcms'@'localhost';
 FLUSH PRIVILEGES;
 SQL
 
 # Import the schema INTO that database
-sudo mysql ezcms_staging < /opt/ezcms/ezcms-login/_sql/ezcms.6.0.sql
+sudo mysql ezcms < /opt/ezcms/ezcms-login/_sql/ezcms.6.0.sql
 ```
 
 **Seeded admin login:** `admin@localhost` / `ezcms`. The password is stored in
@@ -114,9 +106,9 @@ Edit the `config.php` that now sits at the web root:
 <?php
 return [
     'dbHost'   => 'localhost',
-    'dbUser'   => 'ezcms_staging',
+    'dbUser'   => 'ezcms',
     'dbPass'   => '<the password you set above>',
-    'dbName'   => 'ezcms_staging',
+    'dbName'   => 'ezcms',
     'dbTime'   => '+0:00',
     'useRedis' => false,
 ];
@@ -134,15 +126,14 @@ sudo -u www-data php -r '$c=include "/var/www/ezcms/config.php";
 
 ## 6. Nginx vhost
 
-Create `/etc/nginx/sites-available/ezcms-staging.conf`. This is the exact config
-serving the staging site — port **5550**, reusing the domain's existing Let's
-Encrypt certificate. The front controller rewrites unknown URLs to `index.php`;
-`.php` is executed by php-fpm; sensitive paths are denied.
+Create `/etc/nginx/sites-available/ezcms.conf`. The front controller rewrites
+unknown URLs to `index.php`; `.php` is executed by php-fpm; sensitive paths are
+denied.
 
 ```nginx
 server {
-    listen 5550 ssl;
-    listen [::]:5550 ssl;
+    listen 80;
+    listen [::]:80;
     server_name example.com;
 
     root  /var/www/ezcms;
@@ -150,13 +141,8 @@ server {
 
     client_max_body_size 16M;
 
-    ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
-    include             /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam         /etc/letsencrypt/ssl-dhparams.pem;
-
-    access_log /var/log/nginx/ezcms-staging-access.log;
-    error_log  /var/log/nginx/ezcms-staging-error.log;
+    access_log /var/log/nginx/ezcms-access.log;
+    error_log  /var/log/nginx/ezcms-error.log;
 
     # --- Security: never serve these over HTTP ---
     location = /config.php    { deny all; return 403; }   # DB credentials
@@ -185,26 +171,26 @@ server {
 }
 ```
 
-Enable, test, open the firewall port, reload:
+Enable, test, reload — then add TLS:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/ezcms-staging.conf /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/ezcms.conf /etc/nginx/sites-enabled/
 sudo nginx -t
-sudo ufw allow 5550/tcp        # only if ufw is active and using a non-standard port
 sudo systemctl reload nginx
+sudo certbot --nginx -d example.com      # obtain + wire up the Let's Encrypt cert
 ```
 
-> **Standard (port 80/443) deploys:** drop the `listen 5550 ssl` lines and the
-> non-standard-port firewall rule; use `certbot --nginx -d your-domain` to
-> obtain and wire up the certificate. See `nginx.conf.sample` for a plain
-> port-80 starting point.
+> **Alternate port / staging:** to run a second instance on a non-standard port,
+> use `listen 443 ssl;` → `listen 8443 ssl;` (reusing the same certificate) and
+> open that port in your firewall (`ufw allow 8443/tcp`). See `nginx.conf.sample`
+> for a minimal port-80 starting point.
 
 ---
 
 ## 7. Verify
 
 ```bash
-B=https://example.com:5550
+B=https://example.com
 curl -sk -o /dev/null -w "home     %{http_code}\n" "$B/"
 curl -sk -o /dev/null -w "route    %{http_code}\n" "$B/about"          # -> 200
 curl -sk -o /dev/null -w "404 pg   %{http_code}\n" "$B/nope"           # -> 404
@@ -212,20 +198,8 @@ curl -sk -o /dev/null -w "admin    %{http_code}\n" "$B/ezcms-login/"   # -> 200
 curl -sk -o /dev/null -w "config   %{http_code}\n" "$B/config.php"     # -> 403 (blocked)
 ```
 
-### Front-end home page
-The seeded home page renders with the default header / two asides / footer:
-
-![ezCMS front-end home page](docs/deployment/01-home.png)
-
-### Admin login
-`/ezcms-login/` — sign in with the seeded `admin@localhost` / `ezcms`:
-
-![ezCMS admin login](docs/deployment/02-admin-login.png)
-
-### 404 handling
-Unknown URLs serve the CMS 404 page (page id=2) with an HTTP 404 status:
-
-![ezCMS 404 page](docs/deployment/03-404.png)
+Then browse the site (`/`), sign in at `/ezcms-login/` with the seeded
+`admin@localhost` / `ezcms`, and confirm the CMS 404 page serves for unknown URLs.
 
 ---
 
@@ -246,34 +220,33 @@ Unknown URLs serve the CMS 404 page (page id=2) with an HTTP 404 status:
 ```bash
 cd /opt/ezcms/ezcms-login && git pull
 # Re-sync front-end + admin without clobbering config.php:
-rsync -a --exclude config.php root_files/.  /var/www/ezcms/
-rsync -a --exclude .git --exclude .github . /var/www/ezcms/ezcms-login/
+sudo rsync -a --exclude config.php root_files/.  /var/www/ezcms/
+sudo rsync -a --exclude .git --exclude .github . /var/www/ezcms/ezcms-login/
 # Apply any new _sql/upgrade*.sql between your version and the latest, then:
 sudo systemctl reload php8.3-fpm
 ```
 
-## 10. Teardown (staging)
+## 10. Teardown
 
 ```bash
-sudo rm /etc/nginx/sites-enabled/ezcms-staging.conf
+sudo rm /etc/nginx/sites-enabled/ezcms.conf
 sudo systemctl reload nginx
-sudo ufw delete allow 5550/tcp
-sudo mysql -e "DROP DATABASE ezcms_staging; DROP USER 'ezcms_staging'@'localhost';"
-rm -rf /var/www/ezcms
+sudo mysql -e "DROP DATABASE ezcms; DROP USER 'ezcms'@'localhost';"
+sudo rm -rf /var/www/ezcms
 ```
 
 ---
 
-## Staging quick reference
+## Quick reference
 
-| Item             | Value                                             |
-|------------------|---------------------------------------------------|
-| URL              | https://example.com:5550               |
-| Admin            | https://example.com:5550/ezcms-login/  |
-| Web root         | `/var/www/ezcms`                      |
-| Nginx vhost      | `/etc/nginx/sites-available/ezcms-staging.conf`   |
-| Database         | `ezcms_staging` (user `ezcms_staging`@localhost)  |
-| DB credentials   | `/var/www/ezcms/config.php`           |
-| PHP-FPM socket   | `/run/php/php8.3-fpm.sock`                         |
-| Seeded admin     | `admin@localhost` / `ezcms` (change on first login) |
-| Logs             | `/var/log/nginx/ezcms-staging-{access,error}.log` |
+| Item           | Value                                          |
+|----------------|------------------------------------------------|
+| URL            | https://example.com                            |
+| Admin          | https://example.com/ezcms-login/               |
+| Web root       | `/var/www/ezcms`                               |
+| Nginx vhost    | `/etc/nginx/sites-available/ezcms.conf`        |
+| Database       | `ezcms` (user `ezcms`@localhost)               |
+| DB credentials | `/var/www/ezcms/config.php`                    |
+| PHP-FPM socket | `/run/php/php8.3-fpm.sock`                      |
+| Seeded admin   | `admin@localhost` / `ezcms` (change on first login) |
+| Logs           | `/var/log/nginx/ezcms-{access,error}.log`      |
