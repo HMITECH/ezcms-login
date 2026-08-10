@@ -38,7 +38,7 @@
    inline-block by default). */
 .input-block-level{display:block;width:100%;box-sizing:border-box;}
 .control-group{margin-bottom:16px;}
-.control-label{display:block;width:100%;margin-bottom:5px;font-weight:400;color:#333;}
+.control-label{display:block;width:100%;margin-bottom:5px;font-weight:400;font-size:14px;color:#333;}
 .countDisplay{float:right;}
 .form-horizontal .control-group{display:flex;flex-wrap:wrap;align-items:center;}
 .form-horizontal .control-label{width:160px;padding-right:12px;text-align:right;margin-bottom:0;}
@@ -139,6 +139,26 @@ a.label.label-info,.label-info{background-color:#2d6987;color:#fff;}  /* BS2 mut
 
 /* ---- BS2 .pager ---- */
 .pager{display:flex;justify-content:center;gap:.5rem;list-style:none;padding:0;margin:1rem 0;}
+
+/* ---- BS2-style dropdowns that still use <li><a> (no .dropdown-item):
+        e.g. find.php "WHERE", macro.php "Select Macro". Style the items like
+        BS5 dropdown items and the <ul class="nav"> toolbar toggle like a muted
+        control rather than a blue underlined link. ---- */
+.dropdown-menu > li > a:not(.dropdown-item){display:block;padding:4px 16px;color:#212529;
+  text-decoration:none;white-space:nowrap;font-size:14px;font-weight:400;}
+.dropdown-menu > li > a:not(.dropdown-item):hover,
+.dropdown-menu > li > a:not(.dropdown-item):focus{background-color:#0d6efd;color:#fff;}
+.dropdown-menu > li.active > a:not(.dropdown-item){background-color:#0b5ed7;color:#fff;font-weight:600;}
+.dropdown-menu .divider{height:0;margin:6px 0;overflow:hidden;border-top:1px solid #e5e5e5;}
+
+.navbar-inner .nav{display:inline-flex;align-items:center;margin:0;padding:0;list-style:none;}
+.navbar-inner .nav > li{list-style:none;}
+.navbar-inner .nav > li > a{color:#555;text-decoration:none;font-size:14px;padding:4px 10px;display:inline-block;}
+.navbar-inner .nav > li > a:hover,.navbar-inner .nav > li > a:focus{color:#000;text-decoration:none;}
+
+/* BS2 .brand used as a static info label in editor toolbars (find.php findinlbl) */
+.navbar-inner .brand{color:#777;text-decoration:none;font-size:14px;font-weight:400;padding:4px 8px;cursor:default;}
+.navbar-inner .brand:hover{color:#777;text-decoration:none;}
 
 /* ---- BS2 editor toolbar bar (.navbar > .navbar-inner) ----
    The page/layout editors wrap their action buttons in <div class="navbar">

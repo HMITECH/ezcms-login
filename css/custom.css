@@ -170,6 +170,10 @@ nav.navbar.fixed-top { z-index:1030; }
 /* keep the Save Now button compact (markup uses btn-large on some pages) */
 #SaveAsDDM .btn { --bs-btn-font-size:14px; --bs-btn-padding-y:5px; --bs-btn-padding-x:14px; margin:8px 0 0; }
 
+/* find.php results table: BS5's 16px base made it larger than the old ~14px */
+#resultsTable { font-size:14px; }
+#resultsTable > thead > tr > th, #resultsTable > tbody > tr > td { padding:6px 8px; }
+
 /* Dropdown menu items: BS5's default hover is barely visible — make it clear */
 .dropdown-menu .dropdown-item:hover,
 .dropdown-menu .dropdown-item:focus { background-color:#0d6efd; color:#fff; }
