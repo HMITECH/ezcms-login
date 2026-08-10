@@ -104,15 +104,20 @@
 .btn-inverse{--bs-btn-color:#fff;--bs-btn-bg:#363636;--bs-btn-border-color:#363636;
   --bs-btn-hover-bg:#222;--bs-btn-hover-border-color:#222;--bs-btn-hover-color:#fff;}
 
-/* ---- BS2 .label -> BS5 .badge look ---- */
-.label{display:inline-block;padding:.28em .5em;font-size:.75em;font-weight:700;line-height:1;
-  color:#fff;background-color:#6c757d;border-radius:.25rem;white-space:nowrap;vertical-align:baseline;
-  text-decoration:none;}
-a.label.label-info,.label-info{background-color:#0d6efd;color:#fff;}
-.label-important,.label-danger{background-color:#dc3545;color:#fff;}
-.label-success{background-color:#198754;color:#fff;}
-.label-warning{background-color:#ffc107;color:#000;}
-.label-inverse{background-color:#343a40;color:#fff;}
+/* ---- BS2 .label -> BS5 .badge look (BS2 metrics: ~11.8px, tight padding) ---- */
+.label{display:inline-block;padding:2px 6px 3px;font-size:11.8px;font-weight:700;line-height:1.25;
+  color:#fff;background-color:#999;border-radius:3px;vertical-align:baseline;text-decoration:none;}
+a.label.label-info,.label-info{background-color:#2d6987;color:#fff;}  /* BS2 muted steel-blue */
+.label-important,.label-danger{background-color:#b94a48;color:#fff;}  /* BS2 muted red */
+.label-success{background-color:#468847;color:#fff;}
+.label-warning{background-color:#f89406;color:#fff;}
+.label-inverse{background-color:#333;color:#fff;}
+
+/* ---- BS2 .checkbox / .radio (dropped in BS5): make the label a block so the
+        following info-label wraps onto its own line, and keep the old size. ---- */
+.checkbox,.radio{display:block;font-size:14px;font-weight:400;line-height:1.4;min-height:20px;}
+.checkbox > input[type=checkbox],.radio > input[type=radio]{margin-right:6px;vertical-align:-2px;}
+.checkbox.inline,.radio.inline{display:inline-block;margin-right:12px;}
 
 /* ---- misc BS2 utilities BS5 renamed/removed ---- */
 .hide{display:none!important;}
