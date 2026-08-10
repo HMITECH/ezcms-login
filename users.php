@@ -36,7 +36,8 @@ $cms = new ezUsers();
 				<div id="revBlock">
 				  <table class="table table-striped"><thead>
 					<tr><th>#</th><th>Revised</th><th>Resource</th><th>Revision Message</th><th>Date &amp; Time</th></tr>
-				  </thead><tbody><?php echo $cms->revs['log']; ?></tbody></table>
+				  </thead><tbody id="revBody"><tr><td colspan="5" class="text-muted">Loading revisions …</td></tr></tbody></table>
+				  <div id="revPager"></div>
 				</div>
 
 				<div class="row">
@@ -128,6 +129,54 @@ $cms = new ezUsers();
 <script>
 	$("#top-bar li").removeClass('active');
 	$("#top-bar > li:eq(3)").addClass('active');
+
+	// ---- Lazy revision loader (read-only activity log): same pager as the
+	//      other pages, but no Fetch/Diff — rows arrive pre-built. ----
+	var ezRevs = {
+		page:1, pages:1, count:0, per:10,
+		url: function (extra) { return location.pathname + (location.search ? location.search + '&' : '?') + extra; },
+		load: function (page) {
+			$('#revBody').css('opacity', .4);
+			$.getJSON(ezRevs.url('ajaxRevs&page=' + (page || 1)), function (d) {
+				if (!d || !d.status) { $('#revBody').css('opacity', 1); return; }
+				ezRevs.page = d.page; ezRevs.pages = d.pages; ezRevs.count = d.count;
+				$('#revcount').text(d.count);
+				var html = '';
+				if (!d.rows.length) html = '<tr><td colspan="5">There are no revisions.</td></tr>';
+				d.rows.forEach(function (cells) { html += '<tr>' + cells + '</tr>'; });
+				$('#revBody').html(html).css('opacity', 1);
+				ezRevs.pager(d.rows.length);
+			}).fail(function () { $('#revBody').html('<tr><td colspan="5" class="text-danger">Failed to load revisions.</td></tr>').css('opacity', 1); });
+		},
+		pager: function (shown) {
+			var p = ezRevs.page, n = ezRevs.pages, per = ezRevs.per, total = ezRevs.count;
+			var start = total ? (p - 1) * per + 1 : 0, end = (p - 1) * per + shown, h = '';
+			if (n > 1) {
+				var item = function (pg, label, dis, act) {
+					return '<li class="page-item' + (dis ? ' disabled' : '') + (act ? ' active' : '') +
+						'"><a class="page-link" href="#" data-page="' + pg + '">' + label + '</a></li>';
+				};
+				h += '<ul class="pagination pagination-sm">' + item(p - 1, '«', p === 1);
+				var from = Math.max(1, p - 2), to = Math.min(n, p + 2);
+				if (from > 1) h += item(1, '1', false, false);
+				if (from > 2) h += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+				for (var i = from; i <= to; i++) h += item(i, i, false, i === p);
+				if (to < n - 1) h += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+				if (to < n) h += item(n, n, false, false);
+				h += item(p + 1, '»', p === n) + '</ul>';
+			}
+			h += '<span class="rcount">' + (total ? ('Showing ' + start + '–' + end + ' of ' + total) : 'No revisions') + '</span>';
+			$('#revPager').html(h);
+		}
+	};
+	$(function () {
+		ezRevs.load(1);
+		$('#revPager').on('click', 'a[data-page]', function (e) {
+			e.preventDefault();
+			var pg = parseInt($(this).data('page'), 10);
+			if (pg >= 1 && pg <= ezRevs.pages) ezRevs.load(pg);
+		});
+	});
 </script>
 </body>
 </html>

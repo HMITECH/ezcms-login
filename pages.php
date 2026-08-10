@@ -50,7 +50,8 @@ $cms = new ezPages();
 				<div id="revBlock">
 				  <table class="table table-striped"><thead>
 					<tr><th>#</th><th>User Name</th><th>Message</th><th>Date &amp; Time</th><th>Action</th></tr>
-				  </thead><tbody><?php echo $cms->revs['log']; ?></tbody></table>
+				  </thead><tbody id="revBody"><tr><td colspan="5" class="text-muted">Loading revisions …</td></tr></tbody></table>
+				  <div id="revPager"></div>
 				</div>
 
 			    <div class="tabbable tabs-top">
@@ -301,9 +302,9 @@ $cms = new ezPages();
 				<a id="collaspeBTN" href="#" class="btn btn-inverted btn-warning">Collaspe Unchanged</a>
 			</div></div>
 			<table id="diffviewerControld" width="100%" border="0">
-			  <tr><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
+			  <tr><td><select class="revSel"><option value="0">Current (Last Saved)</option></select>
 				</td><td><select disabled><option selected>Your Current Edit</option></select>
-				</td><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
+				</td><td><select class="revSel"><option value="0">Current (Last Saved)</option></select>
 			  </td></tr>
 			</table>
 			<div class="tabbable tabs-top">
@@ -483,7 +484,75 @@ $cms = new ezPages();
 	<script src="codemirror/mode/clike/clike.js"></script>
 	<script>
 
-	var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
+	var revJson = {};   // per-revision snapshot cache, fetched on demand
+
+	// ---- Lazy revision loader (page snapshots): count + a page of the log after
+	//      page render, paginated, smooth; a revision's full row on demand. ----
+	var ezRevs = {
+		page:1, pages:1, count:0, per:10,
+		url: function (extra) { return location.pathname + (location.search ? location.search + '&' : '?') + extra; },
+		load: function (page) {
+			$('#revBody').css('opacity', .4);
+			$.getJSON(ezRevs.url('ajaxRevs&page=' + (page || 1)), function (d) {
+				if (!d || !d.status) { $('#revBody').css('opacity', 1); return; }
+				ezRevs.page = d.page; ezRevs.pages = d.pages; ezRevs.count = d.count;
+				$('#revcount').text(d.count);
+				if (d.opts) {
+					var o = '<option value="0">Current (Last Saved)</option>';
+					d.opts.forEach(function (x) { o += '<option value="' + x.id + '">' + x.label + '</option>'; });
+					$('.revSel').html(o);
+				}
+				var html = '';
+				if (!d.rows.length) html = '<tr><td colspan="5">There are no revisions.</td></tr>';
+				d.rows.forEach(function (r) {
+					var purge = location.search + '&purgeRev=' + r.id;
+					html += '<tr><td>' + r.id + '</td><td>' + r.user + '</td><td>' + $('<i>').text(r.msg || '').html() +
+						'</td><td>' + r.date + '</td><td data-rev-id="' + r.id + '">' +
+						'<a href="#">Fetch</a> &nbsp;|&nbsp; <a href="#">Diff</a> &nbsp;|&nbsp; ' +
+						'<a href="' + purge + '" class="conf-del">Purge</a></td></tr>';
+				});
+				$('#revBody').html(html).css('opacity', 1);
+				ezRevs.pager(d.rows.length);
+			}).fail(function () { $('#revBody').html('<tr><td colspan="5" class="text-danger">Failed to load revisions.</td></tr>').css('opacity', 1); });
+		},
+		pager: function (shown) {
+			var p = ezRevs.page, n = ezRevs.pages, per = ezRevs.per, total = ezRevs.count;
+			var start = total ? (p - 1) * per + 1 : 0, end = (p - 1) * per + shown, h = '';
+			if (n > 1) {
+				var item = function (pg, label, dis, act) {
+					return '<li class="page-item' + (dis ? ' disabled' : '') + (act ? ' active' : '') +
+						'"><a class="page-link" href="#" data-page="' + pg + '">' + label + '</a></li>';
+				};
+				h += '<ul class="pagination pagination-sm">' + item(p - 1, '«', p === 1);
+				var from = Math.max(1, p - 2), to = Math.min(n, p + 2);
+				if (from > 1) h += item(1, '1', false, false);
+				if (from > 2) h += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+				for (var i = from; i <= to; i++) h += item(i, i, false, i === p);
+				if (to < n - 1) h += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+				if (to < n) h += item(n, n, false, false);
+				h += item(p + 1, '»', p === n) + '</ul>';
+			}
+			h += '<span class="rcount">' + (total ? ('Showing ' + start + '–' + end + ' of ' + total) : 'No revisions') + '</span>';
+			$('#revPager').html(h);
+		}
+	};
+	// fetch a revision's full row (cached) then run the callback
+	function ensureRev(id, cb) {
+		if (id in revJson) { cb(revJson[id]); return; }
+		$.getJSON(ezRevs.url('ajaxRevContent&revid=' + id), function (d) {
+			if (!d || !d.status) { alert('Could not load revision ' + id); return; }
+			revJson[id] = d;
+			cb(revJson[id]);
+		}).fail(function () { alert('Could not load revision ' + id); });
+	}
+	$(function () {
+		ezRevs.load(1);
+		$('#revPager').on('click', 'a[data-page]', function (e) {
+			e.preventDefault();
+			var pg = parseInt($(this).data('page'), 10);
+			if (pg >= 1 && pg <= ezRevs.pages) ezRevs.load(pg);
+		});
+	});
 
 	var myCodeMain, myCodeHeader, myCodeSide1, myCodeSide2, myCodeFooter, myCodeHead, myCodeNotes;
 
@@ -508,7 +577,7 @@ $cms = new ezPages();
 
 	// Function to set diff viewer code
 	var getDiffCode = function (index, element, field) {
-		if (index != '0') {
+		if (index != '0' && revJson[index]) {
 			$("#txtTemps").val(revJson[index][field]);
 			return $("#txtTemps").val();
 		} else return $(element).val();
@@ -640,46 +709,48 @@ $cms = new ezPages();
 	});
 
 	// Click on Fetch or DIFF in revision log
-	$('#revBlock a').click( function () {
-		var loadID = $(this).parent().data('rev-id');
-		if ($(this).text() == 'Fetch') {
-			// load all the REMAINING values here
-			$('#txtTitle').val(revJson[loadID]['title']);
-			$('#txtName').val(revJson[loadID]['pagename']);
-			$('#slparentid').val(revJson[loadID]['parentid']);  // Parent
-			$('#sllayouts').val(revJson[loadID]['layout']);  // Layout
-			$('#txtDesc').val(revJson[loadID]['description']);
-			$('#txtKeywords').val(revJson[loadID]['keywords']);
-			$('#txtURL').val(revJson[loadID]['url']);
+	$('#revBody').on('click', 'a', function () {
+		var action = $(this).text(), loadID = $(this).parent().data('rev-id');
+		if (action == 'Fetch') {
+			ensureRev(loadID, function (r) {
+				$('#txtTitle').val(r['title']);
+				$('#txtName').val(r['pagename']);
+				$('#slparentid').val(r['parentid']);  // Parent
+				$('#sllayouts').val(r['layout']);  // Layout
+				$('#txtDesc').val(r['description']);
+				$('#txtKeywords').val(r['keywords']);
+				$('#txtURL').val(r['url']);
 
-			$('#ckpublished').prop('checked', revJson[loadID]['published']*1);
-			$('#cknositemap').prop('checked', revJson[loadID]['nositemap']*1);
-			$('#ckuseheader').prop('checked', revJson[loadID]['useheader']*1);
-			$('#ckuseside').prop('checked', revJson[loadID]['useside']*1);
-			$('#ckusesider').prop('checked', revJson[loadID]['usesider']*1);
-			$('#ckusefooter').prop('checked', revJson[loadID]['usefooter']*1);
+				$('#ckpublished').prop('checked', r['published']*1);
+				$('#cknositemap').prop('checked', r['nositemap']*1);
+				$('#ckuseheader').prop('checked', r['useheader']*1);
+				$('#ckuseside').prop('checked', r['useside']*1);
+				$('#ckusesider').prop('checked', r['usesider']*1);
+				$('#ckusefooter').prop('checked', r['usefooter']*1);
 
-			myCodeMain.setValue(revJson[loadID]['maincontent']);
-			myCodeHeader.setValue(revJson[loadID]['headercontent']);
-			myCodeSide1.setValue(revJson[loadID]['sidecontent']);
-			myCodeSide2.setValue(revJson[loadID]['sidercontent']);
-			myCodeFooter.setValue(revJson[loadID]['footercontent']);
-			myCodeHead.setValue(revJson[loadID]['head']);
-			myCodeNotes.setValue(revJson[loadID]['notes']);
+				myCodeMain.setValue(r['maincontent']);
+				myCodeHeader.setValue(r['headercontent']);
+				myCodeSide1.setValue(r['sidecontent']);
+				myCodeSide2.setValue(r['sidercontent']);
+				myCodeFooter.setValue(r['footercontent']);
+				myCodeHead.setValue(r['head']);
+				myCodeNotes.setValue(r['notes']);
+			});
 			return false;
-		} else if ($(this).text() == 'Diff') {
-			var openB = $('#revTab').data('open');
-			// only populate if codeMain is empty
-			if (openB == 'content') $("#txtTemps").val(revJson[loadID]['maincontent']);
-			if (openB == 'header') $("#txtTemps").val(revJson[loadID]['headercontent']);
-			if (openB == 'sidebar') $("#txtTemps").val(revJson[loadID]['sidecontent']);
-			if (openB == 'siderbar') $("#txtTemps").val(revJson[loadID]['sidercontent']);
-			if (openB == 'footer') $("#txtTemps").val(revJson[loadID]['footercontent']);
-			if (openB == 'head') $("#txtTemps").val(revJson[loadID]['head']);
-			if (openB == 'notes') $("#txtTemps").val(revJson[loadID]['notes']);
-			codeRight= $("#txtTemps").val();
-			$('#diffviewerControld td:last-child select').val(loadID);
-			$('#showdiff').click();
+		} else if (action == 'Diff') {
+			ensureRev(loadID, function (r) {
+				var openB = $('#revTab').data('open');
+				if (openB == 'content') $("#txtTemps").val(r['maincontent']);
+				if (openB == 'header') $("#txtTemps").val(r['headercontent']);
+				if (openB == 'sidebar') $("#txtTemps").val(r['sidecontent']);
+				if (openB == 'siderbar') $("#txtTemps").val(r['sidercontent']);
+				if (openB == 'footer') $("#txtTemps").val(r['footercontent']);
+				if (openB == 'head') $("#txtTemps").val(r['head']);
+				if (openB == 'notes') $("#txtTemps").val(r['notes']);
+				codeRight = $("#txtTemps").val();
+				$('#diffviewerControld td:last-child select').val(loadID);
+				$('#showdiff').click();
+			});
 			return false;
 		}
 	});
@@ -716,32 +787,33 @@ $cms = new ezPages();
 
 	// Change Rev in Diff Viewer select dropdown
 	$('#diffviewerControld select').change( function () {
-		var revID2Load = $(this).val();
+		var revID2Load = $(this).val(), sel = $(this);
 		var openB = $('#revTab').data('open');
+
+		function apply(revContentLoad) {
+			if (sel.parent().index() == 0) codeLeft = revContentLoad;
+			else codeRight = revContentLoad;
+			codeMain = dv.editor().getValue();
+			buildDiffUI();
+		}
 
 		if (revID2Load == '0') {
 			var revContentLoad; // show last saved
-      if (openB == 'content') revContentLoad = $("#txtMain").val();
-      if (openB == 'header') revContentLoad = $("#txtHeader").val();
-      if (openB == 'sidebar') revContentLoad = $("#txtSide").val();
-      if (openB == 'siderbar') revContentLoad = $("#txtrSide").val();
-      if (openB == 'footer') revContentLoad = $("#txtfooter").val();
-      if (openB == 'head') revContentLoad = $("#txtHead").val();
-      if (openB == 'notes') revContentLoad = $("#txtNotes").val();
+			if (openB == 'content') revContentLoad = $("#txtMain").val();
+			if (openB == 'header') revContentLoad = $("#txtHeader").val();
+			if (openB == 'sidebar') revContentLoad = $("#txtSide").val();
+			if (openB == 'siderbar') revContentLoad = $("#txtrSide").val();
+			if (openB == 'footer') revContentLoad = $("#txtfooter").val();
+			if (openB == 'head') revContentLoad = $("#txtHead").val();
+			if (openB == 'notes') revContentLoad = $("#txtNotes").val();
+			apply(revContentLoad);
 		} else {
-      if (openB == 'content') $("#txtTemps").val(revJson[revID2Load]['maincontent']);
-      if (openB == 'header') $("#txtTemps").val(revJson[revID2Load]['headercontent']);
-      if (openB == 'sidebar') $("#txtTemps").val(revJson[revID2Load]['sidecontent']);
-      if (openB == 'siderbar') $("#txtTemps").val(revJson[revID2Load]['sidercontent']);
-      if (openB == 'footer') $("#txtTemps").val(revJson[revID2Load]['footercontent']);
-      if (openB == 'head') $("#txtTemps").val(revJson[revID2Load]['head']);
-      if (openB == 'notes') $("#txtTemps").val(revJson[revID2Load]['notes']);
-			var revContentLoad = $("#txtTemps").val();
+			ensureRev(revID2Load, function (r) {
+				var field = {content:'maincontent', header:'headercontent', sidebar:'sidecontent',
+					siderbar:'sidercontent', footer:'footercontent', head:'head', notes:'notes'}[openB];
+				apply(r[field]);
+			});
 		}
-		if ($(this).parent().index() == 0) codeLeft = revContentLoad;
-		else codeRight = revContentLoad;
-		codeMain = dv.editor().getValue();
-		buildDiffUI();
 	});
 
 	$('#myTab a').click(function (e) {
