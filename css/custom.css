@@ -194,6 +194,10 @@ nav.navbar.fixed-top { z-index:1030; }
 #editBlock.sidebar-collapsed > div:nth-child(2) { margin-left:0; }
 #editBlock.no-anim, #editBlock.no-anim > div { transition:none !important; }
 
+/* profile.php: bare label+input form (no .control-group) — give the inputs the
+   old BS2 bottom spacing so the fields aren't cramped */
+#frmPass .input-block-level { margin-bottom: 12px; }
+
 /* Dropdown menu items: BS5's default hover is barely visible — make it clear */
 .dropdown-menu .dropdown-item:hover,
 .dropdown-menu .dropdown-item:focus { background-color:#0d6efd; color:#fff; }

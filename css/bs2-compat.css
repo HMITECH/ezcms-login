@@ -46,6 +46,14 @@
    collapse to their content width (e.g. the Revision Message on setting.php). */
 .form-horizontal .controls{flex:1 1 auto;min-width:0;}
 
+/* BS2 blockquote header (bold title + muted em-dash hint with a left border),
+   used across the admin (profile.php, page/layout Save-As blockquotes, etc.).
+   BS5 only styles .blockquote, leaving bare <blockquote> plain. */
+blockquote{margin:0 0 16px;padding:2px 0 2px 14px;border-left:4px solid #e5e5e5;}
+blockquote > p{margin:0 0 3px;font-size:16px;font-weight:600;line-height:1.3;color:#333;}
+blockquote > small{display:block;color:#999;line-height:1.4;}
+blockquote > small::before{content:"\2014\00A0";}
+
 /* ---- input-prepend / input-append -> BS5 input-group ---- */
 .input-prepend,.input-append{display:flex;align-items:stretch;margin-bottom:.5rem;}
 .input-prepend > input,.input-append > input,
