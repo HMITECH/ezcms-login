@@ -2,20 +2,24 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+Security updates are provided for the current major release only. Older
+versions should upgrade before reporting an issue.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| 7.x     | :white_check_mark: |
+| < 7.0   | :x:                |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+Please **do not** open a public GitHub issue for security vulnerabilities.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+Report them privately by email to **support@hmi-tech.net** with:
+
+- A description of the vulnerability and its impact
+- Steps to reproduce (proof-of-concept where possible)
+- Affected version(s)
+
+You can expect an initial acknowledgement within a few business days. If the
+report is accepted, we will work on a fix and coordinate a disclosure timeline
+with you; if declined, we will explain why.

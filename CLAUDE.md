@@ -4,77 +4,93 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ezCMS is a developer-focused PHP CMS that gives direct code access via an integrated CodeMirror editor. The admin panel lives in this repo (`ezcms-login/`); the public-facing website lives at the web root (populated from `root_files/`).
+ezCMS is a developer-focused PHP CMS that gives direct code access via an integrated CodeMirror editor. This repo (`ezcms-login/`) is the CMS admin panel; the public-facing website is served from the web root (populated from `root_files/`).
 
 ## No Build System
 
-This is a runtime PHP project — no compilation, bundling, or package manager. PHP 8.0+ and MySQL/MariaDB are required. Redis is optional (disable in `config.php` to start).
+Runtime PHP project — no compilation, bundling, or package manager. PHP 8.0+ and MySQL/MariaDB required. Redis is optional (`useRedis => false` in `config.php`, the default).
+
+There is **no test framework and no test suite**. The only automated check is the GitHub Actions workflow `.github/workflows/phpmd.yml`, which runs PHPMD's `codesize` ruleset on every push/PR to `master` and uploads SARIF results (non-blocking — `continue-on-error: true`). To reproduce locally:
+
+```bash
+phpmd . text codesize
+```
 
 ## Installation / Setup
 
 ```bash
-# Clone and copy web root files
+# Copy web root files to the document root
 cp -r root_files/* /var/www/html/
 
-# Configure database
+# Place this admin repo as a SUBDIRECTORY of that web root
+#   e.g. /var/www/html/ezcms-login/
+
+# Configure database (lives at the web root, NOT in this repo)
 nano /var/www/html/config.php
 
 # Import latest schema
 mysql -u root -p dbname < _sql/ezcms.6.0.sql
 ```
 
-See `nginx.conf.sample` for web server configuration (URL rewriting, security blocks for `/includes/`, `/macros/`, `/filemanager/config/`).
+See `nginx.conf.sample` (or `root_files/.htaccess` for Apache) for URL rewriting and security blocks on `includes/`, `macros/`, and `filemanager/config/`.
 
 ## Architecture
 
-### Two-tier layout
+### Deployment layout — admin panel is a subfolder of the web root
 
-| Directory | Role |
-|-----------|------|
-| `ezcms-login/` (this repo) | CMS admin panel, served from a non-public path |
-| `root_files/` | Web root files copied to the site's document root |
+This is the single most important structural fact. `root_files/*` is copied to the document root; **this repo is then placed inside that same document root** (e.g. `/var/www/html/ezcms-login/`). The admin panel and the frontend therefore **share** `cms.class.php` and `config.php`, which live at the web root — one level above this repo.
+
+That is why the require paths climb out of the repo:
+- `class/ezcms.class.php` → `require_once("../cms.class.php")` (CWD is the repo root when an admin `*.php` page runs)
+- `scripts/login.php` → `require_once("../../cms.class.php")`
+
+`root_files/cms.class.php` defines `class db extends PDO` — the shared DB/Redis layer. Every admin class extends `ezCMS`, which extends `db`.
 
 ### Request flow
 
-**Admin:** `index.php` (login) → `scripts/login.php` (auth) → any `*.php` admin page → `class/*.class.php` → `root_files/cms.class.php` (PDO layer) → MySQL
+**Admin:** `index.php` (login form) → `scripts/login.php` (auth) → any top-level `*.php` admin page → `class/*.class.php` → `db` (PDO) → MySQL
 
-**Frontend:** `root_files/index.php` → URL lookup in DB → assemble layout + includes + blocks → optional Redis cache → output HTML
+**Frontend:** `root_files/index.php` → `getSiteData()` + `getPageData($uri)` → sets template vars (`$maincontent`, `$header`, `$sidebar`, `$siderbar`, `$footer`) → `include($page['layout'])` → HTML
+
+### Admin page convention
+
+Each top-level admin `*.php` page follows the same shape: `require_once` its class → `new ez<Thing>()` (the constructor handles the whole POST lifecycle) → render HTML with a left file/page tree (`$cms->treehtml`), a CodeMirror editor, and a self-posting `<form>` carrying `$cms->csrfField()`. To add a content-type screen, mirror an existing pair like `includes.php` + `class/includes.class.php`.
 
 ### Core classes (`class/`)
 
-- `ezcms.class.php` — base class; all others extend or use it
-- `pages.class.php` — page CRUD and publish/draft lifecycle
-- `layouts.class.php`, `includes.class.php`, `styles.class.php`, `scripts.class.php` — manage the corresponding content types
-- `macros.class.php` / `macro.class.php` — batch content processing
-- `controller.class.php` — URL routing rules
-- `users.class.php` — admin user management and session handling
-- `find.class.php` — site-wide search
+- `ezcms.class.php` — base class; constructor enforces login, starts session, verifies CSRF on POST, loads the logged-in user, handles editor theme/bg-color AJAX
+- `pages.class.php` — page CRUD and publish/draft lifecycle (largest class)
+- `layouts.class.php`, `includes.class.php`, `styles.class.php`, `scripts.class.php` — the corresponding content types
+- `macros.class.php` / `macro.class.php` — macro management vs. single-macro execution
+- `controller.class.php` — URL routing rules; `redirect.class.php` — 301 redirects
+- `users.class.php`, `profile.class.php`, `settings.class.php`, `find.class.php` (site-wide search)
 
-### Database / caching
+### Frontend / DB / caching (`root_files/cms.class.php`)
 
-- PDO abstraction in `root_files/cms.class.php` (extends PDO directly)
-- Redis keys: `{dbName}-site`, `{dbName}-page-{uri}` with ~6-hour TTL
-- Git-style revision history stored in `git_pages` and `git_files` tables
+- **Page `id = 2` is the 404 page.** Unpublished pages return 404 to the public but render for logged-in admins.
+- On a miss, `getPageDatabase()` checks the `redirects` table for a 301; otherwise logs to `log404`.
+- Redis keys (when enabled): `{dbName}-site`, `{dbName}-page-{uri}`, `{dbName}-404page`. **TTLs are long, not short** — site/404 cached ~15 days (`3600*12*30`), pages ~5 days (`3600*12*10`). Editing content must invalidate these keys or changes won't appear.
+- Git-style revision history is captured into the `git_pages` / `git_files` tables (see `pageRevision()` in `ezcms.class.php`).
 
 ### Macro system
 
-Macros are standalone PHP scripts in `root_files/macros/`. Each receives page content, transforms it, and returns the result. The execution engine is `root_files/macros/macro.php`. New macros just need to be dropped into that directory.
+Macros are standalone PHP scripts in `root_files/macros/`. `root_files/macros/macro.php` is the template/engine and documents the contract: each macro receives one content block's HTML parsed into `$html` via **PHP Simple HTML DOM** (`include/simple-html-dom.php`), mutates it, and returns the result. Blocks available: `maincontent`, `sidecontent`, `sidercontent`. Drop a new file into `root_files/macros/` to register a macro.
 
 ### CodeMirror editor
 
-Lives in `codemirror/`. Supports PHP, HTML, CSS, JS, XML with themes (monokai, dracula, etc.), code folding, diff/merge, and git-style revision comparison via `js/gitFileCode.js`.
+Lives in `codemirror/`. Supports PHP, HTML, CSS, JS, XML with themes (monokai, dracula, …), code folding, and diff/merge for git-style revision comparison via `js/gitFileCode.js`.
 
 ## Security conventions
 
-- CSRF tokens required on all state-changing forms
-- Passwords hashed with SHA2(512)
-- `X-Frame-Options: deny` and CSP headers set in `include/head.php`
-- PDO prepared statements throughout — do not concatenate user input into queries
-- Nginx config blocks direct access to `includes/`, `macros/`, `filemanager/config/`
+- **Auth:** passwords hashed with MySQL `SHA2(?, 512)`. Legacy plaintext rows are matched (`passwd = SHA2(?,512) OR passwd = ?`) and transparently re-hashed on next successful login (`scripts/login.php`).
+- **CSRF:** `csrfToken()` / `csrfField()` / `verifyCsrf()` in `ezcms.class.php`; the base constructor auto-verifies on every POST, so every state-changing form must emit `$cms->csrfField()`.
+- **Headers:** `X-Frame-Options: deny` + CSP `frame-ancestors 'none'` (set in `index.php` and `include/head.php`).
+- **SQL:** use PDO prepared statements for anything touching user input. Note: parts of the legacy codebase still concatenate trusted/internal IDs into `query()` strings — do not extend that pattern to user-supplied values.
+- Web-server config blocks direct access to `includes/`, `macros/`, `filemanager/config/`.
 
 ## PHP style
 
-Recent codebase modernisation targets PHP 8.0+ idioms:
-- Use `[]` instead of `array()`
-- Use short array destructuring `[$a, $b] = ...` instead of `list()`
-- Match/arrow functions where they improve clarity
+Codebase is being modernised to PHP 8.0+ idioms:
+- `[]` instead of `array()`
+- short destructuring `[$a, $b] = ...` instead of `list()`
+- match/arrow functions where they improve clarity
