@@ -156,13 +156,19 @@ nav.navbar.fixed-top { z-index:1030; }
 
 /* "Save As" dropdown forms in the editor toolbars (layouts/includes/styles/
    scripts/macros). BS5 dropdown-menus are ~160px, which crushed the
-   prefix + input + suffix group down to an unusable sliver. Widen the menu and
-   let the text input flex to fill the remaining space. */
-#SaveAsDDM { min-width:340px; }
+   prefix + input + suffix group to an unusable sliver. Widen the menu, restore
+   the compact BS2 blockquote header, and let the text input flex to fill. */
+#SaveAsDDM { min-width:290px; font-size:13px; }
+#SaveAsDDM blockquote { margin:0 0 10px; padding:2px 0 2px 12px; border-left:4px solid #e5e5e5; }
+#SaveAsDDM blockquote p { margin:0 0 2px; font-size:16px; font-weight:600; line-height:1.2; color:#333; }
+#SaveAsDDM blockquote small { display:block; color:#999; font-size:12px; line-height:1.3; }
+#SaveAsDDM blockquote small::before { content:"\2014\00A0"; }
 #SaveAsDDM .input-prepend,
 #SaveAsDDM .input-append { display:flex; flex-wrap:nowrap; width:100%; margin-bottom:0; }
-#SaveAsDDM .add-on { flex:0 0 auto; white-space:nowrap; }
-#SaveAsDDM input[type="text"] { flex:1 1 auto; min-width:0; width:auto; }
+#SaveAsDDM .add-on { flex:0 0 auto; white-space:nowrap; font-size:13px; padding:5px 8px; }
+#SaveAsDDM input[type="text"] { flex:1 1 auto; min-width:0; width:auto; font-size:13px; padding:5px 8px; height:auto; }
+/* keep the Save Now button compact (markup uses btn-large on some pages) */
+#SaveAsDDM .btn { --bs-btn-font-size:14px; --bs-btn-padding-y:5px; --bs-btn-padding-x:14px; margin:8px 0 0; }
 
 /* Dropdown menu items: BS5's default hover is barely visible — make it clear */
 .dropdown-menu .dropdown-item:hover,
