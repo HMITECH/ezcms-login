@@ -38,7 +38,7 @@
    inline-block by default). */
 .input-block-level{display:block;width:100%;box-sizing:border-box;}
 .control-group{margin-bottom:16px;}
-.control-label{display:block;width:100%;margin-bottom:5px;font-weight:400;font-size:14px;color:#333;}
+.control-label{display:block;width:100%;margin-bottom:5px;font-weight:400;color:#333;}
 .countDisplay{float:right;}
 .form-horizontal .control-group{display:flex;flex-wrap:wrap;align-items:center;}
 .form-horizontal .control-label{width:160px;padding-right:12px;text-align:right;margin-bottom:0;}
@@ -50,7 +50,7 @@
 .input-prepend,.input-append{display:flex;align-items:stretch;margin-bottom:.5rem;}
 .input-prepend > input,.input-append > input,
 .input-prepend > .uneditable-input,.input-append > .uneditable-input{flex:1 1 auto;width:1%;}
-.add-on{display:flex;align-items:center;padding:.375rem .75rem;font-size:1rem;
+.add-on{display:flex;align-items:center;padding:.375rem .75rem;
   color:#212529;background-color:#e9ecef;border:1px solid #ced4da;}
 .input-prepend .add-on{border-right:0;}
 .input-append .add-on{border-left:0;}
@@ -115,7 +115,7 @@ a.label.label-info,.label-info{background-color:#2d6987;color:#fff;}  /* BS2 mut
 
 /* ---- BS2 .checkbox / .radio (dropped in BS5): make the label a block so the
         following info-label wraps onto its own line, and keep the old size. ---- */
-.checkbox,.radio{display:block;font-size:14px;font-weight:400;line-height:1.4;min-height:20px;}
+.checkbox,.radio{display:block;font-weight:400;line-height:1.4;min-height:20px;}
 .checkbox > input[type=checkbox],.radio > input[type=radio]{margin-right:6px;vertical-align:-2px;}
 .checkbox.inline,.radio.inline{display:inline-block;margin-right:12px;}
 
@@ -144,8 +144,9 @@ a.label.label-info,.label-info{background-color:#2d6987;color:#fff;}  /* BS2 mut
         e.g. find.php "WHERE", macro.php "Select Macro". Style the items like
         BS5 dropdown items and the <ul class="nav"> toolbar toggle like a muted
         control rather than a blue underlined link. ---- */
+.dropdown-menu{--bs-dropdown-font-size:.875rem;}  /* BS5 defaults to 1rem */
 .dropdown-menu > li > a:not(.dropdown-item){display:block;padding:4px 16px;color:#212529;
-  text-decoration:none;white-space:nowrap;font-size:14px;font-weight:400;}
+  text-decoration:none;white-space:nowrap;font-weight:400;}
 .dropdown-menu > li > a:not(.dropdown-item):hover,
 .dropdown-menu > li > a:not(.dropdown-item):focus{background-color:#0d6efd;color:#fff;}
 .dropdown-menu > li.active > a:not(.dropdown-item){background-color:#0b5ed7;color:#fff;font-weight:600;}
@@ -153,11 +154,11 @@ a.label.label-info,.label-info{background-color:#2d6987;color:#fff;}  /* BS2 mut
 
 .navbar-inner .nav{display:inline-flex;align-items:center;margin:0;padding:0;list-style:none;}
 .navbar-inner .nav > li{list-style:none;}
-.navbar-inner .nav > li > a{color:#555;text-decoration:none;font-size:14px;padding:4px 10px;display:inline-block;}
+.navbar-inner .nav > li > a{color:#555;text-decoration:none;padding:4px 10px;display:inline-block;}
 .navbar-inner .nav > li > a:hover,.navbar-inner .nav > li > a:focus{color:#000;text-decoration:none;}
 
 /* BS2 .brand used as a static info label in editor toolbars (find.php findinlbl) */
-.navbar-inner .brand{color:#777;text-decoration:none;font-size:14px;font-weight:400;padding:4px 8px;cursor:default;}
+.navbar-inner .brand{color:#777;text-decoration:none;font-weight:400;padding:4px 8px;cursor:default;}
 .navbar-inner .brand:hover{color:#777;text-decoration:none;}
 
 /* ---- BS2 editor toolbar bar (.navbar > .navbar-inner) ----

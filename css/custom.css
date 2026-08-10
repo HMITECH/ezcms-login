@@ -43,9 +43,8 @@ a.label.label-info { font-size: 1em; border-radius: 0;padding: 3px 6px; }
 #divbgcolor { padding:10px; }
 #left-tree > li > a,
 #left-tree > li > ul > li > a { font-weight: bold; }
-/* Treeview links: BS5 enlarged the base font, underlined links and brightened
-   the colour — restore the compact, non-underlined BS2 look. */
-#left-tree { font-size: 14px; }
+/* Treeview links: BS5 underlined links and brightened the colour — restore the
+   compact, non-underlined BS2 look. */
 #left-tree a { color: #0088cc; text-decoration: none; }
 #left-tree a:hover { color: #005580; text-decoration: none; }
 #left-tree a.label-info, #left-tree a.label.label-info { color:#fff; background-color:#2d6987; }
@@ -174,8 +173,7 @@ nav.navbar.fixed-top { z-index:1030; }
 /* keep the Save Now button compact (markup uses btn-large on some pages) */
 #SaveAsDDM .btn { --bs-btn-font-size:14px; --bs-btn-padding-y:5px; --bs-btn-padding-x:14px; margin:8px 0 0; }
 
-/* find.php results table: BS5's 16px base made it larger than the old ~14px */
-#resultsTable { font-size:14px; }
+/* find.php results table: keep cells compact (BS5 default cell padding is looser) */
 #resultsTable > thead > tr > th, #resultsTable > tbody > tr > td { padding:6px 8px; }
 
 /* Dropdown menu items: BS5's default hover is barely visible — make it clear */
