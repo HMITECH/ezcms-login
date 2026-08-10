@@ -31,20 +31,30 @@ document.querySelectorAll('.tooltipme2').forEach(function (el) { new bootstrap.T
 $('.conf-del').click( function () {
 	return confirm('Confirm Delete Action ?');
 });
-// expand srink edit block size
-$('#toggleEditSize').click( function () {
-	var btnIcon = $(this).find('i');
-	if (btnIcon.hasClass('icon-chevron-left')) {
-		btnIcon.removeClass('icon-chevron-left').addClass('icon-chevron-right');
-		$('#editBlock > div').eq(0).hide()
-		$('#editBlock > div').eq(1).removeClass('span9')
-	} else {
-		btnIcon.removeClass('icon-chevron-right').addClass('icon-chevron-left');
-		$('#editBlock > div').eq(0).show()
-		$('#editBlock > div').eq(1).addClass('span9')
+// expand/shrink the edit block — animated collapse, remembered across reloads
+(function () {
+	var KEY = 'ezcmsSidebarCollapsed';
+	var $eb = $('#editBlock');
+	function setState(collapsed, animate) {
+		if (!$eb.length) return;
+		if (!animate) $eb.addClass('no-anim');           // apply instantly on load
+		$eb.toggleClass('sidebar-collapsed', collapsed);
+		$('#toggleEditSize i')
+			.toggleClass('icon-chevron-right', collapsed)
+			.toggleClass('icon-chevron-left', !collapsed);
+		if (!animate) { void $eb[0].offsetHeight; $eb.removeClass('no-anim'); }
 	}
-	return false;
-});
+	// restore the saved state on load, without animating
+	setState(localStorage.getItem(KEY) === '1', false);
+	$('#toggleEditSize').click( function () {
+		var collapsed = !$eb.hasClass('sidebar-collapsed');
+		setState(collapsed, true);
+		localStorage.setItem(KEY, collapsed ? '1' : '0');
+		// let CodeMirror re-measure once the pane finishes resizing
+		setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 300);
+		return false;
+	});
+})();
 // Open the treeview to selected item
 var tSelc = $('#left-tree a.label-info').closest('li');
 while ( tSelc.length ) {
