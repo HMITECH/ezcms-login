@@ -36,6 +36,7 @@ $cms = new ezSettings();
 		border-color:var(--cm-bg);
 	}
 	/* Revision-log pager: page numbers on the left, count info on the right */
+	#revBody { transition:opacity .18s ease; }   /* smooth dim while a page loads */
 	#revPager { display:flex; align-items:center; margin-top:8px; }
 	#revPager .pagination { margin:0; }
 	#revPager .rcount { margin-left:auto; color:#777; font-size:13px; }
@@ -158,9 +159,11 @@ var revJson = {};   // per-revision content cache, filled on demand via AJAX
 var ezRevs = {
 	page: 1, pages: 1, count: 0, per: 10,
 	load: function (page) {
-		$('#revBody').html('<tr><td colspan="5" class="text-muted">Loading …</td></tr>');
+		// keep the current rows in place (just dim them) so the table doesn't
+		// collapse-then-expand while the next page is fetched — smooth swap
+		$('#revBody').css('opacity', .4);
 		$.getJSON('setting.php?ajaxRevs&page=' + (page || 1), function (d) {
-			if (!d || !d.status) return;
+			if (!d || !d.status) { $('#revBody').css('opacity', 1); return; }
 			ezRevs.page = d.page; ezRevs.pages = d.pages; ezRevs.count = d.count;
 			$('#revcount').text(d.count);
 			if (d.opts) {   // populate the diff dropdowns (all revisions), once
@@ -176,9 +179,9 @@ var ezRevs = {
 					'<a href="#">Fetch</a> &nbsp;|&nbsp; <a href="#">Diff</a> &nbsp;|&nbsp; ' +
 					'<a href="?purgeRev=' + r.id + '" class="conf-del">Purge</a></td></tr>';
 			});
-			$('#revBody').html(html);
+			$('#revBody').html(html).css('opacity', 1);
 			ezRevs.pager(d.rows.length);
-		}).fail(function () { $('#revBody').html('<tr><td colspan="5" class="text-danger">Failed to load revisions.</td></tr>'); });
+		}).fail(function () { $('#revBody').html('<tr><td colspan="5" class="text-danger">Failed to load revisions.</td></tr>').css('opacity', 1); });
 	},
 	// page numbers (left) + "Showing x–y of N" (pushed right via CSS margin-left:auto)
 	pager: function (shown) {
