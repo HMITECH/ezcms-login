@@ -19,16 +19,16 @@
 .icon-check::before{content:"\f633";}
 .icon-flag::before{content:"\f3cc";}
 .icon-tint::before{content:"\f30d";}
-.icon-file::before{content:"\f392";}
+.icon-file::before{content:"\f369";}
 .icon-fast-forward::before{content:"\f55e";}
-.icon-question-sign::before{content:"\f505";}
+.icon-question-sign::before{content:"\f504";}
 .icon-align-left::before{content:"\f5c7";}
 .icon-download::before{content:"\f30a";}
 .icon-th-large::before{content:"\f3fc";}
 .icon-chevron-left::before{content:"\f284";}
 .icon-share-alt::before{content:"\f52d";}
 .icon-resize-small::before{content:"\f149";}
-.icon-folder-open::before{content:"\f3d8";}
+.icon-folder-open::before{content:"\f3d1";}
 .icon-step-forward::before{content:"\f558";}
 .icon-cog::before{content:"\f3e5";}
 .icon-th-list::before{content:"\f478";}
@@ -38,3 +38,8 @@
 .icon-plus::before{content:"\f64d";}
 .icon-off::before{content:"\f4ff";}
 .icon-font::before{content:"\f3da";}
+/* tree/status icons that were previously unmapped */
+.icon-home::before{content:"\f424";}       /* house-fill */
+.icon-ban-circle::before{content:"\f6a3";} /* ban-fill */
+.icon-globe::before{content:"\f3ee";}
+.icon-indent-left::before{content:"\f5c5";}
