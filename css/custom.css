@@ -157,6 +157,13 @@ nav.navbar.fixed-top { z-index:1030; }
 .dropdown-menu .dropdown-item:focus { background-color:#0d6efd; color:#fff; }
 .dropdown-menu .dropdown-item:hover i,
 .dropdown-menu .dropdown-item:focus i { color:#fff; }
+/* current-page item: per-page JS toggles .active on the submenu <li>, which BS5
+   doesn't style (it styles .dropdown-item.active on the <a>). Highlight it. */
+#top-bar .dropdown-menu > li.active > .dropdown-item,
+.dropdown-menu .dropdown-item.active {
+	background-color:#0b5ed7; color:#fff; font-weight:600;
+}
+#top-bar .dropdown-menu > li.active > .dropdown-item i { color:#fff; }
 div.white-boxed {
 	background: rgba(255, 255, 255, 0.95);
 	border: 1px solid #000;
