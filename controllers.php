@@ -31,7 +31,7 @@ $cms = new ezController();
 			<div class="navbar">
 				<div class="navbar-inner">
 					<input type="submit" name="Submit" value="Save Changes" class="btn btn-primary ">
-					<a id="showrevs" href="#" class="btn btn-secondary">Revision Log <sup><?php echo $cms->revs['cnt']; ?></sup></a>
+					<a id="showrevs" href="#" class="btn btn-secondary">Revision Log <sup id="revcount">…</sup></a>
 					<a id="showdiff" href="#" class="btn btn-inverted btn-danger">Review DIFF</a>
 				</div>
 			</div>
@@ -39,7 +39,8 @@ $cms = new ezController();
 			<div id="revBlock">
 			  <table class="table table-striped"><thead>
 				<tr><th>#</th><th>User Name</th><th>Message</th><th>Date &amp; Time</th><th>Action</th></tr>
-			  </thead><tbody><?php echo $cms->revs['log']; ?></tbody></table>
+			  </thead><tbody id="revBody"><tr><td colspan="5" class="text-muted">Loading revisions …</td></tr></tbody></table>
+					  <div id="revPager"></div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="txtGitMsg">Revision Message</label>
@@ -95,9 +96,9 @@ $cms = new ezController();
 				<a id="collaspeBTN" href="#" class="btn btn-inverted btn-warning">Collaspe Unchanged</a>
 			</div></div>
 			<table id="diffviewerControld" width="100%" border="0">
-			  <tr><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
+			  <tr><td><select class="revSel"><option value="0">Current (Last Saved)</option></select>
 				</td><td><select disabled><option selected>Your Current Edit</option></select>
-				</td><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
+				</td><td><select class="revSel"><option value="0">Current (Last Saved)</option></select>
 			  </td></tr>
 			</table>
 			<div id="diffviewer"></div>
@@ -140,7 +141,7 @@ $cms = new ezController();
 <script src="codemirror/mode/clike/clike.js"></script>
 <script src="codemirror/mode/php/php.js"></script>
 <script>
-	var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
+	// revJson is managed by gitFileCode.js (revisions are lazy-loaded)
 	var	cmTheme = '<?php echo $_SESSION["CMTHEME"]; ?>',
 		cmMode = 'application/x-httpd-php';
 </script>

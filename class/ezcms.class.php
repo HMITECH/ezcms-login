@@ -127,6 +127,43 @@ class ezCMS extends db {
 		}
 		return false;
 	}
+
+	// AJAX: paginated git_files revisions for one file (metadata only) + count +
+	// the diff-select options. Content is fetched separately, on demand.
+	// Used by layouts/includes/styles/scripts/macros/controllers (single content).
+	protected function ajaxFileRevs($fullpath) {
+		$per  = 10;
+		$page = max(1, (int)($_GET['page'] ?? 1));
+		$fp   = $this->quote($fullpath);
+		$total  = (int)$this->query("SELECT COUNT(*) FROM `git_files` WHERE `fullpath` = $fp")->fetchColumn();
+		$pages  = max(1, (int)ceil($total / $per));
+		$offset = ($page - 1) * $per;
+		$rows = [];
+		foreach ($this->query("SELECT git_files.id, git_files.revmsg, git_files.createdon, users.username
+				FROM git_files LEFT JOIN users ON users.id = git_files.createdby
+				WHERE git_files.fullpath = $fp ORDER BY git_files.id DESC LIMIT $per OFFSET $offset") as $e) {
+			$rows[] = ['id'=>$e['id'], 'user'=>$e['username'], 'msg'=>$e['revmsg'], 'date'=>$e['createdon']];
+		}
+		$opts = null;
+		if ($page === 1) {
+			$opts = [];
+			foreach ($this->query("SELECT git_files.id, git_files.createdon, users.username
+					FROM git_files LEFT JOIN users ON users.id = git_files.createdby
+					WHERE git_files.fullpath = $fp ORDER BY git_files.id DESC") as $e) {
+				$opts[] = ['id'=>$e['id'], 'label'=>'#'.$e['id'].' '.$e['createdon'].' ('.$e['username'].')'];
+			}
+		}
+		die(json_encode(['status'=>true, 'count'=>$total, 'page'=>$page, 'pages'=>$pages,
+			'rows'=>$rows, 'opts'=>$opts]));
+	}
+
+	// AJAX: a single git_files revision's content
+	protected function ajaxFileRevContent() {
+		$id = (int)($_GET['id'] ?? 0);
+		$c  = $this->query("SELECT `content` FROM `git_files` WHERE `id` = $id LIMIT 1")->fetchColumn();
+		if ($c === false) die(json_encode(['status'=>false]));
+		die(json_encode(['status'=>true, 'content'=>$c]));
+	}
 	
 	// Fetch a value from a table on single condition like id
 	protected function chkTableForVal($table, $chkFld, $retFld, $val) {

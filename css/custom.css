@@ -98,12 +98,17 @@ a.label.label-info { font-size: 1em; border-radius: 0;padding: 3px 6px; }
 	border-radius: 4px 0 4px 0;
 }
 /* #pagesBlock keeps the scroll box (it can list many pages); the revision log
-   shows only the recent few, so it expands naturally. */
+   is paginated, so it expands naturally. */
 #pagesBlock {
     max-height: 300px;
     overflow-x: hidden;
     overflow-y: auto;
 }
+/* Revision-log pager (shared): page numbers left, "Showing x–y of N" right */
+#revPager { display:flex; align-items:center; margin-top:8px; }
+#revPager .pagination { margin:0; }
+#revPager .rcount { margin-left:auto; color:#777; font-size:13px; }
+#revBody { transition:opacity .18s ease; }   /* smooth dim while a page loads */
 #revBlock .nomargin { margin-bottom:0; }
 #revBlock:after        {content: "Revision Log" ;}
 #pagesBlock:after      {content: "Pages using this layout" ;}

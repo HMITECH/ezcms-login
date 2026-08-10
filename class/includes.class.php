@@ -65,8 +65,9 @@ class ezIncludes extends ezCMS {
 		// Get the Usage of this include in layouts
 		$this->getUsage();		
 		
-		// Get the Revisions
-		$this->getRevisions();
+		// Revisions load lazily via AJAX after the page renders
+		if (isset($_GET['ajaxRevs']))       $this->ajaxFileRevs('includes/'.$this->filename);
+		if (isset($_GET['ajaxRevContent'])) $this->ajaxFileRevContent();
 
 	}
 	

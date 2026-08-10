@@ -35,11 +35,6 @@ $cms = new ezSettings();
 		background:var(--cm-bg); color:var(--cm-fg);
 		border-color:var(--cm-bg);
 	}
-	/* Revision-log pager: page numbers on the left, count info on the right */
-	#revBody { transition:opacity .18s ease; }   /* smooth dim while a page loads */
-	#revPager { display:flex; align-items:center; margin-top:8px; }
-	#revPager .pagination { margin:0; }
-	#revPager .rcount { margin-left:auto; color:#777; font-size:13px; }
 	</style>
 
 </head><body>

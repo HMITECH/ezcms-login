@@ -59,8 +59,9 @@ class ezLayouts extends ezCMS {
 		// Get the Usage of this layout in pages
 		$this->getPageUse();		
 		
-		// Get the Revisions
-		$this->getRevisions();
+		// Revisions load lazily via AJAX after the page renders
+		if (isset($_GET['ajaxRevs']))       $this->ajaxFileRevs($this->filename);
+		if (isset($_GET['ajaxRevContent'])) $this->ajaxFileRevContent();
 	}
 	
 	// Function to Update the Defaults Settings
