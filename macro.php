@@ -70,7 +70,7 @@ $cms = new ezMacro();
 				<button id="toggleEditSize" class="btn pull-left"><i class="icon-chevron-left"></i></button>
 				<ul class="nav pull-left">
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i>
+						<a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"><i class="icon-cog"></i>
 							<strong>Select Macro</strong> <b class="caret"></b></a>
 						<ul id="macro-select" class="dropdown-menu">
 							<?php echo $cms->macrolist; ?>

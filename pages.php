@@ -54,15 +54,15 @@ $cms = new ezPages();
 				</div>
 
 			    <div class="tabbable tabs-top">
-				<ul class="nav nav-tabs" id="myTab">
-				  <li class="active"><a href="#d-main">Main</a></li>
-				  <li><a href="#d-content">Content</a></li>
-				  <li><a href="#d-header">Header</a></li>
-				  <li><a href="#d-sidebar">Aside 1</a></li>
-				  <li><a href="#d-siderbar">Aside 2</a></li>
-				  <li><a href="#d-footers">Footer</a></li>
-				  <li><a href="#d-head">Head</a></li>
-				  <li><a href="#d-notes">Notes</a></li>
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+				  <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#d-main">Main</a></li>
+				  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#d-content">Content</a></li>
+				  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#d-header">Header</a></li>
+				  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#d-sidebar">Aside 1</a></li>
+				  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#d-siderbar">Aside 2</a></li>
+				  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#d-footers">Footer</a></li>
+				  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#d-head">Head</a></li>
+				  <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#d-notes">Notes</a></li>
 				</ul>
 
 				<div class="tab-content">
@@ -77,9 +77,9 @@ $cms = new ezPages();
 									<input type="text" id="txtURL" name="url"
 										placeholder="Enter the URL of the page"
 										title="Enter the URL of the page here. Empty to auto generate."
-										data-toggle="tooltip" <?php if ( ($cms->id == 1) || ($cms->id == 2) ) echo 'readonly';?>
+										data-bs-toggle="tooltip" <?php if ( ($cms->id == 1) || ($cms->id == 2) ) echo 'readonly';?>
 										value="<?php echo $cms->page['url']; ?>"
-										data-placement="top" minlength="2"
+										data-bs-placement="top" minlength="2"
 										class="input-block-level tooltipme2"><br>
 										<label class="checkbox" <?php if ($cms->id < 3) echo 'style="display:none"';?>>
 										  <input id="ckpublished" name="published" type="checkbox"
@@ -101,9 +101,9 @@ $cms = new ezPages();
 									<input type="text" id="txtGitMsg" name="revmsg"
 										placeholder="Enter a description for this revision"
 										title="Enter a message to describe this revision."
-										data-toggle="tooltip"
+										data-bs-toggle="tooltip"
 										value="" <?php if ($cms->id == 'new') echo 'readonly';?>
-										data-placement="top" minlength="2"
+										data-bs-placement="top" minlength="2"
 										class="input-block-level tooltipme2"><br>
 									<?php echo $cms->page['publishedMsg']; ?>
 									<label class="checkbox checkRight" <?php if ($cms->id < 3) echo 'style="display:none"';?>>
@@ -124,9 +124,9 @@ $cms = new ezPages();
 									<input type="text" id="txtTitle" name="title"
 										placeholder="Enter the title of the page"
 										title="Enter the full title of the page here."
-										data-toggle="tooltip"
+										data-bs-toggle="tooltip"
 										value="<?php echo $cms->page['title']; ?>"
-										data-placement="top" minlength="2"
+										data-bs-placement="top" minlength="2"
 										class="input-block-level tooltipme2 countme2" required>
 								</div>
 							  </div>
@@ -138,9 +138,9 @@ $cms = new ezPages();
 									<input type="text" id="txtName" name="pagename"
 										placeholder="Enter the name of the page"
 										title="Enter the full name of the page here."
-										data-toggle="tooltip"
+										data-bs-toggle="tooltip"
 										value="<?php echo $cms->page['pagename']; ?>"
-										data-placement="top" minlength="2"
+										data-bs-placement="top" minlength="2"
 										class="input-block-level tooltipme2 countme2" required>
 								</div>
 							  </div>
@@ -174,9 +174,9 @@ $cms = new ezPages();
 										name="priority" min="0" max="999"
 										placeholder="Search priority 0 - 999"
 										title="Seach Priority of the page"
-										data-toggle="tooltip"
+										data-bs-toggle="tooltip"
 										value="<?php echo $cms->page['priority']; ?>"
-										data-placement="top"
+										data-bs-placement="top"
 										class="input-block-level tooltipme2" 
 										required>
 								</div>
@@ -189,9 +189,9 @@ $cms = new ezPages();
 									<input type="text" id="txtimg" name="img"
 										placeholder="Featured image of the page"
 										title="Enter the full path of the image here."
-										data-toggle="tooltip"
+										data-bs-toggle="tooltip"
 										value="<?php echo $cms->page['img']; ?>"
-										data-placement="top" minlength="2"
+										data-bs-placement="top" minlength="2"
 										class="input-block-level tooltipme2">
 								</div>
 							  </div>
@@ -206,8 +206,8 @@ $cms = new ezPages();
 									<textarea name="description" rows="5" id="txtDesc"
 										placeholder="Enter the description of the page"
 										title="Enter the description of the page here, this is VERY IMPORTANT for SEO. Do not duplicate on all pages"
-										data-toggle="tooltip"
-										data-placement="top"
+										data-bs-toggle="tooltip"
+										data-bs-placement="top"
 										class="input-block-level tooltipme2 countme2"><?php echo $cms->page['description']; ?></textarea>
 								</div>
 							  </div>
@@ -219,8 +219,8 @@ $cms = new ezPages();
 									<textarea name="keywords" rows="5" id="txtKeywords"
 										placeholder="Enter the Keywords of the page"
 										title="Enter list keywords of the page here, not so important now but use it anyways. Do not stuff keywords"
-										data-toggle="tooltip"
-										data-placement="top"
+										data-bs-toggle="tooltip"
+										data-bs-placement="top"
 										class="input-block-level tooltipme2 countme2"><?php echo $cms->page['keywords']; ?></textarea>
 								</div>
 							  </div>
@@ -308,13 +308,13 @@ $cms = new ezPages();
 			</table>
 			<div class="tabbable tabs-top">
 				<ul class="nav nav-tabs" id="revTab" data-open="content">
-				  <li class="active"><a href="#" data-block="content">Content</a></li>
-				  <li><a href="#" data-block="header">Header</a></li>
-				  <li><a href="#" data-block="sidebar">Aside 1</a></li>
-				  <li><a href="#" data-block="siderbar">Aside 2</a></li>
-				  <li><a href="#" data-block="footer">Footer</a></li>
-				  <li><a href="#" data-block="head">Head</a></li>
-				  <li><a href="#" data-block="notes">Notes</a></li>
+				  <li class="nav-item"><a class="nav-link active" href="#" data-block="content">Content</a></li>
+				  <li class="nav-item"><a class="nav-link" href="#" data-block="header">Header</a></li>
+				  <li class="nav-item"><a class="nav-link" href="#" data-block="sidebar">Aside 1</a></li>
+				  <li class="nav-item"><a class="nav-link" href="#" data-block="siderbar">Aside 2</a></li>
+				  <li class="nav-item"><a class="nav-link" href="#" data-block="footer">Footer</a></li>
+				  <li class="nav-item"><a class="nav-link" href="#" data-block="head">Head</a></li>
+				  <li class="nav-item"><a class="nav-link" href="#" data-block="notes">Notes</a></li>
 				</ul>
 				<div id="diffviewer"></div>
 			</div><!-- /tabbable  -->
@@ -456,9 +456,8 @@ $cms = new ezPages();
 
 	});
 
-	$('#myTab a').click(function (e) {
-		e.preventDefault();
-		$(this).tab('show');
+	// Bootstrap 5 shows the tab natively via data-bs-toggle="tab"; just track the hash.
+	$('#myTab a').on('shown.bs.tab', function (e) {
 		window.location.hash = $(this).attr('href').replace('#d-','');
 	});
 
@@ -598,7 +597,9 @@ $cms = new ezPages();
 
 		buildDiffUI();
 		$('#revTab').data('open', block)
-		$(this).tab('show');
+		// custom (paneless) tabs: manage the active state ourselves (no BS5 .tab plugin)
+		$('#revTab .nav-link').removeClass('active');
+		$(this).addClass('active');
 
 	});
 

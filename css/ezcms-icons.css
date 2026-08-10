@@ -1,0 +1,40 @@
+/* ezCMS legacy glyphicon -> Bootstrap Icons compatibility shim.
+ * Lets existing <i class="icon-*"> markup render modern Bootstrap Icons
+ * without touching every admin template. Generated during the BS2->BS5 migration. */
+[class^="icon-"], [class*=" icon-"]{
+  display:inline-block;font-family:"bootstrap-icons"!important;font-style:normal;
+  font-weight:normal!important;font-variant:normal;text-transform:none;line-height:1;
+  vertical-align:-.125em;-webkit-font-smoothing:antialiased;}
+/* neutralize BS2 sprite leftovers */
+.icon-white{filter:none;}
+.icon-play::before{content:"\f4f5";}
+.icon-chevron-right::before{content:"\f285";}
+.icon-retweet::before{content:"\f130";}
+.icon-search::before{content:"\f52a";}
+.icon-pencil::before{content:"\f4cb";}
+.icon-edit::before{content:"\f4ca";}
+.icon-comment::before{content:"\f268";}
+.icon-share::before{content:"\f52e";}
+.icon-user::before{content:"\f4e1";}
+.icon-check::before{content:"\f633";}
+.icon-flag::before{content:"\f3cc";}
+.icon-tint::before{content:"\f30d";}
+.icon-file::before{content:"\f392";}
+.icon-fast-forward::before{content:"\f55e";}
+.icon-question-sign::before{content:"\f505";}
+.icon-align-left::before{content:"\f5c7";}
+.icon-download::before{content:"\f30a";}
+.icon-th-large::before{content:"\f3fc";}
+.icon-chevron-left::before{content:"\f284";}
+.icon-share-alt::before{content:"\f52d";}
+.icon-resize-small::before{content:"\f149";}
+.icon-folder-open::before{content:"\f3d8";}
+.icon-step-forward::before{content:"\f558";}
+.icon-cog::before{content:"\f3e5";}
+.icon-th-list::before{content:"\f478";}
+.icon-list-alt::before{content:"\f228";}
+.icon-fast-backward::before{content:"\f552";}
+.icon-step-backward::before{content:"\f564";}
+.icon-plus::before{content:"\f64d";}
+.icon-off::before{content:"\f4ff";}
+.icon-font::before{content:"\f3da";}

@@ -1,0 +1,94 @@
+/* -------------------------------------------------------------------------
+ * ezCMS Bootstrap 2 -> 5 transitional compatibility layer.
+ *
+ * Bootstrap 5 dropped the Bootstrap 2 fluid grid (.row-fluid/.spanN), the
+ * float helpers (.pull-left/right), the old form/input-group classes and
+ * .well/.hero-unit. This sheet re-implements just those legacy classes on
+ * top of BS5 so admin screens that still use BS2 markup keep their layout
+ * while they are migrated to native BS5 one screen at a time. Delete once no
+ * .spanN / .row-fluid / input-prepend markup remains.
+ * ------------------------------------------------------------------------- */
+
+/* ---- BS2 fluid grid (12 col, flex reimplementation) ---- */
+.row-fluid { display:flex; flex-wrap:wrap; width:100%; margin:0 -10px; }
+.row-fluid > [class*="span"] { padding:0 10px; box-sizing:border-box; min-height:1px; }
+.span1{width:8.3333%}   .span2{width:16.6666%} .span3{width:25%}
+.span4{width:33.3333%}  .span5{width:41.6666%} .span6{width:50%}
+.span7{width:58.3333%}  .span8{width:66.6666%} .span9{width:75%}
+.span10{width:83.3333%} .span11{width:91.6666%} .span12{width:100%}
+.offset1{margin-left:8.3333%} .offset2{margin-left:16.6666%} .offset3{margin-left:25%}
+.offset4{margin-left:33.3333%}
+@media (max-width:767px){
+  .row-fluid{flex-direction:column;margin:0;}
+  .row-fluid > [class*="span"]{width:100%;padding:0;}
+}
+
+/* ---- float helpers ---- */
+.pull-right{float:right!important;}
+.pull-left{float:left!important;}
+
+/* ---- forms ---- */
+.input-block-level{display:block;width:100%;box-sizing:border-box;}
+.control-group{margin-bottom:1rem;}
+.control-label{display:inline-block;margin-bottom:.35rem;font-weight:600;}
+.form-horizontal .control-group{display:flex;flex-wrap:wrap;align-items:center;}
+.form-horizontal .control-label{width:160px;padding-right:12px;text-align:right;}
+
+/* ---- input-prepend / input-append -> BS5 input-group ---- */
+.input-prepend,.input-append{display:flex;align-items:stretch;margin-bottom:.5rem;}
+.input-prepend > input,.input-append > input,
+.input-prepend > .uneditable-input,.input-append > .uneditable-input{flex:1 1 auto;width:1%;}
+.add-on{display:flex;align-items:center;padding:.375rem .75rem;font-size:1rem;
+  color:#212529;background-color:#e9ecef;border:1px solid #ced4da;}
+.input-prepend .add-on{border-right:0;}
+.input-append .add-on{border-left:0;}
+
+/* ---- misc BS2 containers ---- */
+.well{padding:1rem;background-color:#f8f9fa;border:1px solid #e9ecef;border-radius:.375rem;
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.05);}
+.hero-unit{padding:2rem;margin-bottom:2rem;background-color:#eee;border-radius:.5rem;}
+
+/* ---- BS2 plain .btn had a grey default; BS5 .btn (no variant) is transparent.
+        Give un-themed buttons a light look; themed .btn-* keep BS5 styling.   ---- */
+.btn:not([class*="btn-"]){
+  --bs-btn-color:#212529; --bs-btn-bg:#f5f5f5; --bs-btn-border-color:#ccc;
+  --bs-btn-hover-color:#212529; --bs-btn-hover-bg:#e6e6e6; --bs-btn-hover-border-color:#adadad;
+  --bs-btn-active-bg:#d4d4d4; --bs-btn-active-border-color:#8c8c8c;
+}
+/* BS2 sizing aliases */
+.btn-large{--bs-btn-padding-y:.5rem;--bs-btn-padding-x:1rem;--bs-btn-font-size:1.25rem;}
+.btn-small{--bs-btn-padding-y:.25rem;--bs-btn-padding-x:.5rem;--bs-btn-font-size:.875rem;}
+.btn-mini{--bs-btn-padding-y:.1rem;--bs-btn-padding-x:.4rem;--bs-btn-font-size:.75rem;}
+.btn-inverse{--bs-btn-color:#fff;--bs-btn-bg:#363636;--bs-btn-border-color:#363636;
+  --bs-btn-hover-bg:#222;--bs-btn-hover-border-color:#222;--bs-btn-hover-color:#fff;}
+
+/* ---- BS2 .label -> BS5 .badge look ---- */
+.label{display:inline-block;padding:.28em .5em;font-size:.75em;font-weight:700;line-height:1;
+  color:#fff;background-color:#6c757d;border-radius:.25rem;white-space:nowrap;vertical-align:baseline;
+  text-decoration:none;}
+a.label.label-info,.label-info{background-color:#0d6efd;color:#fff;}
+.label-important,.label-danger{background-color:#dc3545;color:#fff;}
+.label-success{background-color:#198754;color:#fff;}
+.label-warning{background-color:#ffc107;color:#000;}
+.label-inverse{background-color:#343a40;color:#fff;}
+
+/* ---- misc BS2 utilities BS5 renamed/removed ---- */
+.hide{display:none!important;}
+.muted{color:#6c757d!important;}
+.input-medium{width:150px;}
+.input-large{width:210px;}
+.input-small{width:90px;}
+.table-condensed > :not(caption) > * > *{padding:.25rem;}
+
+/* ---- BS2 progress (.progress > .bar) -> BS5 (.progress > .progress-bar) ---- */
+.progress{height:1.25rem;background-color:#e9ecef;border-radius:.375rem;overflow:hidden;}
+.progress .bar{display:flex;align-items:center;justify-content:center;height:100%;
+  color:#fff;background-color:#0d6efd;text-align:center;white-space:nowrap;
+  transition:width .6s ease;}
+.progress-striped .bar,.progress .bar.progress-bar-striped{
+  background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,
+  transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+  background-size:1rem 1rem;}
+
+/* ---- BS2 .pager ---- */
+.pager{display:flex;justify-content:center;gap:.5rem;list-style:none;padding:0;margin:1rem 0;}

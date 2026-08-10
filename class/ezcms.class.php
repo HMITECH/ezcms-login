@@ -78,9 +78,10 @@ class ezCMS extends db {
 	
 	// this function will set the formatted html to display
 	public function setMsgHTML ($class, $caption, $subcaption ) {
-		$this->msg = '<div class="alert alert-'.$class.'">
-			<button type="button" class="close" data-dismiss="alert">x</button>
-			<strong>'.$caption.'</strong><br>'.$subcaption.'</div>';
+		$class = ($class === 'error') ? 'danger' : $class; // BS5 renamed alert-error -> alert-danger
+		$this->msg = '<div class="alert alert-'.$class.' alert-dismissible fade show">
+			<strong>'.$caption.'</strong><br>'.$subcaption.'
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 	}
 
 	// this function will set the formatted html to display

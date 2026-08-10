@@ -41,7 +41,7 @@ $cms = new ezMacros();
 							<a href="#" id="toggleEditSize" class="btn"><i class="icon-chevron-left"></i></a>
 							<input type="submit" name="Submit" id="Submit" value="Save Changes" class="btn btn-primary">
 							<div class="btn-group">
-							  <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+							  <a class="btn dropdown-toggle btn-info" data-bs-toggle="dropdown" href="#">
 								Save As <span class="caret"></span></a>
 							  <div id="SaveAsDDM" class="dropdown-menu" style="padding:10px;">
 								<blockquote>
@@ -80,8 +80,8 @@ $cms = new ezMacros();
 							<input type="text" id="txtGitMsg" name="revmsg"
 								placeholder="Enter a description for this revision"
 								title="Enter a message to describe this revision."
-								data-toggle="tooltip" value=""
-								data-placement="top" minlength="2"
+								data-bs-toggle="tooltip" value=""
+								data-bs-placement="top" minlength="2"
 								class="input-block-level tooltipme2">
 						</div>
 					</div>

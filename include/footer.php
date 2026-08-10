@@ -19,12 +19,14 @@
     </div>
   </div>
 </div>
-<script src="js/bootstrap.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="js/bs-typeahead-compat.js"></script>
 <script src="js/jquery.treeview/jquery.treeview.js"></script>
 <script src="js/pass-strength.js"></script>
 <script>(function($) {
 "use strict";
-$('.tooltipme2').tooltip();
+// Bootstrap 5 tooltips (opt-in, no jQuery plugin)
+document.querySelectorAll('.tooltipme2').forEach(function (el) { new bootstrap.Tooltip(el); });
 // Confirm Delete Action
 $('.conf-del').click( function () {
 	return confirm('Confirm Delete Action ?');
