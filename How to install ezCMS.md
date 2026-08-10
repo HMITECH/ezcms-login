@@ -57,7 +57,7 @@ Set `use_redis` to `false` to start. You can enable it later once Redis is avail
 Use the latest SQL file from the `_sql/` directory:
 
 ```bash
-mysql -u dbuser -p'yourpassword' dbname < login/_sql/ezcms.6.0.sql
+mysql -u dbuser -p'yourpassword' dbname < login/_sql/ezcms.7.0.sql
 ```
 
 ### 6. Configure your web server

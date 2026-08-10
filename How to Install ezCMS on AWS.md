@@ -96,7 +96,7 @@ sudo chmod -R 755 /var/www/html
 ### Import the database schema
 
 ```bash
-mysql -u dbcms -p'StrongPasswordHere' dbsite < login/_sql/ezcms.6.0.sql
+mysql -u dbcms -p'StrongPasswordHere' dbsite < login/_sql/ezcms.7.0.sql
 ```
 
 ### Configure the application

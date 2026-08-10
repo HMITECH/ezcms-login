@@ -27,7 +27,7 @@ root (one level *above* the admin panel). The admin code reaches them with
 └── ezcms-login/                   <- ADMIN PANEL (this repo), a subfolder
     ├── index.php  pages.php  ...
     ├── class/  codemirror/  filemanager/  ...
-    └── _sql/ezcms.6.0.sql
+    └── _sql/ezcms.7.0.sql
 ```
 
 ---
@@ -76,7 +76,7 @@ sudo chmod 640 /var/www/ezcms/config.php     # secret: strip world-read
 ## 4. Create the database
 
 The schema does **not** create the database — create it first, then import.
-`_sql/ezcms.6.0.sql` is the latest schema and seeds a `site` row, four `pages`
+`_sql/ezcms.7.0.sql` is the latest schema and seeds a `site` row, four `pages`
 (incl. the id=2 404 page), and one admin user.
 
 ```bash
@@ -89,7 +89,7 @@ FLUSH PRIVILEGES;
 SQL
 
 # Import the schema INTO that database
-sudo mysql ezcms < /opt/ezcms/ezcms-login/_sql/ezcms.6.0.sql
+sudo mysql ezcms < /opt/ezcms/ezcms-login/_sql/ezcms.7.0.sql
 ```
 
 **Seeded admin login:** `admin@localhost` / `ezcms`. The password is stored in

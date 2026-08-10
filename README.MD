@@ -106,7 +106,7 @@ cp -r ezcms-login/root_files/* /var/www/html/
 cp -r ezcms-login /var/www/html/ezcms-login
 
 # Import the latest database schema
-mysql -u root -p dbname < ezcms-login/_sql/ezcms.6.0.sql
+mysql -u root -p dbname < ezcms-login/_sql/ezcms.7.0.sql
 
 # Configure database credentials (and Redis, if used)
 nano /var/www/html/config.php

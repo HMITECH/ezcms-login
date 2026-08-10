@@ -29,7 +29,7 @@ cp -r root_files/* /var/www/html/
 nano /var/www/html/config.php
 
 # Import latest schema
-mysql -u root -p dbname < _sql/ezcms.6.0.sql
+mysql -u root -p dbname < _sql/ezcms.7.0.sql
 ```
 
 See `nginx.conf.sample` (or `root_files/.htaccess` for Apache) for URL rewriting and security blocks on `includes/`, `macros/`, and `filemanager/config/`.
