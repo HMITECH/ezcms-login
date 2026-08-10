@@ -86,9 +86,9 @@ class ezSettings extends ezCMS {
 	}
 	
 	// Function to fetch the revisions
-	// AJAX: paginated revision metadata + total count + select options (no content)
+	// AJAX: recent revision metadata + total count + select options (no content)
 	private function ajaxRevs() {
-		$per  = 15;
+		$per  = 10;   // the log shows only the most recent few
 		$page = max(1, (int)($_GET['page'] ?? 1));
 		$cur  = (int)$this->site['id'];
 

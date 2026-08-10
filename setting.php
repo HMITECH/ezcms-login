@@ -76,7 +76,6 @@ $cms = new ezSettings();
 			  <table class="table table-striped"><thead>
 				<tr><th>#</th><th>User Name</th><th>Message</th><th>Date &amp; Time</th><th>Action</th></tr>
 			  </thead><tbody id="revBody"><tr><td colspan="5" class="text-muted">Loading revisions …</td></tr></tbody></table>
-			  <div id="revPager"></div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="txtGitMsg">Revision Message</label>
@@ -149,17 +148,15 @@ $cms = new ezSettings();
 
 var revJson = {};   // per-revision content cache, filled on demand via AJAX
 
-// ---- Lazy revision loader: fetch count + a page of the log after page load,
-//      paginate on demand, and fetch a revision's content only when needed. ----
+// ---- Lazy revision loader: after page load, fetch the total count, the diff
+//      options and the most recent revisions; content is fetched on demand. ----
 var ezRevs = {
-	page: 1, pages: 1, per: 15,
-	load: function (page) {
+	load: function () {
 		$('#revBody').html('<tr><td colspan="5" class="text-muted">Loading …</td></tr>');
-		$.getJSON('setting.php?ajaxRevs&page=' + (page || 1), function (d) {
+		$.getJSON('setting.php?ajaxRevs&page=1', function (d) {
 			if (!d || !d.status) return;
-			ezRevs.page = d.page; ezRevs.pages = d.pages;
 			$('#revcount').text(d.count);
-			if (d.opts) {   // populate the diff dropdowns once
+			if (d.opts) {   // populate the diff dropdowns (all revisions)
 				var o = '<option value="0">Current (Last Saved)</option>';
 				d.opts.forEach(function (x) { o += '<option value="' + x.id + '">' + x.label + '</option>'; });
 				$('#revSelL, #revSelR').html(o);
@@ -173,25 +170,7 @@ var ezRevs = {
 					'<a href="?purgeRev=' + r.id + '" class="conf-del">Purge</a></td></tr>';
 			});
 			$('#revBody').html(html);
-			ezRevs.pager();
 		}).fail(function () { $('#revBody').html('<tr><td colspan="5" class="text-danger">Failed to load revisions.</td></tr>'); });
-	},
-	pager: function () {
-		if (ezRevs.pages <= 1) { $('#revPager').empty(); return; }
-		var p = ezRevs.page, n = ezRevs.pages, h = '<ul class="pagination pagination-sm" style="margin:8px 0 0">';
-		var item = function (pg, label, dis, act) {
-			return '<li class="page-item' + (dis ? ' disabled' : '') + (act ? ' active' : '') +
-				'"><a class="page-link" href="#" data-page="' + pg + '">' + label + '</a></li>';
-		};
-		h += item(p - 1, '«', p === 1);
-		var from = Math.max(1, p - 2), to = Math.min(n, p + 2);
-		if (from > 1) h += item(1, '1', false, false);
-		if (from > 2) h += '<li class="page-item disabled"><span class="page-link">…</span></li>';
-		for (var i = from; i <= to; i++) h += item(i, i, false, i === p);
-		if (to < n - 1) h += '<li class="page-item disabled"><span class="page-link">…</span></li>';
-		if (to < n) h += item(n, n, false, false);
-		h += item(p + 1, '»', p === n) + '</ul>';
-		$('#revPager').html(h);
 	}
 };
 // fetch a revision's content (cached) then run the callback
@@ -203,14 +182,7 @@ function ensureRev(id, cb) {
 		cb(revJson[id]);
 	}).fail(function () { alert('Could not load revision ' + id); });
 }
-$(function () {
-	ezRevs.load(1);
-	$('#revPager').on('click', 'a[data-page]', function (e) {
-		e.preventDefault();
-		var pg = parseInt($(this).data('page'), 10);
-		if (pg >= 1 && pg <= ezRevs.pages) ezRevs.load(pg);
-	});
-});
+$(function () { ezRevs.load(); });
 
 var myCodeHeader, myCodeSide1, myCodeSide2, myCodeFooter;
 
