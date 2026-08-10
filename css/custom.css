@@ -8,6 +8,10 @@
  */
 @charset "utf-8";
 html,body {height: 100%;}
+/* Admin base font: Bootstrap 5 defaults to 16px; the old (BS2) admin was 14px.
+   Set it once here so the whole panel matches, instead of per-component. */
+:root { --bs-body-font-size: .875rem; }
+body { font-size: 14px; }
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover,
 a,button { outline:none; }
 .btn, .btn-group { 	margin-right:10px; }
