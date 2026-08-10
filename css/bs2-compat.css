@@ -60,6 +60,33 @@
   box-shadow:inset 0 1px 1px rgba(0,0,0,.05);}
 .hero-unit{padding:2rem;margin-bottom:2rem;background-color:#eee;border-radius:.5rem;}
 
+/* ---- BS2 button sizing: BS5 defaults (~38px/16px) are bigger than the old
+        ~30px/14px. Trim the base .btn back via BS5's button CSS variables.
+        .btn-large/.btn-mini and #cm-toolbar override this as needed.       ---- */
+.btn{
+  --bs-btn-padding-y:4px; --bs-btn-padding-x:12px;
+  --bs-btn-font-size:14px; --bs-btn-line-height:1.43; --bs-btn-border-radius:4px;
+}
+/* ---- BS2 variant colours (BS5's are brighter / different hues) ---- */
+.btn-primary{--bs-btn-bg:#0044cc;--bs-btn-border-color:#003bb3;
+  --bs-btn-hover-bg:#003bb3;--bs-btn-hover-border-color:#0033a3;
+  --bs-btn-active-bg:#0033a3;--bs-btn-active-border-color:#002d91;}
+.btn-success{--bs-btn-bg:#51a351;--bs-btn-border-color:#499249;
+  --bs-btn-hover-bg:#499249;--bs-btn-hover-border-color:#418241;--bs-btn-active-bg:#418241;}
+.btn-info{--bs-btn-color:#fff;--bs-btn-bg:#2f96b4;--bs-btn-border-color:#2a87a1;
+  --bs-btn-hover-color:#fff;--bs-btn-hover-bg:#2a87a1;--bs-btn-hover-border-color:#25778e;
+  --bs-btn-active-bg:#25778e;--bs-btn-active-color:#fff;}
+.btn-warning{--bs-btn-color:#fff;--bs-btn-bg:#f89406;--bs-btn-border-color:#df8505;
+  --bs-btn-hover-color:#fff;--bs-btn-hover-bg:#df8505;--bs-btn-hover-border-color:#c67704;
+  --bs-btn-active-bg:#c67704;--bs-btn-active-color:#fff;}
+.btn-danger{--bs-btn-bg:#da4f49;--bs-btn-border-color:#c43c35;
+  --bs-btn-hover-bg:#c43c35;--bs-btn-hover-border-color:#b02b25;--bs-btn-active-bg:#b02b25;}
+/* BS2 had no .btn-secondary, so those buttons (Revisions, modal Close) fell back
+   to the light-grey default. BS5 makes them dark grey — restore the light look. */
+.btn-secondary{--bs-btn-color:#333;--bs-btn-bg:#f5f5f5;--bs-btn-border-color:#ccc;
+  --bs-btn-hover-color:#333;--bs-btn-hover-bg:#e6e6e6;--bs-btn-hover-border-color:#adadad;
+  --bs-btn-active-color:#333;--bs-btn-active-bg:#d4d4d4;--bs-btn-active-border-color:#8c8c8c;}
+
 /* ---- BS2 plain .btn had a grey default; BS5 .btn (no variant) is transparent.
         Give un-themed buttons a light look; themed .btn-* keep BS5 styling.   ---- */
 .btn:not([class*="btn-"]){
@@ -71,6 +98,9 @@
 .btn-large{--bs-btn-padding-y:.5rem;--bs-btn-padding-x:1rem;--bs-btn-font-size:1.25rem;}
 .btn-small{--bs-btn-padding-y:.25rem;--bs-btn-padding-x:.5rem;--bs-btn-font-size:.875rem;}
 .btn-mini{--bs-btn-padding-y:.1rem;--bs-btn-padding-x:.4rem;--bs-btn-font-size:.75rem;}
+/* keep BS5's own size modifiers working despite the smaller base .btn above */
+.btn-lg{--bs-btn-padding-y:.5rem;--bs-btn-padding-x:1rem;--bs-btn-font-size:1.25rem;--bs-btn-border-radius:.5rem;--bs-btn-line-height:1.5;}
+.btn-sm{--bs-btn-padding-y:.25rem;--bs-btn-padding-x:.5rem;--bs-btn-font-size:.875rem;--bs-btn-border-radius:.25rem;}
 .btn-inverse{--bs-btn-color:#fff;--bs-btn-bg:#363636;--bs-btn-border-color:#363636;
   --bs-btn-hover-bg:#222;--bs-btn-hover-border-color:#222;--bs-btn-hover-color:#fff;}
 
