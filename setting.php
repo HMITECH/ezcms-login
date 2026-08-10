@@ -382,7 +382,7 @@ $('#myTab a').click(function (e) {
 	myCodeSide2.refresh();
 	myCodeFooter.refresh();
 });
-$(window).load( function () {
+$(window).on('load', function () {
 	myCodeHeader = CodeMirror.fromTextArea(document.getElementById("txtHeader"), codeMirrorJSON);
 	myCodeFooter = CodeMirror.fromTextArea(document.getElementById("txtFooter"), codeMirrorJSON);
 	myCodeSide1 = CodeMirror.fromTextArea(document.getElementById("txtSide"), codeMirrorJSON);

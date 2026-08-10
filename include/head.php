@@ -28,5 +28,5 @@
 <link rel="stylesheet" href="codemirror/addon/dialog/dialog.css">
 <link href="css/custom.css" rel="stylesheet">
 <link href="css/ezcms-icons.css" rel="stylesheet">
-<script src="js/jquery-3.7.1.min.js"></script>
-<script src="js/jquery-migrate-3.5.0.min.js"></script>
+<script src="js/jquery-4.0.0.min.js"></script>
+<script src="js/jquery-migrate-4.0.2.min.js"></script>
