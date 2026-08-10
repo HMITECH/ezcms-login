@@ -50,9 +50,9 @@ $cms = new ezSettings();
 				<a id="collaspeBTN" href="#" class="btn btn-inverted btn-warning">Collaspe Unchanged</a>
 			</div></div>
 			<table id="diffviewerControld" width="100%" border="0">
-			  <tr><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
+			  <tr><td><select id="revSelL"><option value="0">Current (Last Saved)</option></select>
 				</td><td><select disabled><option selected>Your Current Edit</option></select>
-				</td><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
+				</td><td><select id="revSelR"><option value="0">Current (Last Saved)</option></select>
 			  </td></tr>
 			</table>
 			<div id="difBlockHeader"><div id="diffviewerHeader"></div></div>
@@ -67,7 +67,7 @@ $cms = new ezSettings();
 			<div class="navbar">
 				<div class="navbar-inner">
 					<input type="submit" name="Submit" value="Save Changes" class="btn btn-primary">
-					<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup><?php echo $cms->revs['cnt']; ?></sup></a>
+					<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup id="revcount">…</sup></a>
 					<a id="showdiff" href="#" class="btn btn-inverted btn-danger">Review DIFF</a>
 				</div>
 			</div>
@@ -75,7 +75,8 @@ $cms = new ezSettings();
 			<div id="revBlock">
 			  <table class="table table-striped"><thead>
 				<tr><th>#</th><th>User Name</th><th>Message</th><th>Date &amp; Time</th><th>Action</th></tr>
-			  </thead><tbody><?php echo $cms->revs['log']; ?></tbody></table>
+			  </thead><tbody id="revBody"><tr><td colspan="5" class="text-muted">Loading revisions …</td></tr></tbody></table>
+			  <div id="revPager"></div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="txtGitMsg">Revision Message</label>
@@ -146,7 +147,70 @@ $cms = new ezSettings();
 <script src="codemirror/mode/clike/clike.js"></script>
 <script>
 
-var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
+var revJson = {};   // per-revision content cache, filled on demand via AJAX
+
+// ---- Lazy revision loader: fetch count + a page of the log after page load,
+//      paginate on demand, and fetch a revision's content only when needed. ----
+var ezRevs = {
+	page: 1, pages: 1, per: 15,
+	load: function (page) {
+		$('#revBody').html('<tr><td colspan="5" class="text-muted">Loading …</td></tr>');
+		$.getJSON('setting.php?ajaxRevs&page=' + (page || 1), function (d) {
+			if (!d || !d.status) return;
+			ezRevs.page = d.page; ezRevs.pages = d.pages;
+			$('#revcount').text(d.count);
+			if (d.opts) {   // populate the diff dropdowns once
+				var o = '<option value="0">Current (Last Saved)</option>';
+				d.opts.forEach(function (x) { o += '<option value="' + x.id + '">' + x.label + '</option>'; });
+				$('#revSelL, #revSelR').html(o);
+			}
+			var html = '';
+			if (!d.rows.length) html = '<tr><td colspan="5">There are no revisions.</td></tr>';
+			d.rows.forEach(function (r) {
+				html += '<tr><td>' + r.id + '</td><td>' + r.user + '</td><td>' + $('<i>').text(r.msg || '').html() +
+					'</td><td>' + r.date + '</td><td data-rev-id="' + r.id + '">' +
+					'<a href="#">Fetch</a> &nbsp;|&nbsp; <a href="#">Diff</a> &nbsp;|&nbsp; ' +
+					'<a href="?purgeRev=' + r.id + '" class="conf-del">Purge</a></td></tr>';
+			});
+			$('#revBody').html(html);
+			ezRevs.pager();
+		}).fail(function () { $('#revBody').html('<tr><td colspan="5" class="text-danger">Failed to load revisions.</td></tr>'); });
+	},
+	pager: function () {
+		if (ezRevs.pages <= 1) { $('#revPager').empty(); return; }
+		var p = ezRevs.page, n = ezRevs.pages, h = '<ul class="pagination pagination-sm" style="margin:8px 0 0">';
+		var item = function (pg, label, dis, act) {
+			return '<li class="page-item' + (dis ? ' disabled' : '') + (act ? ' active' : '') +
+				'"><a class="page-link" href="#" data-page="' + pg + '">' + label + '</a></li>';
+		};
+		h += item(p - 1, '«', p === 1);
+		var from = Math.max(1, p - 2), to = Math.min(n, p + 2);
+		if (from > 1) h += item(1, '1', false, false);
+		if (from > 2) h += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+		for (var i = from; i <= to; i++) h += item(i, i, false, i === p);
+		if (to < n - 1) h += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+		if (to < n) h += item(n, n, false, false);
+		h += item(p + 1, '»', p === n) + '</ul>';
+		$('#revPager').html(h);
+	}
+};
+// fetch a revision's content (cached) then run the callback
+function ensureRev(id, cb) {
+	if (revJson[id]) { cb(revJson[id]); return; }
+	$.getJSON('setting.php?ajaxRevContent&id=' + id, function (d) {
+		if (!d || !d.status) { alert('Could not load revision ' + id); return; }
+		revJson[id] = { header: d.header, side1: d.side1, side2: d.side2, footer: d.footer };
+		cb(revJson[id]);
+	}).fail(function () { alert('Could not load revision ' + id); });
+}
+$(function () {
+	ezRevs.load(1);
+	$('#revPager').on('click', 'a[data-page]', function (e) {
+		e.preventDefault();
+		var pg = parseInt($(this).data('page'), 10);
+		if (pg >= 1 && pg <= ezRevs.pages) ezRevs.load(pg);
+	});
+});
 
 var myCodeHeader, myCodeSide1, myCodeSide2, myCodeFooter;
 
@@ -270,37 +334,33 @@ $('#showdiff').click( function () {
 	return false;
 });
 
-// Click on Fetch or DIFF in revision log
-$('#revBlock a').click( function () {
+// Click on Fetch or DIFF in the revision log (rows are added dynamically, so
+// delegate; the revision's content is fetched on demand via ensureRev)
+$('#revBody').on('click', 'a', function () {
 
-	var loadID = $(this).parent().data('rev-id');
+	var action = $(this).text(), loadID = $(this).parent().data('rev-id');
 
-	if ($(this).text() == 'Fetch') {
-
-		myCodeHeader.setValue(revJson[loadID].header);
-		myCodeSide1 .setValue(revJson[loadID].side1);
-		myCodeSide2 .setValue(revJson[loadID].side2);
-		myCodeFooter.setValue(revJson[loadID].footer);
+	if (action == 'Fetch') {
+		ensureRev(loadID, function (r) {
+			myCodeHeader.setValue(r.header);
+			myCodeSide1 .setValue(r.side1);
+			myCodeSide2 .setValue(r.side2);
+			myCodeFooter.setValue(r.footer);
+		});
 		return false;
 
-	} else if ($(this).text() == 'Diff') {
-
-		$("#txtTemps").val(revJson[loadID]);
-		codeRight= $("#txtTemps").val();
-		$("#txtTemps").val(revJson[loadID].header);
-		codeRightHeader = $("#txtTemps").val();
-		$("#txtTemps").val(revJson[loadID].side1);
-		codeRightSide1 = $("#txtTemps").val();
-		$("#txtTemps").val(revJson[loadID].side2);
-		codeRightSide2 = $("#txtTemps").val();
-		$("#txtTemps").val(revJson[loadID].footer);
-		codeRightFooter = $("#txtTemps").val();
-		$('#diffviewerControld td:last-child select').val(loadID);
-		$('#showdiff').click();
+	} else if (action == 'Diff') {
+		ensureRev(loadID, function (r) {
+			$("#txtTemps").val(r.header); codeRightHeader = $("#txtTemps").val();
+			$("#txtTemps").val(r.side1);  codeRightSide1  = $("#txtTemps").val();
+			$("#txtTemps").val(r.side2);  codeRightSide2  = $("#txtTemps").val();
+			$("#txtTemps").val(r.footer); codeRightFooter = $("#txtTemps").val();
+			$('#diffviewerControld td:last-child select').val(loadID);
+			$('#showdiff').click();
+		});
 		return false;
-
 	}
-
+	// "Purge" is a normal link (?purgeRev=…) guarded by .conf-del — let it proceed
 });
 
 // Toggle Collapse Unchanged sections
@@ -343,42 +403,36 @@ $("#waysDiffBTN").click( function () {
 
 // Change Rev in Diff Viewer select dropdown
 $('#diffviewerControld select').change( function () {
-	var revID2Load = $(this).val();
-	var revHeaderLoad, revSide1Load, revSide2Load, revFooterLoad;
+	var revID2Load = $(this).val(), side = $(this).parent().index();
+
+	function apply(revHeaderLoad, revSide1Load, revSide2Load, revFooterLoad) {
+		if (side == 0) {
+			dvHeader.left.orig.setValue(revHeaderLoad);
+			dvSide1.left.orig.setValue(revSide1Load);
+			dvSide2.left.orig.setValue(revSide2Load);
+			dvFooter.left.orig.setValue(revFooterLoad);
+			codeLeftHeader = revHeaderLoad; codeLeftSide1 = revSide1Load;
+			codeLeftSide2 = revSide2Load;   codeLeftFooter = revFooterLoad;
+		} else {
+			dvHeader.right.orig.setValue(revHeaderLoad);
+			dvSide1.right.orig.setValue(revSide1Load);
+			dvSide2.right.orig.setValue(revSide2Load);
+			dvFooter.right.orig.setValue(revFooterLoad);
+			codeRightHeader = revHeaderLoad; codeRightSide1 = revSide1Load;
+			codeRightSide2 = revSide2Load;   codeRightFooter = revFooterLoad;
+		}
+	}
 
 	if (revID2Load == '0') {
-		revHeaderLoad = $("#txtHeader").val();
-		revSide1Load = $("#txtSide1").val();
-		revSide2Load  = $("#txtSide2").val();
-		revFooterLoad = $("#txtFooter").val();
+		apply($("#txtHeader").val(), $("#txtSide1").val(), $("#txtSide2").val(), $("#txtFooter").val());
 	} else {
-		$("#txtTemps").val(revJson[revID2Load].header);
-		revHeaderLoad = $("#txtTemps").val();
-		$("#txtTemps").val(revJson[revID2Load].side1);
-		revSide1Load = $("#txtTemps").val();
-		$("#txtTemps").val(revJson[revID2Load].side2);
-		revSide2Load = $("#txtTemps").val();
-		$("#txtTemps").val(revJson[revID2Load].footer);
-		revFooterLoad = $("#txtTemps").val();
-	}
-	if ($(this).parent().index() == 0) {
-		dvHeader.left.orig.setValue(revHeaderLoad);
-		dvSide1.left.orig.setValue(revSide1Load);
-		dvSide2.left.orig.setValue(revSide2Load);
-		dvFooter.left.orig.setValue(revFooterLoad);
-		codeLeftHeader = revHeaderLoad;
-		codeLeftSide1 = revSide1Load;
-		codeLeftSide2 = revSide2Load;
-		codeLeftFooter = revFooterLoad;
-	} else {
-		dvHeader.right.orig.setValue(revHeaderLoad);
-		dvSide1.right.orig.setValue(revSide1Load);
-		dvSide2.right.orig.setValue(revSide2Load);
-		dvFooter.right.orig.setValue(revFooterLoad);
-		codeRightHeader = revHeaderLoad;
-		codeRightSide1 = revSide1Load;
-		codeRightSide2 = revSide2Load;
-		codeRightFooter = revFooterLoad;
+		ensureRev(revID2Load, function (r) {
+			$("#txtTemps").val(r.header); var h = $("#txtTemps").val();
+			$("#txtTemps").val(r.side1);  var s1 = $("#txtTemps").val();
+			$("#txtTemps").val(r.side2);  var s2 = $("#txtTemps").val();
+			$("#txtTemps").val(r.footer); var f = $("#txtTemps").val();
+			apply(h, s1, s2, f);
+		});
 	}
 });
 
