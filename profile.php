@@ -42,21 +42,21 @@ $cms = new ezProfile();
 					<input type="text" id="txtcpass" name="txtcpass"
 						placeholder="Existing password"
 						title="Enter your existing password here"
-						data-toggle="tooltip" data-placement="top"
+						data-bs-toggle="tooltip" data-bs-placement="top"
 						class="input-block-level tooltipme2">
 
 					<label class="control-label" for="inputTitle">New Password</label>
 					<input type="text" id="txtnpass" name="txtnpass"
 						placeholder="New password"
 						title="Enter the new password here"
-						data-toggle="tooltip" data-placement="top"
+						data-bs-toggle="tooltip" data-bs-placement="top"
 						class="input-block-level tooltipme2">
 
 					<label class="control-label" for="inputTitle">Repeat New Password</label>
 					<input type="text" id="txtrpass" name="txtrpass"
 						placeholder="Repeat new password"
 						title="Repeat the new password here"
-						data-toggle="tooltip" data-placement="top"
+						data-bs-toggle="tooltip" data-bs-placement="top"
 						class="input-block-level tooltipme2">
 
 					<input type="submit" name="Submit" class="btn btn-primary" value="Change password">

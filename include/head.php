@@ -14,8 +14,9 @@
 <meta name="robots" content="noindex, nofollow">
 <link type="image/x-icon" href="favicon.ico" rel="icon"/>
 <link type="image/x-icon" href="favicon.ico" rel="shortcut icon"/>
-<link href="css/bootstrap.min.css" rel="stylesheet">
-<link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet">
+<link href="css/bs2-compat.css" rel="stylesheet">
 <link href="js/jquery.treeview/jquery.treeview.css" rel="stylesheet">
 <link href="codemirror/lib/codemirror.css" rel="stylesheet">
 <link rel="stylesheet" href="codemirror/addon/fold/foldgutter.css" />
@@ -26,5 +27,6 @@
 <link rel="stylesheet" href="codemirror/addon/hint/show-hint.css">
 <link rel="stylesheet" href="codemirror/addon/dialog/dialog.css">
 <link href="css/custom.css" rel="stylesheet">
-<script src="js/jquery-3.7.1.min.js"></script>
-<script src="js/jquery-migrate-3.5.0.min.js"></script>
+<link href="css/ezcms-icons.css" rel="stylesheet">
+<script src="js/jquery-4.0.0.min.js"></script>
+<script src="js/jquery-migrate-4.0.2.min.js"></script>

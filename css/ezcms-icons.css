@@ -1,0 +1,45 @@
+/* ezCMS legacy glyphicon -> Bootstrap Icons compatibility shim.
+ * Lets existing <i class="icon-*"> markup render modern Bootstrap Icons
+ * without touching every admin template. Generated during the BS2->BS5 migration. */
+[class^="icon-"], [class*=" icon-"]{
+  display:inline-block;font-family:"bootstrap-icons"!important;font-style:normal;
+  font-weight:normal!important;font-variant:normal;text-transform:none;line-height:1;
+  vertical-align:-.125em;-webkit-font-smoothing:antialiased;}
+/* neutralize BS2 sprite leftovers */
+.icon-white{filter:none;}
+.icon-play::before{content:"\f4f4";}
+.icon-chevron-right::before{content:"\f285";}
+.icon-retweet::before{content:"\f130";}
+.icon-search::before{content:"\f52a";}
+.icon-pencil::before{content:"\f4c9";}
+.icon-edit::before{content:"\f4ca";}
+.icon-comment::before{content:"\f268";}
+.icon-share::before{content:"\f52e";}
+.icon-user::before{content:"\f4da";}
+.icon-check::before{content:"\f633";}
+.icon-flag::before{content:"\f3cc";}
+.icon-tint::before{content:"\f30b";}
+.icon-file::before{content:"\f369";}
+.icon-fast-forward::before{content:"\f55e";}
+.icon-question-sign::before{content:"\f504";}
+.icon-align-left::before{content:"\f5c7";}
+.icon-download::before{content:"\f30a";}
+.icon-th-large::before{content:"\f3fc";}
+.icon-chevron-left::before{content:"\f284";}
+.icon-share-alt::before{content:"\f3db";}
+.icon-resize-small::before{content:"\f149";}
+.icon-folder-open::before{content:"\f3d1";}
+.icon-step-forward::before{content:"\f558";}
+.icon-cog::before{content:"\f3e5";}
+.icon-th-list::before{content:"\f478";}
+.icon-list-alt::before{content:"\f38a";}
+.icon-fast-backward::before{content:"\f552";}
+.icon-step-backward::before{content:"\f564";}
+.icon-plus::before{content:"\f64d";}
+.icon-off::before{content:"\f4ff";}
+.icon-font::before{content:"\f3da";}
+/* tree/status icons that were previously unmapped */
+.icon-home::before{content:"\f424";}       /* house-fill */
+.icon-ban-circle::before{content:"\f6a3";} /* ban-fill */
+.icon-globe::before{content:"\f4cf";}
+.icon-indent-left::before{content:"\f5c5";}

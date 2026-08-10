@@ -70,8 +70,11 @@ class ezPages extends ezCMS {
 		// Update the Controller of Posted
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') $this->update();
 		
-		// Get the Revisions
-		if ($this->id != 'new') $this->getRevisions();
+		// Revisions load lazily via AJAX after the page renders
+		if ($this->id != 'new') {
+			if (isset($_GET['ajaxRevs']))       $this->ajaxPageRevs();
+			if (isset($_GET['ajaxRevContent'])) $this->ajaxPageRevContent();
+		}
 		
 		//Build the Menu to show
 		$this->buildMenu();
@@ -148,7 +151,7 @@ class ezPages extends ezCMS {
 		$this->btns .= '<a href="?copyid='.$this->id.'" class="btn btn-warning">Copy</a>';
 		if ($this->id > 2)
 			$this->btns .= '<a href="?delid='.$this->id.'" class="btn btn-danger conf-del">Delete</a>';
-		$this->btns .= '<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup>'.$this->revs['cnt'].'</sup></a>';
+		$this->btns .= '<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup id="revcount">…</sup></a>';
 		$this->btns .= '<a id="showdiff" href="#" class="btn btn-inverted btn-danger">Review DIFF</a>';	
 	}
 	
@@ -243,35 +246,41 @@ class ezPages extends ezCMS {
 	}
 
 	// Function to fetch the revisions
-	private function getRevisions() {
-
-		$results = $this->query("SELECT git_pages.*,users.username
+	// AJAX: paginated git_pages revision metadata + count + diff-select options
+	private function ajaxPageRevs() {
+		$per  = 10;
+		$page = max(1, (int)($_GET['page'] ?? 1));
+		$pid  = intval($this->id);
+		$total  = (int)$this->query("SELECT COUNT(*) FROM `git_pages` WHERE `page_id` = $pid")->fetchColumn();
+		$pages  = max(1, (int)ceil($total / $per));
+		$offset = ($page - 1) * $per;
+		$rows = [];
+		foreach ($this->query("SELECT git_pages.id, git_pages.revmsg, git_pages.createdon, users.username
 				FROM git_pages LEFT JOIN users ON git_pages.createdby = users.id
-				WHERE git_pages.page_id = ".intval($this->id)." ORDER BY git_pages.id DESC")->fetchAll(PDO::FETCH_ASSOC);
-		
-		foreach ($results as $entry) {
-
-			$this->revs['opt'] .= '<option value="'.$entry['id'].'">#'.
-				$this->revs['cnt'].' '.$entry['createdon'].' ('.$entry['username'].')</option>';
-
-			$this->revs['log'] .= '<tr>
-				<td>'.$this->revs['cnt'].'</td>
-				<td>'.$entry['username'].'</td>
-				<td>'.$entry['revmsg'].'</td>
-				<td>'.$entry['createdon'].'</td>
-			  	<td data-rev-id="'.$entry['id'].'">
-				<a href="#">Fetch</a> &nbsp;|&nbsp; 
-				<a href="#">Diff</a> &nbsp;|&nbsp;
-				<a href="?id='.$this->id.'&purgeRev='.$entry['id'].'" class="conf-del">Purge</a></td></tr>';
-
-			$this->revs['jsn'][$entry['id']] = $entry;
-
-			$this->revs['cnt']++;
+				WHERE git_pages.page_id = $pid ORDER BY git_pages.id DESC LIMIT $per OFFSET $offset") as $e) {
+			$rows[] = ['id'=>$e['id'], 'user'=>$e['username'], 'msg'=>$e['revmsg'], 'date'=>$e['createdon']];
 		}
-		$this->revs['cnt']--;
+		$opts = null;
+		if ($page === 1) {
+			$opts = [];
+			foreach ($this->query("SELECT git_pages.id, git_pages.createdon, users.username
+					FROM git_pages LEFT JOIN users ON git_pages.createdby = users.id
+					WHERE git_pages.page_id = $pid ORDER BY git_pages.id DESC") as $e) {
+				$opts[] = ['id'=>$e['id'], 'label'=>'#'.$e['id'].' '.$e['createdon'].' ('.$e['username'].')'];
+			}
+		}
+		die(json_encode(['status'=>true, 'count'=>$total, 'page'=>$page, 'pages'=>$pages,
+			'rows'=>$rows, 'opts'=>$opts]));
+	}
 
-		if ($this->revs['log'] == '') 
-			$this->revs['log'] = '<tr><td colspan="4">There are no revisions.</td></tr>';	
+	// AJAX: one git_pages revision's full row (the page snapshot). Uses 'revid'
+	// because 'id' already carries the page id in this page's URLs.
+	private function ajaxPageRevContent() {
+		$rid = (int)($_GET['revid'] ?? 0);
+		$row = $this->query("SELECT * FROM `git_pages` WHERE `id` = $rid LIMIT 1")->fetch(PDO::FETCH_ASSOC);
+		if (!$row) die(json_encode(['status'=>false]));
+		$row['status'] = true;
+		die(json_encode($row));
 	}
 
 	// Function to Setup page variable and checkboxes

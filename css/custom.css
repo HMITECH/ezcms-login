@@ -8,6 +8,10 @@
  */
 @charset "utf-8";
 html,body {height: 100%;}
+/* Admin base font: Bootstrap 5 defaults to 16px; the old (BS2) admin was 14px.
+   Set it once here so the whole panel matches, instead of per-component. */
+:root { --bs-body-font-size: .875rem; }
+body { font-size: 14px; }
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover,
 a,button { outline:none; }
 .btn, .btn-group { 	margin-right:10px; }
@@ -30,15 +34,23 @@ a,button { outline:none; }
 }
 textarea { height: 300px;  width: 100%; box-sizing: border-box; }
 #txtDesc, #txtKeywords { height:auto;}
-#wrap .container { padding-top:60px; margin: 0 auto; width:98%; }
+#wrap .container { padding:60px 0 0; margin: 0 auto; width:98%; max-width:none; }
 .countDisplay {float: right;}
 .checkRight { float: right; }
 .row { width: 100%; margin: 0;}
 .slRootMsg { margin: 0 0 3px; padding: 5px 10px; font-weight:bold;}
 a.label.label-info { font-size: 1em; border-radius: 0;padding: 3px 6px; }
 #divbgcolor { padding:10px; }
-#left-tree > li > a, 
+#left-tree > li > a,
 #left-tree > li > ul > li > a { font-weight: bold; }
+/* Treeview links: BS5 underlined links and brightened the colour — restore the
+   compact, non-underlined BS2 look. */
+#left-tree a { color: #0088cc; text-decoration: none; }
+#left-tree a:hover { color: #005580; text-decoration: none; }
+#left-tree a.label-info, #left-tree a.label.label-info { color:#fff; background-color:#2d6987; }
+#left-tree i[class^="icon-"] { color:#333; font-size:15px; vertical-align:-2px; }
+/* the includes-tree root "+" (icon-plus) reads too thin vs the old bold glyph */
+#left-tree .icon-plus { -webkit-text-stroke:0.07em currentColor; text-stroke:0.07em currentColor; }
 /*iframe Block - file manager*/
 #shrFrm { width:100%; min-height:500px; }
 /*Results Table*/
@@ -85,11 +97,18 @@ a.label.label-info { font-size: 1em; border-radius: 0;padding: 3px 6px; }
 	-moz-border-radius: 4px 0 4px 0;
 	border-radius: 4px 0 4px 0;
 }
-#revBlock, #pagesBlock {
+/* #pagesBlock keeps the scroll box (it can list many pages); the revision log
+   is paginated, so it expands naturally. */
+#pagesBlock {
     max-height: 300px;
     overflow-x: hidden;
     overflow-y: auto;
 }
+/* Revision-log pager (shared): page numbers left, "Showing x–y of N" right */
+#revPager { display:flex; align-items:center; margin-top:8px; }
+#revPager .pagination { margin:0; }
+#revPager .rcount { margin-left:auto; color:#777; font-size:13px; }
+#revBody { transition:opacity .18s ease; }   /* smooth dim while a page loads */
 #revBlock .nomargin { margin-bottom:0; }
 #revBlock:after        {content: "Revision Log" ;}
 #pagesBlock:after      {content: "Pages using this layout" ;}
@@ -100,16 +119,104 @@ a.label.label-info { font-size: 1em; border-radius: 0;padding: 3px 6px; }
 #difBlockFooter:after  {content: "Footer Block" ;}
 #tbloading {display: none;margin-top: 12px;}
 #push,#footer {height: 30px;}
-#footer { 
-	height: 30px; 
-	background: rgba(245, 245, 245, 0.8);
-	text-align:center; 
+#footer {
+	height: 30px;
+	background: #212529;        /* match the header */
+	color: #adb5bd;
+	text-align: center;
+	font-size: 13px;
+	display: flex;
+	align-items: center;        /* vertically centre the row within 30px */
 }
+/* footer wrapper should span like the page content (was BS5's narrower 1320px) */
+#footer .container { width: 98%; max-width: 100%; }
+#footer a { color: #9ec5fe; text-decoration: none; }
+#footer a:hover { color: #fff; text-decoration: underline; }
+#footer strong { color: #e9ecef; }
 .tooltip-inner {font-size:18px;}
 .label, .badge {white-space:normal;}
 .CodeMirror {height:500px; }
 /* Ensure toolbar dropdowns appear above the CodeMirror editor */
 #frmlayout .navbar { position: relative; z-index: 1001; }
+
+/* ===== Admin top navbar (Bootstrap 5) — compact BS2-style header =====
+   Bootstrap 5's default navbar/nav-link padding makes the bar ~56px and taller
+   than the old 40px BS2 bar. Trim it back, keep items vertically centred, and
+   restore the active/hover highlight (per-page JS toggles .active on
+   #top-bar > li, which BS5 no longer styles on its own). */
+nav.navbar.fixed-top { padding-top:0; padding-bottom:0; min-height:44px; }
+nav.navbar .navbar-brand { padding:12px 0; margin-right:1rem; font-size:20px; line-height:20px; }
+nav.navbar .navbar-nav .nav-link { padding:12px 15px; line-height:20px; color:rgba(255,255,255,.85); }
+nav.navbar .navbar-nav .nav-link:hover,
+nav.navbar .navbar-nav .nav-link:focus { background-color:rgba(255,255,255,.10); color:#fff; }
+/* active page: subtle fill + a bright accent underline (cleaner than a dark inset) */
+#top-bar > .nav-item.active > .nav-link,
+#top-bar > li.active > .nav-link {
+	background-color:rgba(255,255,255,.12); color:#fff;
+	box-shadow:inset 0 -3px 0 #4dabf7;
+}
+/* keep the fixed navbar clear of the content */
+nav.navbar.fixed-top { z-index:1030; }
+
+/* CMS dropdown: make the background-colour picker full width, like the theme <select> */
+#divbgcolor input[type="color"] {
+	width:100%; height:34px; padding:2px; cursor:pointer;
+	border:1px solid #ced4da; border-radius:.25rem; background:#fff;
+}
+
+/* "Save As" dropdown forms in the editor toolbars (layouts/includes/styles/
+   scripts/macros). BS5 dropdown-menus are ~160px, which crushed the
+   prefix + input + suffix group to an unusable sliver. Widen the menu, restore
+   the compact BS2 blockquote header, and let the text input flex to fill. */
+#SaveAsDDM { min-width:290px; font-size:13px; }
+#SaveAsDDM blockquote { margin:0 0 10px; padding:2px 0 2px 12px; border-left:4px solid #e5e5e5; }
+#SaveAsDDM blockquote p { margin:0 0 2px; font-size:16px; font-weight:600; line-height:1.2; color:#333; }
+#SaveAsDDM blockquote small { display:block; color:#999; font-size:12px; line-height:1.3; }
+#SaveAsDDM blockquote small::before { content:"\2014\00A0"; }
+#SaveAsDDM .input-prepend,
+#SaveAsDDM .input-append { display:flex; flex-wrap:nowrap; width:100%; margin-bottom:0; }
+#SaveAsDDM .add-on { flex:0 0 auto; white-space:nowrap; font-size:13px; padding:5px 8px; }
+#SaveAsDDM input[type="text"] { flex:1 1 auto; min-width:0; width:auto; font-size:13px; padding:5px 8px; height:auto; }
+/* keep the Save Now button compact (markup uses btn-large on some pages) */
+#SaveAsDDM .btn { --bs-btn-font-size:14px; --bs-btn-padding-y:5px; --bs-btn-padding-x:14px; margin:8px 0 0; }
+
+/* find.php results table: keep cells compact (BS5 default cell padding is looser) */
+#resultsTable > thead > tr > th, #resultsTable > tbody > tr > td { padding:6px 8px; }
+
+/* Editor sidebar collapse (#toggleEditSize): animated + state remembered.
+   The editor pane flex-grows so it fills smoothly as the sidebar collapses.
+   .no-anim (added briefly on load) applies the restored state without animating. */
+#editBlock > div:nth-child(2) { flex:1 1 auto; transition:margin .28s ease; }
+#editBlock > div:first-child {
+	overflow:hidden;
+	transition:width .28s ease, min-width .28s ease, opacity .2s ease,
+		padding .28s ease, margin .28s ease, border-width .28s ease;
+}
+#editBlock.sidebar-collapsed > div:first-child {
+	width:0 !important; min-width:0 !important;
+	padding-left:0 !important; padding-right:0 !important;
+	margin-left:0 !important; margin-right:0 !important;
+	border-width:0 !important; opacity:0;
+}
+#editBlock.sidebar-collapsed > div:nth-child(2) { margin-left:0; }
+#editBlock.no-anim, #editBlock.no-anim > div { transition:none !important; }
+
+/* profile.php: bare label+input form (no .control-group) — give the inputs the
+   old BS2 bottom spacing so the fields aren't cramped */
+#frmPass .input-block-level { margin-bottom: 12px; }
+
+/* Dropdown menu items: BS5's default hover is barely visible — make it clear */
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus { background-color:#0d6efd; color:#fff; }
+.dropdown-menu .dropdown-item:hover i,
+.dropdown-menu .dropdown-item:focus i { color:#fff; }
+/* current-page item: per-page JS toggles .active on the submenu <li>, which BS5
+   doesn't style (it styles .dropdown-item.active on the <a>). Highlight it. */
+#top-bar .dropdown-menu > li.active > .dropdown-item,
+.dropdown-menu .dropdown-item.active {
+	background-color:#0b5ed7; color:#fff; font-weight:600;
+}
+#top-bar .dropdown-menu > li.active > .dropdown-item i { color:#fff; }
 div.white-boxed {
 	background: rgba(255, 255, 255, 0.95);
 	border: 1px solid #000;

@@ -60,8 +60,9 @@ class ezMacros extends ezCMS {
 		//Build the HTML Treeview
 		$this->buildTree();
 				
-		// Get the Revisions
-		$this->getRevisions();
+		// Revisions load lazily via AJAX after the page renders
+		if (isset($_GET['ajaxRevs']))       $this->ajaxFileRevs('macros/'.$this->filename);
+		if (isset($_GET['ajaxRevContent'])) $this->ajaxFileRevContent();
 
 	}
 
@@ -146,7 +147,7 @@ class ezMacros extends ezCMS {
 		$this->revs['cnt']--;
 		
 		if ($this->revs['log'] == '') 
-			$this->revs['log'] = '<tr><td colspan="4">There are no revisions.</td></tr>';	
+			$this->revs['log'] = '<tr><td colspan="5">There are no revisions.</td></tr>';	
 	}
 	
 	// Function to Delete the Macro

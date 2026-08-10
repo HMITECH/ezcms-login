@@ -26,8 +26,9 @@ class ezScripts extends ezCMS {
 		// call parent constuctor
 		parent::__construct();
 		
-		// Get the folder fro which site is running
-		$this->siteFolder =  substr(htmlspecialchars($_SERVER["PHP_SELF"]), 0, -18);
+		// Folder this admin panel runs from (e.g. /ezcms-login) — derive it from the
+		// path instead of a hard-coded length, so any folder name works.
+		$this->siteFolder =  htmlspecialchars(rtrim(dirname($_SERVER["PHP_SELF"]), '/'));
 		
 		// Check if file to display is set
 		if (isset($_GET['show'])) $this->filename = $_GET['show'];
@@ -59,8 +60,9 @@ class ezScripts extends ezCMS {
 		//Build the HTML Treeview
 		$this->buildTree();
 		
-		// Get the Revisions
-		$this->getRevisions();
+		// Revisions load lazily via AJAX after the page renders
+		if (isset($_GET['ajaxRevs']))       $this->ajaxFileRevs($this->filename);
+		if (isset($_GET['ajaxRevContent'])) $this->ajaxFileRevContent();
 	}
 
 	// Function to Update the Defaults Settings
@@ -122,7 +124,7 @@ class ezScripts extends ezCMS {
 		$this->revs['cnt']--;
 		
 		if ($this->revs['log'] == '') 
-			$this->revs['log'] = '<tr><td colspan="4">There are no revisions.</td></tr>';	
+			$this->revs['log'] = '<tr><td colspan="5">There are no revisions.</td></tr>';	
 	}
 	
 	// Function to Build Treeview HTML (JS grouped by first dot)

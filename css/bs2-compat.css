@@ -1,0 +1,190 @@
+/* -------------------------------------------------------------------------
+ * ezCMS Bootstrap 2 -> 5 transitional compatibility layer.
+ *
+ * Bootstrap 5 dropped the Bootstrap 2 fluid grid (.row-fluid/.spanN), the
+ * float helpers (.pull-left/right), the old form/input-group classes and
+ * .well/.hero-unit. This sheet re-implements just those legacy classes on
+ * top of BS5 so admin screens that still use BS2 markup keep their layout
+ * while they are migrated to native BS5 one screen at a time. Delete once no
+ * .spanN / .row-fluid / input-prepend markup remains.
+ * ------------------------------------------------------------------------- */
+
+/* ---- BS2 fluid grid (12 col, flex reimplementation) ---- */
+/* Faithful Bootstrap 2 fluid grid: spans tile via margin-left gutters (2.564%),
+   NOT inner padding — so .white-boxed keeps its own padding and adjacent boxes
+   get a real gap between them (matching the old UI). */
+.row-fluid { display:flex; flex-wrap:wrap; width:100%; }
+.row-fluid > [class*="span"] { margin-left:2.564102564%; box-sizing:border-box; min-height:1px; }
+.row-fluid > [class*="span"]:first-child { margin-left:0; }
+.span1{width:5.982905983%}  .span2{width:14.529914530%} .span3{width:23.076923077%}
+.span4{width:31.623931624%} .span5{width:40.170940171%} .span6{width:48.717948718%}
+.span7{width:57.264957265%} .span8{width:65.811965812%} .span9{width:74.358974359%}
+.span10{width:82.905982906%} .span11{width:91.452991453%} .span12{width:100%}
+.offset1{margin-left:8.547008547%} .offset2{margin-left:17.094017094%} .offset3{margin-left:25.641025641%}
+.offset4{margin-left:34.188034188%}
+@media (max-width:767px){
+  .row-fluid{flex-direction:column;}
+  .row-fluid > [class*="span"]{width:100%;margin-left:0;}
+}
+
+/* ---- float helpers ---- */
+.pull-right{float:right!important;}
+.pull-left{float:left!important;}
+
+/* ---- forms ----
+   BS2 rendered .control-label as a full-width block with normal weight, which
+   is what lets the floated .countDisplay badge sit at the far right of the row
+   and keeps the label from looking heavy. Restore that (BS5 makes <label>
+   inline-block by default). */
+.input-block-level{display:block;width:100%;box-sizing:border-box;}
+.control-group{margin-bottom:16px;}
+.control-label{display:block;width:100%;margin-bottom:5px;font-weight:400;color:#333;}
+.countDisplay{float:right;}
+.form-horizontal .control-group{display:flex;flex-wrap:wrap;align-items:center;}
+.form-horizontal .control-label{width:160px;padding-right:12px;text-align:right;margin-bottom:0;}
+/* .controls must fill the rest of the row, else input-block-level inputs
+   collapse to their content width (e.g. the Revision Message on setting.php). */
+.form-horizontal .controls{flex:1 1 auto;min-width:0;}
+
+/* BS2 blockquote header (bold title + muted em-dash hint with a left border),
+   used across the admin (profile.php, page/layout Save-As blockquotes, etc.).
+   BS5 only styles .blockquote, leaving bare <blockquote> plain. */
+blockquote{margin:0 0 16px;padding:2px 0 2px 14px;border-left:4px solid #e5e5e5;}
+blockquote > p{margin:0 0 3px;font-size:16px;font-weight:600;line-height:1.3;color:#333;}
+blockquote > small{display:block;color:#999;line-height:1.4;}
+blockquote > small::before{content:"\2014\00A0";}
+
+/* ---- input-prepend / input-append -> BS5 input-group ---- */
+.input-prepend,.input-append{display:flex;align-items:stretch;margin-bottom:.5rem;}
+.input-prepend > input,.input-append > input,
+.input-prepend > .uneditable-input,.input-append > .uneditable-input{flex:1 1 auto;width:1%;}
+.add-on{display:flex;align-items:center;padding:.375rem .75rem;
+  color:#212529;background-color:#e9ecef;border:1px solid #ced4da;}
+.input-prepend .add-on{border-right:0;}
+.input-append .add-on{border-left:0;}
+
+/* ---- misc BS2 containers ---- */
+.well{padding:1rem;background-color:#f8f9fa;border:1px solid #e9ecef;border-radius:.375rem;
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.05);}
+.hero-unit{padding:2rem;margin-bottom:2rem;background-color:#eee;border-radius:.5rem;}
+
+/* ---- BS2 button sizing: BS5 defaults (~38px/16px) are bigger than the old
+        ~30px/14px. Trim the base .btn back via BS5's button CSS variables.
+        .btn-large/.btn-mini and #cm-toolbar override this as needed.       ---- */
+.btn{
+  --bs-btn-padding-y:4px; --bs-btn-padding-x:12px;
+  --bs-btn-font-size:14px; --bs-btn-line-height:1.43; --bs-btn-border-radius:4px;
+}
+/* ---- BS2 variant colours (BS5's are brighter / different hues) ---- */
+.btn-primary{--bs-btn-bg:#0044cc;--bs-btn-border-color:#003bb3;
+  --bs-btn-hover-bg:#003bb3;--bs-btn-hover-border-color:#0033a3;
+  --bs-btn-active-bg:#0033a3;--bs-btn-active-border-color:#002d91;}
+.btn-success{--bs-btn-bg:#51a351;--bs-btn-border-color:#499249;
+  --bs-btn-hover-bg:#499249;--bs-btn-hover-border-color:#418241;--bs-btn-active-bg:#418241;}
+.btn-info{--bs-btn-color:#fff;--bs-btn-bg:#2f96b4;--bs-btn-border-color:#2a87a1;
+  --bs-btn-hover-color:#fff;--bs-btn-hover-bg:#2a87a1;--bs-btn-hover-border-color:#25778e;
+  --bs-btn-active-bg:#25778e;--bs-btn-active-color:#fff;}
+.btn-warning{--bs-btn-color:#fff;--bs-btn-bg:#f89406;--bs-btn-border-color:#df8505;
+  --bs-btn-hover-color:#fff;--bs-btn-hover-bg:#df8505;--bs-btn-hover-border-color:#c67704;
+  --bs-btn-active-bg:#c67704;--bs-btn-active-color:#fff;}
+.btn-danger{--bs-btn-bg:#da4f49;--bs-btn-border-color:#c43c35;
+  --bs-btn-hover-bg:#c43c35;--bs-btn-hover-border-color:#b02b25;--bs-btn-active-bg:#b02b25;}
+/* BS2 had no .btn-secondary, so those buttons (Revisions, modal Close) fell back
+   to the light-grey default. BS5 makes them dark grey — restore the light look. */
+.btn-secondary{--bs-btn-color:#333;--bs-btn-bg:#f5f5f5;--bs-btn-border-color:#ccc;
+  --bs-btn-hover-color:#333;--bs-btn-hover-bg:#e6e6e6;--bs-btn-hover-border-color:#adadad;
+  --bs-btn-active-color:#333;--bs-btn-active-bg:#d4d4d4;--bs-btn-active-border-color:#8c8c8c;}
+
+/* ---- BS2 plain .btn had a grey default; BS5 .btn (no variant) is transparent.
+        Give un-themed buttons a light look; themed .btn-* keep BS5 styling.   ---- */
+.btn:not([class*="btn-"]){
+  --bs-btn-color:#212529; --bs-btn-bg:#f5f5f5; --bs-btn-border-color:#ccc;
+  --bs-btn-hover-color:#212529; --bs-btn-hover-bg:#e6e6e6; --bs-btn-hover-border-color:#adadad;
+  --bs-btn-active-bg:#d4d4d4; --bs-btn-active-border-color:#8c8c8c;
+}
+/* BS2 sizing aliases */
+.btn-large{--bs-btn-padding-y:.5rem;--bs-btn-padding-x:1rem;--bs-btn-font-size:1.25rem;}
+.btn-small{--bs-btn-padding-y:.25rem;--bs-btn-padding-x:.5rem;--bs-btn-font-size:.875rem;}
+.btn-mini{--bs-btn-padding-y:.1rem;--bs-btn-padding-x:.4rem;--bs-btn-font-size:.75rem;}
+/* keep BS5's own size modifiers working despite the smaller base .btn above */
+.btn-lg{--bs-btn-padding-y:.5rem;--bs-btn-padding-x:1rem;--bs-btn-font-size:1.25rem;--bs-btn-border-radius:.5rem;--bs-btn-line-height:1.5;}
+.btn-sm{--bs-btn-padding-y:.25rem;--bs-btn-padding-x:.5rem;--bs-btn-font-size:.875rem;--bs-btn-border-radius:.25rem;}
+.btn-inverse{--bs-btn-color:#fff;--bs-btn-bg:#363636;--bs-btn-border-color:#363636;
+  --bs-btn-hover-bg:#222;--bs-btn-hover-border-color:#222;--bs-btn-hover-color:#fff;}
+
+/* ---- BS2 .label -> BS5 .badge look (BS2 metrics: ~11.8px, tight padding) ---- */
+.label{display:inline-block;padding:2px 6px 3px;font-size:11.8px;font-weight:700;line-height:1.25;
+  color:#fff;background-color:#999;border-radius:3px;vertical-align:baseline;text-decoration:none;}
+a.label.label-info,.label-info{background-color:#2d6987;color:#fff;}  /* BS2 muted steel-blue */
+.label-important,.label-danger{background-color:#b94a48;color:#fff;}  /* BS2 muted red */
+.label-success{background-color:#468847;color:#fff;}
+.label-warning{background-color:#f89406;color:#fff;}
+.label-inverse{background-color:#333;color:#fff;}
+
+/* ---- BS2 .checkbox / .radio (dropped in BS5): make the label a block so the
+        following info-label wraps onto its own line, and keep the old size. ---- */
+.checkbox,.radio{display:block;font-weight:400;line-height:1.4;min-height:20px;}
+.checkbox > input[type=checkbox],.radio > input[type=radio]{margin-right:6px;vertical-align:-2px;}
+.checkbox.inline,.radio.inline{display:inline-block;margin-right:12px;}
+
+/* ---- misc BS2 utilities BS5 renamed/removed ---- */
+.hide{display:none!important;}
+.muted{color:#6c757d!important;}
+.input-medium{width:150px;}
+.input-large{width:210px;}
+.input-small{width:90px;}
+.table-condensed > :not(caption) > * > *{padding:.25rem;}
+
+/* ---- BS2 progress (.progress > .bar) -> BS5 (.progress > .progress-bar) ---- */
+.progress{height:1.25rem;background-color:#e9ecef;border-radius:.375rem;overflow:hidden;}
+.progress .bar{display:flex;align-items:center;justify-content:center;height:100%;
+  color:#fff;background-color:#0d6efd;text-align:center;white-space:nowrap;
+  transition:width .6s ease;}
+.progress-striped .bar,.progress .bar.progress-bar-striped{
+  background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,
+  transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+  background-size:1rem 1rem;}
+
+/* ---- BS2 .pager ---- */
+.pager{display:flex;justify-content:center;gap:.5rem;list-style:none;padding:0;margin:1rem 0;}
+
+/* ---- BS2-style dropdowns that still use <li><a> (no .dropdown-item):
+        e.g. find.php "WHERE", macro.php "Select Macro". Style the items like
+        BS5 dropdown items and the <ul class="nav"> toolbar toggle like a muted
+        control rather than a blue underlined link. ---- */
+.dropdown-menu{--bs-dropdown-font-size:.875rem;}  /* BS5 defaults to 1rem */
+.dropdown-menu > li > a:not(.dropdown-item){display:block;padding:4px 16px;color:#212529;
+  text-decoration:none;white-space:nowrap;font-weight:400;}
+.dropdown-menu > li > a:not(.dropdown-item):hover,
+.dropdown-menu > li > a:not(.dropdown-item):focus{background-color:#0d6efd;color:#fff;}
+.dropdown-menu > li.active > a:not(.dropdown-item){background-color:#0b5ed7;color:#fff;font-weight:600;}
+.dropdown-menu .divider{height:0;margin:6px 0;overflow:hidden;border-top:1px solid #e5e5e5;}
+
+.navbar-inner .nav{display:inline-flex;align-items:center;margin:0;padding:0;list-style:none;}
+.navbar-inner .nav > li{list-style:none;}
+.navbar-inner .nav > li > a{color:#555;text-decoration:none;padding:4px 10px;display:inline-block;}
+.navbar-inner .nav > li > a:hover,.navbar-inner .nav > li > a:focus{color:#000;text-decoration:none;}
+
+/* BS2 .brand used as a static info label in editor toolbars (find.php findinlbl) */
+.navbar-inner .brand{color:#777;text-decoration:none;font-weight:400;padding:4px 8px;cursor:default;}
+.navbar-inner .brand:hover{color:#777;text-decoration:none;}
+
+/* ---- BS2 editor toolbar bar (.navbar > .navbar-inner) ----
+   The page/layout editors wrap their action buttons in <div class="navbar">
+   <div class="navbar-inner">. BS2 styled .navbar-inner as a light grey rounded
+   bar; BS5 has no such class, so recreate it. Scope to div.navbar so the top
+   <nav class="navbar"> is untouched. */
+div.navbar{padding:0;margin-bottom:12px;background:none;border:0;min-height:0;}
+.navbar-inner{
+  display:flex;flex-wrap:wrap;align-items:center;gap:2px;width:100%;
+  padding:8px 10px;
+  background-image:linear-gradient(to bottom,#ffffff,#f2f2f2);
+  border:1px solid #d5d5d5;border-radius:6px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(0,0,0,.06);
+}
+/* the dropdown panel (Save As, etc.) shouldn't stretch in the flex bar */
+.navbar-inner .dropdown-menu{gap:0;}
+
+/* editor tab strip: a little breathing room above the fields */
+.tabbable > .tab-content{padding-top:16px;}
+.nav-tabs{margin-bottom:0;}

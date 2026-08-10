@@ -42,7 +42,7 @@ $cms = new ezLayouts();
 							<a href="#" id="toggleEditSize" class="btn"><i class="icon-chevron-left"></i></a>
 							<input type="submit" name="Submit" id="Submit" value="Save Changes" class="btn btn-primary">
 							<div class="btn-group">
-							  <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+							  <a class="btn dropdown-toggle btn-info" data-bs-toggle="dropdown" href="#">
 								Save As <span class="caret"></span></a>
 							  <div id="SaveAsDDM" class="dropdown-menu" style="padding:10px;">
 								<blockquote>
@@ -60,7 +60,7 @@ $cms = new ezLayouts();
 							</div>
 							<?php echo $cms->deletebtn; ?>
 							<a id="showPages" href="#" class="btn btn btn-warning">Pages<sup><?php echo $cms->usage['cnt']; ?></sup></a>
-							<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup><?php echo $cms->revs['cnt']; ?></sup></a>
+							<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup id="revcount">…</sup></a>
 							<a id="showdiff" href="#" class="btn btn-inverted btn-danger">Review DIFF</a>
 						</div>
 					</div>
@@ -68,7 +68,8 @@ $cms = new ezLayouts();
 					<div id="revBlock">
 					  <table class="table table-striped"><thead>
 						<tr><th>#</th><th>User Name</th><th>Message</th><th>Date &amp; Time</th><th>Action</th></tr>
-					  </thead><tbody><?php echo $cms->revs['log']; ?></tbody></table>
+					  </thead><tbody id="revBody"><tr><td colspan="5" class="text-muted">Loading revisions …</td></tr></tbody></table>
+					  <div id="revPager"></div>
 					</div>
 					<div id="pagesBlock">
 					  <table class="table table-striped"><thead>
@@ -82,9 +83,9 @@ $cms = new ezLayouts();
 							<input type="text" id="txtGitMsg" name="revmsg"
 								placeholder="Enter a description for this revision"
 								title="Enter a message to describe this revision."
-								data-toggle="tooltip"
+								data-bs-toggle="tooltip"
 								value=""
-								data-placement="top" minlength="2"
+								data-bs-placement="top" minlength="2"
 								class="input-block-level tooltipme2">
 						</div>
 					</div>
@@ -93,7 +94,7 @@ $cms = new ezLayouts();
 					<button type="button" class="btn btn-mini cm-btn-replace"><i class="icon-retweet"></i> Replace</button>
 					<button type="button" class="btn btn-mini cm-btn-goto"><i class="icon-step-forward"></i> Go to Line</button>
 					<div class="btn-group">
-						<button type="button" class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-font"></i> <span class="cm-size-label">Font Size</span> <span class="caret"></span></button>
+						<button type="button" class="btn btn-mini dropdown-toggle" data-bs-toggle="dropdown"><i class="icon-font"></i> <span class="cm-size-label">Font Size</span> <span class="caret"></span></button>
 						<ul class="dropdown-menu cm-fontsize-menu">
 							<li><a href="#" data-size="11">11px</a></li>
 							<li><a href="#" data-size="12">12px</a></li>
@@ -105,7 +106,7 @@ $cms = new ezLayouts();
 						</ul>
 					</div>
 					<div class="btn-group">
-						<button type="button" class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-resize-small"></i> Fold <span class="caret"></span></button>
+						<button type="button" class="btn btn-mini dropdown-toggle" data-bs-toggle="dropdown"><i class="icon-resize-small"></i> Fold <span class="caret"></span></button>
 						<ul class="dropdown-menu cm-fold-menu">
 							<li><a href="#" data-fold="0">Fold All</a></li>
 							<li class="divider"></li>
@@ -117,7 +118,7 @@ $cms = new ezLayouts();
 							<li><a href="#" data-fold="none">Unfold All</a></li>
 						</ul>
 					</div>
-					<a href="#cm-shortcuts-modal" data-toggle="modal" class="btn btn-mini"><i class="icon-question-sign"></i> Shortcuts</a>
+					<a href="#cm-shortcuts-modal" data-bs-toggle="modal" class="btn btn-mini"><i class="icon-question-sign"></i> Shortcuts</a>
 				</div>
 				<textarea name="txtContents" id="txtContents" class="input-block-level"><?php echo $cms->content; ?></textarea>
 				</form>
@@ -131,9 +132,9 @@ $cms = new ezLayouts();
 				<a id="collaspeBTN" href="#" class="btn btn-inverted btn-warning">Collaspe Unchanged</a>
 			</div></div>
 			<table id="diffviewerControld" width="100%" border="0">
-			  <tr><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
+			  <tr><td><select class="revSel"><option value="0">Current (Last Saved)</option></select>
 				</td><td><select disabled><option selected>Your Current Edit</option></select>
-				</td><td><select><option value="0">Current (Last Saved)</option><?php echo $cms->revs['opt']; ?></select>
+				</td><td><select class="revSel"><option value="0">Current (Last Saved)</option></select>
 			  </td></tr>
 			</table>
 			<div id="diffviewer"></div>
@@ -198,7 +199,7 @@ $cms = new ezLayouts();
 <script src="codemirror/mode/clike/clike.js"></script>
 <script src="codemirror/mode/php/php.js"></script>
 <script>
-	var revJson = <?php echo json_encode($cms->revs['jsn']); ?>;
+	// revJson is managed by gitFileCode.js (revisions are lazy-loaded)
 	var	cmTheme = '<?php echo $_SESSION["CMTHEME"]; ?>',
 		cmMode = 'application/x-httpd-php';
 	$('#frmlayout').submit( function() {

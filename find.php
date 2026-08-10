@@ -36,7 +36,7 @@ $cms = new ezFind();
 				<input type="submit" name="find" class="btn btn-primary pull-left" value="Find All">
 				<ul class="nav pull-right">
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-flag"></i>
+						<a href="#" class="dropdown-toggle" data-bs-toggle="dropdown"><i class="icon-flag"></i>
 							WHERE <b class="caret"></b></a>
 						<ul id="findinDD" class="dropdown-menu">
 							<li class="active"><a data-loc="page" href="#"><i class="icon-file"></i> Pages</a></li>

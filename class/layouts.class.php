@@ -59,8 +59,9 @@ class ezLayouts extends ezCMS {
 		// Get the Usage of this layout in pages
 		$this->getPageUse();		
 		
-		// Get the Revisions
-		$this->getRevisions();
+		// Revisions load lazily via AJAX after the page renders
+		if (isset($_GET['ajaxRevs']))       $this->ajaxFileRevs($this->filename);
+		if (isset($_GET['ajaxRevContent'])) $this->ajaxFileRevContent();
 	}
 	
 	// Function to Update the Defaults Settings
@@ -190,7 +191,7 @@ class ezLayouts extends ezCMS {
 		$this->revs['cnt']--;
 		
 		if ($this->revs['log'] == '') 
-			$this->revs['log'] = '<tr><td colspan="4">There are no revisions.</td></tr>';	
+			$this->revs['log'] = '<tr><td colspan="5">There are no revisions.</td></tr>';	
 	}
 
 	// Function to fetch the pages this layout is used in

@@ -31,8 +31,9 @@ class ezController extends ezCMS {
 		// Purge Revision
 		if (isset($_GET['purgeRev'])) $this->delRevision();
 		
-		// Get the Revisions
-		$this->getRevisions();
+		// Revisions load lazily via AJAX after the page renders
+		if (isset($_GET['ajaxRevs']))       $this->ajaxFileRevs('index.php');
+		if (isset($_GET['ajaxRevContent'])) $this->ajaxFileRevContent();
 
 	}
 	
@@ -88,7 +89,7 @@ class ezController extends ezCMS {
 		$this->revs['cnt']--;
 		
 		if ($this->revs['log'] == '') 
-			$this->revs['log'] = '<tr><td colspan="4">There are no revisions.</td></tr>';	
+			$this->revs['log'] = '<tr><td colspan="5">There are no revisions.</td></tr>';	
 	}
 	
 	// Function to Update the Controller

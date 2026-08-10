@@ -30,8 +30,8 @@ class ezRedirect extends ezCMS {
 	private function getJson() {
 		$r = new stdClass();
 		$r->status = true;
-		$r->rows = $this->query("SELECT * FROM `redirects` ORDER BY `id` DESC LIMIT 1000")->fetchAll(PDO::FETCH_ASSOC);
-		$r->r404 = $this->query("SELECT log404.url, count(0) as cnt404 FROM log404 GROUP BY log404.url LIMIT 1000")->fetchAll(PDO::FETCH_ASSOC);
+		$r->rows = $this->query("SELECT * FROM `redirects` ORDER BY `id` DESC LIMIT 5000")->fetchAll(PDO::FETCH_ASSOC);
+		$r->r404 = $this->query("SELECT `url`, count(0) as cnt404 FROM `log404` GROUP BY `url` ORDER BY cnt404 DESC, url ASC LIMIT 5000")->fetchAll(PDO::FETCH_ASSOC);
 		die(json_encode($r));
 	}
 	

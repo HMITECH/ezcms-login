@@ -1,11 +1,13 @@
 <!-- CodeMirror Keyboard Shortcuts Modal -->
-<div id="cm-shortcuts-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="cm-shortcuts-label" aria-hidden="true">
+<div id="cm-shortcuts-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cm-shortcuts-label" aria-hidden="true">
+ <div class="modal-dialog modal-dialog-scrollable">
+  <div class="modal-content">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3 id="cm-shortcuts-label">Keyboard Shortcuts</h3>
+		<h5 class="modal-title" id="cm-shortcuts-label">Keyboard Shortcuts</h5>
+		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	</div>
 	<div class="modal-body">
-		<table class="table table-condensed table-striped">
+		<table class="table table-sm table-striped">
 			<thead><tr><th style="width:210px">Key</th><th>Action</th></tr></thead>
 			<tbody>
 				<tr><td colspan="2"><strong>Search &amp; Navigation</strong></td></tr>
@@ -35,6 +37,8 @@
 		</table>
 	</div>
 	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal">Close</button>
+		<button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 	</div>
+  </div>
+ </div>
 </div>

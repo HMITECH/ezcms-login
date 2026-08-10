@@ -44,17 +44,16 @@ class ezUsers extends ezCMS {
 				exit;
 			}
 			
-			// Get the Revisions
-			$this->getRevisions();			
-			
+			// Revisions load lazily via AJAX after the page renders
+			if (isset($_GET['ajaxRevs'])) $this->ajaxUserRevs();
+
 			$this->barBtns = '<input type="submit" name="Submit" class="btn btn-primary" value="Save Changes">
 				 <a href="?id=new" class="btn btn-info">New User</a>';
-				
-			if ($this->id <> 1) $this->barBtns .=  
+
+			if ($this->id <> 1) $this->barBtns .=
 				' <a href="?delid=' . $this->id .'" class="btn btn-danger conf-del">Delete</a>';
 
-			$this->barBtns .= '<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup>'.
-				$this->revs['cnt'].'</sup></a>';			
+			$this->barBtns .= '<a id="showrevs" href="#" class="btn btn-secondary">Revisions <sup id="revcount">…</sup></a>';
 				
 			// Get Created on String
 			$this->createdText = '<div class="clearfix"></div><p><em>Created on '.
@@ -82,19 +81,31 @@ class ezUsers extends ezCMS {
 
 	}
 	
-	// Function to fetch the revisions
-	private function getRevisions() {
-	
-		$results = $this->query(" (SELECT `page_id` as `id`, 1 as `type`, `url` as `det`, `revmsg`, `createdon` 
-								FROM `git_pages` WHERE `createdby` = ".intval($this->id)." )
-							UNION (SELECT `id`, 2 as `type`, `fullpath` as `det`, `revmsg`,`createdon` 
-								FROM `git_files` WHERE `createdby` = ".intval($this->id).")
-							UNION (SELECT `id`, 3 as `type`, '' as `det`, `revmsg`, `createdon` 
-								FROM `site` WHERE `createdby` = ".intval($this->id).")
-							ORDER BY `createdon` DESC LIMIT 200")->fetchAll(PDO::FETCH_ASSOC);
-		
+	// AJAX: paginated activity log (this user's page/file/settings revisions).
+	// Read-only listing — no Fetch/Diff/Purge — so it returns pre-built row cells.
+	private function ajaxUserRevs() {
+
+		$per  = 10;
+		$page = max(1, (int)($_GET['page'] ?? 1));
+		$uid  = intval($this->id);
+
+		$union = "(SELECT `page_id` as `id`, 1 as `type`, `url` as `det`, `revmsg`, `createdon`
+						FROM `git_pages` WHERE `createdby` = $uid)
+				UNION (SELECT `id`, 2 as `type`, `fullpath` as `det`, `revmsg`, `createdon`
+						FROM `git_files` WHERE `createdby` = $uid)
+				UNION (SELECT `id`, 3 as `type`, '' as `det`, `revmsg`, `createdon`
+						FROM `site` WHERE `createdby` = $uid)";
+
+		$total  = (int)$this->query("SELECT COUNT(*) FROM ($union) t")->fetchColumn();
+		$pages  = max(1, (int)ceil($total / $per));
+		$offset = ($page - 1) * $per;
+		$results = $this->query("$union ORDER BY `createdon` DESC LIMIT $per OFFSET $offset")
+			->fetchAll(PDO::FETCH_ASSOC);
+
+		$rows = [];
+		$num  = $total - $offset;   // running sequence number, newest first
 		foreach ($results as $entry) {
-		
+
 			if ($entry['type']==1) {
 				$type = '<a href="pages.php?id='.$entry['id'].'"><i class="icon-file"></i> Page</a>';
 			} else if ($entry['type']==2) {
@@ -116,22 +127,16 @@ class ezUsers extends ezCMS {
 				}
 			} else if ($entry['type']==3) {
 				$type = '<a href="setting.php"><i class="icon-th-list"></i> Defaults Settings</a>';
+			} else {
+				$type = '';
 			}
 
-			$this->revs['log'] .= '<tr>
-				<td>'.$this->revs['cnt'].'</td>
-				<td>'.$type.'</td>
-				<td>'.$entry['det'].'</td>
-				<td>'.$entry['revmsg'].'</td>
-				<td>'.$entry['createdon'].'</td></tr>';
-
-			$this->revs['cnt']++;
+			$rows[] = '<td>'.$num.'</td><td>'.$type.'</td><td>'.htmlspecialchars($entry['det']).
+				'</td><td>'.htmlspecialchars($entry['revmsg']).'</td><td>'.$entry['createdon'].'</td>';
+			$num--;
 		}
-		$this->revs['cnt']--;
 
-		if ($this->revs['log'] == '') 
-			$this->revs['log'] = '<tr><td colspan="4">There are no revisions.</td></tr>';
-			
+		die(json_encode(['status'=>true, 'count'=>$total, 'page'=>$page, 'pages'=>$pages, 'rows'=>$rows]));
 	}
 	
 	// this function will set the options to diaplay check boxes

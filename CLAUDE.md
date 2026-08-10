@@ -88,6 +88,18 @@ Lives in `codemirror/`. Supports PHP, HTML, CSS, JS, XML with themes (monokai, d
 - **SQL:** use PDO prepared statements for anything touching user input. Note: parts of the legacy codebase still concatenate trusted/internal IDs into `query()` strings — do not extend that pattern to user-supplied values.
 - Web-server config blocks direct access to `includes/`, `macros/`, `filemanager/config/`.
 
+## Front-end libraries
+
+The admin panel runs on **Bootstrap 5.3.8** and **jQuery 4.0.0** (both vendored):
+- Bootstrap 5 CSS + bundle JS and **Bootstrap Icons** live under `vendor/`; jQuery 4 + `jquery-migrate` 4.x under `js/`. Loaded via `include/head.php` (CSS) and `include/footer.php` (JS).
+- BS5 components use `data-bs-*` attributes; there are **no jQuery Bootstrap plugins** — tooltips/modals/dropdowns/tabs use the native BS5 API (e.g. `new bootstrap.Tooltip(el)`).
+- Three **transitional compatibility shims** let un-migrated BS2 markup keep working; treat them as scaffolding to delete as markup is converted to native BS5, **not** as a place to add new code:
+  - `css/bs2-compat.css` — BS2 fluid grid (`.row-fluid`/`.spanN`), float helpers, legacy form/`.well`/`.label`/`.progress>.bar`/`.hide` classes. **Don't author new `.spanN` markup** — use native BS5 grid.
+  - `css/ezcms-icons.css` — renders legacy `<i class="icon-*">` glyphicons with the Bootstrap Icons font. New markup should use `class="bi bi-*"` directly.
+  - `js/bs-typeahead-compat.js` — reimplements the BS2 `$.fn.typeahead` (dropped in BS3) for the left-tree page search.
+- **CodeMirror stays at 5.65.21** (the final v5 release, still maintained). CM6 was intentionally *not* adopted: it needs a build step and drops most of the 65 bundled themes.
+- The **filemanager** (`filemanager/`) is a self-contained vendored bundle with its own older jQuery/jQuery-UI stack — out of scope for the admin-panel library versions above.
+
 ## PHP style
 
 Codebase is being modernised to PHP 8.0+ idioms:

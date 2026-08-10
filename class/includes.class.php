@@ -65,8 +65,9 @@ class ezIncludes extends ezCMS {
 		// Get the Usage of this include in layouts
 		$this->getUsage();		
 		
-		// Get the Revisions
-		$this->getRevisions();
+		// Revisions load lazily via AJAX after the page renders
+		if (isset($_GET['ajaxRevs']))       $this->ajaxFileRevs('includes/'.$this->filename);
+		if (isset($_GET['ajaxRevContent'])) $this->ajaxFileRevContent();
 
 	}
 	
@@ -199,7 +200,7 @@ class ezIncludes extends ezCMS {
 		$this->revs['cnt']--;
 		
 		if ($this->revs['log'] == '') 
-			$this->revs['log'] = '<tr><td colspan="4">There are no revisions.</td></tr>';	
+			$this->revs['log'] = '<tr><td colspan="5">There are no revisions.</td></tr>';	
 	}
 
 	// Function to fetch the layouts this include is used in
